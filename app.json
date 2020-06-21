@@ -1,11 +1,10 @@
 {
   "expo": {
-    "name": "coco-react-native",
-    "slug": "coco-react-native",
+    "name": "Coco",
+    "slug": "coco",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
