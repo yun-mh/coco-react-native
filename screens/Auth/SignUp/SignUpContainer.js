@@ -1,19 +1,28 @@
 import React, { useState } from "react";
-import utils from "../../../utils";
-import api from "../../../api";
-import SignUpPresenter from "./SignUpPresenter";
 import { Alert } from "react-native";
-import { getCameraPermission } from "../../../userPermissions";
+import { useMutation } from "@apollo/react-hooks";
 import * as ImagePicker from "expo-image-picker";
+import SignUpPresenter from "./SignUpPresenter";
+import { getCameraPermission } from "../../../userPermissions";
+import { CREATE_ACCOUNT } from "../../../queries/Auth/AuthQueries";
+import utils from "../../../utils";
 
 export default ({ navigation }) => {
+  const [avatar, setAvatar] = useState(
+    "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.globalvetlink.com%2Fwp-content%2Fuploads%2F2015%2F07%2Fanonymous.png&f=1&nofb=1"
+  ); // fix this later
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [avatar, setAvatar] = useState(
-    "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.globalvetlink.com%2Fwp-content%2Fuploads%2F2015%2F07%2Fanonymous.png&f=1&nofb=1"
-  ); // fix this later
+  const [createAccountMutation] = useMutation(CREATE_ACCOUNT, {
+    variables: {
+      avatar,
+      username,
+      email,
+      password,
+    },
+  });
 
   const handlePickAvatar = async () => {
     getCameraPermission();
@@ -45,17 +54,14 @@ export default ({ navigation }) => {
     }
     setLoading(true);
     try {
-      const { status } = await api.createAccount({
-        username: userName, // fix this later
-        email,
-        username: email,
-        password,
-      });
-      if (status === 201) {
-        navigation.navigate("SignIn", { email, password }); // fix this later
+      const {
+        data: { createAccount },
+      } = await createAccountMutation();
+      if (createAccount) {
+        navigation.navigate("RegisterDog", { email });
       }
     } catch (e) {
-      alert(e);
+      Alert.alert(e);
       console.warn(e);
     } finally {
       setLoading(false);

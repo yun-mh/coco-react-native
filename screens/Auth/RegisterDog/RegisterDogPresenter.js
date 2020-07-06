@@ -1,6 +1,7 @@
 import React from "react";
 import { KeyboardAvoidingView, View } from "react-native";
 import styled from "styled-components/native";
+import { Feather } from "@expo/vector-icons";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
@@ -14,7 +15,25 @@ const Container = styled.View`
   padding-horizontal: 35px;
 `;
 
-const InputContainer = styled.View``;
+const AvatarContainer = styled.TouchableOpacity`
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+  background-color: ${colors.grayShadow};
+  justify-content: center;
+  align-items: center;
+`;
+
+const Avatar = styled.Image`
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+`;
+
+const InputContainer = styled.View`
+  margin-top: 60px;
+`;
 
 const DividerContainer = styled.View`
   flex-direction: row;
@@ -56,16 +75,20 @@ const SocialLoginButton = styled.View`
 const SignUpFooter = styled.View``;
 
 export default ({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  handleSubmit,
-  loading,
-  toSignUp,
-  toPasswordReset,
   navigation,
+  image,
+  name,
+  setName,
+  breed,
+  setBreed,
+  gender,
+  setGender,
+  birthdate,
+  setBirthdate,
+  handleSubmit,
+  handlePickImage,
 }) => {
+  const toSignIn = () => navigation.navigate("SignIn");
   return (
     <DismissKeyboard>
       <Container>
@@ -77,47 +100,42 @@ export default ({
               justifyContent: "center",
             }}
           >
+            <AvatarContainer onPress={handlePickImage}>
+              <Avatar source={{ uri: image }} />
+              <Feather
+                name="plus"
+                size={40}
+                color={colors.gray}
+                style={{ marginTop: 5, marginLeft: 1 }}
+              />
+            </AvatarContainer>
             <InputContainer>
               <Input
-                value={email}
-                placeholder="メールアドレス"
+                value={name}
+                placeholder="犬名"
                 autoCapitalize="none"
-                keyboardType={"email-address"}
-                stateFn={setEmail}
+                stateFn={setName}
               />
               <Input
-                value={password}
-                placeholder="パスワード"
-                isPassword={true}
-                stateFn={setPassword}
+                value={breed}
+                placeholder="breed"
+                autoCapitalize="none"
+                stateFn={setBreed}
+              />
+              <Input value={gender} placeholder="gender" stateFn={setGender} />
+              <Input
+                value={birthdate}
+                placeholder="birthdate"
+                stateFn={setBirthdate}
               />
             </InputContainer>
-            <Button
-              loading={loading}
-              text={"ログイン"}
-              accent={true}
-              onPress={handleSubmit}
-            />
-            <TextButton
-              caption={"パスワードを忘れた場合は"}
-              title={"パスワード再設定"}
-              onPress={toPasswordReset}
-            />
-            <DividerContainer>
-              <DividerLine />
-              <DividerText>または</DividerText>
-              <DividerLine />
-            </DividerContainer>
-            <SocialLoginContainer>
-              <SocialLoginButton></SocialLoginButton>
-              <SocialLoginButton></SocialLoginButton>
-            </SocialLoginContainer>
+            <Button text={"次へ"} accent={true} onPress={handleSubmit} />
           </View>
           <SignUpFooter>
             <TextButton
-              caption={"アカウントのお持ちでない場合は"}
-              title={"会員登録"}
-              onPress={toSignUp}
+              caption={"アカウントをお持ちの場合は"}
+              title={"ログイン"}
+              onPress={toSignIn}
             />
           </SignUpFooter>
         </KeyboardAvoidingView>

@@ -112,7 +112,7 @@ export default ({
                 value={username}
                 placeholder="ユーザ名"
                 autoCapitalize="none"
-                stateFn={setEmail}
+                stateFn={setUsername}
               />
               <Input
                 value={email}

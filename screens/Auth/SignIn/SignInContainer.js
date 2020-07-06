@@ -1,36 +1,69 @@
 import React, { useState } from "react";
 import { Alert } from "react-native";
-import { useDispatch } from "react-redux";
+import { useMutation } from "@apollo/react-hooks";
 import utils from "../../../utils";
-import { userLogin } from "../../../redux/usersSlice";
 import SignInPresenter from "./SignInPresenter";
+import { LOGIN } from "../../../queries/Auth/AuthQueries";
+import { useLogIn } from "../../../contexts/AuthContext";
 
 export default ({ navigation, route: { params } }) => {
-  const dispatch = useDispatch();
   const [email, setEmail] = useState(params?.email);
   const [password, setPassword] = useState(params?.password);
+  const [loading, setLoading] = useState(false);
+  const login = useLogIn();
+  const [loginMutation] = useMutation(LOGIN, {
+    variables: {
+      email,
+      password,
+    },
+  });
+
+  const toSignUp = () => navigation.navigate("SignUp");
+  const toPasswordReset = () => navigation.navigate("PasswordReset");
+
   const isFormValid = () => {
     if (email === "" || password === "") {
-      Alert.alert("認証失敗", "メールアドレスとパスワードを入力してください。");
+      Alert.alert(
+        "ログイン失敗",
+        "メールアドレスとパスワードを入力してください。"
+      );
       return false;
     }
     if (!utils.isEmail(email)) {
-      Alert.alert("認証失敗", "メールアドレスを正しく入力してください。");
+      Alert.alert("ログイン失敗", "メールアドレスを正しく入力してください。");
       return false;
     }
     return true;
   };
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     if (!isFormValid()) {
       return;
     }
-    dispatch(
-      userLogin({
-        username: email,
-        password,
-      })
-    );
+    setLoading(true);
+    try {
+      const {
+        data: { login: token },
+      } = await loginMutation();
+      if (token !== "" || token !== false) {
+        login(token);
+      } else {
+        Alert.alert(
+          "ログイン失敗",
+          "認証トークンに問題があります。もう一度ログインしてみてください。"
+        );
+      }
+    } catch (error) {
+      Alert.alert(
+        "ログイン失敗",
+        "メールアドレスやパスワードを確認してください。"
+      );
+      return;
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <SignInPresenter
       email={email}
@@ -38,6 +71,9 @@ export default ({ navigation, route: { params } }) => {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
+      loading={loading}
+      toSignUp={toSignUp}
+      toPasswordReset={toPasswordReset}
       navigation={navigation}
     />
   );
