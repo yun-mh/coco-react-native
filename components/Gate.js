@@ -1,10 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
+import { useIsLoggedIn } from "../contexts/AuthContext";
 import Auth from "../navigation/Auth";
+import Main from "../navigation/Main";
 
 export default () => {
-  const { isLoggedIn } = useSelector((state) => state.usersReducer);
+  const isLoggedIn = useIsLoggedIn();
   return (
     <NavigationContainer>
       {isLoggedIn ? <Main /> : <Auth />}

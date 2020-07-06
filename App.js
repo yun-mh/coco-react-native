@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import { AsyncStorage } from "react-native";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { Ionicons, Feather } from "@expo/vector-icons";
+import { ApolloClient, InMemoryCache } from "apollo-boost";
+import { persistCache } from "apollo-cache-persist";
+import { ApolloProvider } from "@apollo/react-hooks";
 import Gate from "./components/Gate";
-import store, { persistor } from "./redux/store";
+import apolloClientOptions from "./apollo";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const cacheImages = (images) =>
   images.map((image) => {
@@ -21,28 +24,61 @@ const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-  const handleFinish = () => setIsReady(true);
-  const loadAssets = () => {
-    const images = [
-      require("./assets/intro1.jpg"),
-      require("./assets/intro2.jpg"),
-      require("./assets/intro3.jpg"),
-      require("./assets/anonymous.png"),
-    ];
-    const fonts = [Ionicons.font, Feather.font];
-    const imagePromises = cacheImages(images);
-    const fontPromises = cacheFonts(fonts);
-    return Promise.all([...imagePromises, ...fontPromises]);
+  const [client, setClient] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+
+  const handleFinish = async () => {
+    const cache = new InMemoryCache();
+    await persistCache({
+      cache,
+      storage: AsyncStorage,
+    });
+    const client = new ApolloClient({
+      cache,
+      request: async (operation) => {
+        const token = await AsyncStorage.getItem("jwt");
+        return operation.setContext({
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      },
+      ...apolloClientOptions,
+    });
+    const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+    if (!isLoggedIn || isLoggedIn === "false") {
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
+    }
+    setClient(client);
+    setIsReady(true);
   };
-  return isReady ? (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
+
+  const preload = () => {
+    try {
+      const images = [
+        require("./assets/intro1.jpg"),
+        require("./assets/intro2.jpg"),
+        require("./assets/intro3.jpg"),
+        require("./assets/anonymous.png"),
+      ];
+      const fonts = [Ionicons.font, Feather.font];
+      const imagePromises = cacheImages(images);
+      const fontPromises = cacheFonts(fonts);
+      return Promise.all([...imagePromises, ...fontPromises]);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  return isReady && client && isLoggedIn !== null ? (
+    <ApolloProvider client={client}>
+      <AuthProvider isLoggedIn={isLoggedIn}>
         <Gate />
-      </PersistGate>
-    </Provider>
+      </AuthProvider>
+    </ApolloProvider>
   ) : (
     <AppLoading
-      startAsync={loadAssets}
+      startAsync={preload}
       onError={console.error}
       onFinish={handleFinish}
     />
