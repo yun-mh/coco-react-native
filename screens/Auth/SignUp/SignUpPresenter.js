@@ -125,6 +125,7 @@ export default ({
                 value={password}
                 placeholder="パスワード"
                 isPassword={true}
+                autoCapitalize="none"
                 stateFn={setPassword}
               />
             </InputContainer>

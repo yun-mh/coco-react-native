@@ -18,6 +18,12 @@ export const CODE_CHECK = gql`
   }
 `;
 
+export const PASSWORD_CHANGE = gql`
+  mutation passwordChange($email: String!, $password: String!) {
+    passwordChange(email: $email, password: $password)
+  }
+`;
+
 export const CREATE_ACCOUNT = gql`
   mutation createAccount(
     $avatar: String!

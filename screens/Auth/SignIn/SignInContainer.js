@@ -4,13 +4,14 @@ import { useMutation } from "@apollo/react-hooks";
 import utils from "../../../utils";
 import SignInPresenter from "./SignInPresenter";
 import { LOGIN } from "../../../queries/Auth/AuthQueries";
-import { useLogIn } from "../../../contexts/AuthContext";
+import { useLogIn, useTempLogIn } from "../../../contexts/AuthContext";
 
 export default ({ navigation, route: { params } }) => {
   const [email, setEmail] = useState(params?.email);
   const [password, setPassword] = useState(params?.password);
   const [loading, setLoading] = useState(false);
   const login = useLogIn();
+  const temp = useTempLogIn(); // delete later
   const [loginMutation] = useMutation(LOGIN, {
     variables: {
       email,
@@ -75,6 +76,7 @@ export default ({ navigation, route: { params } }) => {
       toSignUp={toSignUp}
       toPasswordReset={toPasswordReset}
       navigation={navigation}
+      temp={temp} // delete later
     />
   );
 };

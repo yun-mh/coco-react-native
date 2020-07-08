@@ -33,7 +33,7 @@ export default ({ navigation, route: { params } }) => {
         data: { codeCheck },
       } = await codeCheckMutation();
       if (codeCheck) {
-        Alert.alert("完了", "hey");
+        navigation.navigate("PasswordChange", { email });
       } else {
         Alert.alert("エラー", "コードをもう一度確認してください。");
       }

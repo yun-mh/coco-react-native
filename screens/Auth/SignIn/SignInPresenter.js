@@ -65,6 +65,7 @@ export default ({
   toSignUp,
   toPasswordReset,
   navigation,
+  temp, // delete later
 }) => {
   return (
     <DismissKeyboard>
@@ -112,6 +113,7 @@ export default ({
               <SocialLoginButton></SocialLoginButton>
               <SocialLoginButton></SocialLoginButton>
             </SocialLoginContainer>
+            <TextButton caption={"kari"} title={"kari"} onPress={temp} />
           </View>
           <SignUpFooter>
             <TextButton
@@ -124,4 +126,4 @@ export default ({
       </Container>
     </DismissKeyboard>
   );
-};
+}; // delete text button later

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, TouchableOpacity } from "react-native";
+import { Dimensions } from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import Button from "../../components/Button";
@@ -61,6 +61,7 @@ const AuthContainer = styled.View`
 export default ({ navigation }) => {
   const toSignUp = () => navigation.navigate("SignUp");
   const toSignIn = () => navigation.navigate("SignIn");
+
   return (
     <Container>
       <SlideContainer>

@@ -14,7 +14,13 @@ const Container = styled.View`
 
 const InputContainer = styled.View``;
 
-export default ({ email, setEmail, handleSubmit, loading, navigation }) => {
+export default ({
+  password,
+  setPassword,
+  handleSubmit,
+  loading,
+  navigation,
+}) => {
   return (
     <DismissKeyboard>
       <Container>
@@ -28,16 +34,16 @@ export default ({ email, setEmail, handleSubmit, loading, navigation }) => {
           >
             <InputContainer>
               <Input
-                value={email}
-                placeholder="メールアドレス"
+                value={password}
+                placeholder="新しいパスワード"
                 autoCapitalize="none"
-                keyboardType={"email-address"}
-                stateFn={setEmail}
+                isPassword={true}
+                stateFn={setPassword}
               />
             </InputContainer>
             <Button
               loading={loading}
-              text={"メール送信"}
+              text={"更新"}
               accent={true}
               onPress={handleSubmit}
             />
