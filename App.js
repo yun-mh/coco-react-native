@@ -4,7 +4,7 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import { ApolloClient, InMemoryCache } from "apollo-boost";
+import ApolloClient, { InMemoryCache } from "apollo-boost";
 import { persistCache } from "apollo-cache-persist";
 import { ApolloProvider } from "@apollo/react-hooks";
 import Gate from "./components/Gate";
