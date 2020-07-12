@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
@@ -15,8 +15,10 @@ import { View, Text } from "react-native";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import LogoTitle from "../components/Main/LogoTitle";
 import ProfileButton from "../components/Main/ProfileButton";
+import SearchButton from "../components/Main/SearchButton";
 import { useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import { PROFILE_THUMBNAIL } from "../queries/Auth/MainQueries";
+
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -24,32 +26,34 @@ function getHeaderTitle(route) {
     case "Feed":
       return () => <LogoTitle />;
     case "Walking":
-      return "My profile";
+      return "Walking";
     case "Photo":
-      return "My profile";
+      return "Photo";
     case "Notification":
-      return "My profile";
+      return "Notification";
     case "Message":
-      return "My account";
+      return "Message";
   }
 }
 
 const TabsNavigator = createBottomTabNavigator();
 
 const Tabs = ({ navigation, route }) => {
+  const { loading, error, data, refetch } = useQuery(PROFILE_THUMBNAIL);
+  const [current, setCurrent] = useState(getFocusedRouteNameFromRoute(route) || "Feed")
+  
   useLayoutEffect(() => {
+    setCurrent(getFocusedRouteNameFromRoute(route) || "Feed")
     navigation.setOptions({
       headerTitle: getHeaderTitle(route),
-    });
-  }, [navigation, route]);
-
-  // navigation.setOptions({
-  //   headerRight: () =>
-  //     getFocusedRouteNameFromRoute(route) === "Feed" ? <ProfileButton /> : null,
-  // });
+      headerLeft: () => current === "Feed" ? <SearchButton /> : null,
+      headerRight: () => current === "Feed" ? <ProfileButton loading={loading} data={data} /> : null,
+    }); 
+  }, [navigation, route, loading, data, current]);
 
   return (
     <TabsNavigator.Navigator
+      initialRouteName="Feed"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           let iconName;

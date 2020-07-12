@@ -9,8 +9,8 @@ const Container = styled.View`
   align-items: center;
 `;
 
-export default () => (
+export default ({ color = colors.primary }) => (
   <Container>
-    <ActivityIndicator color={colors.primary} />
+    <ActivityIndicator color={color} />
   </Container>
 );
