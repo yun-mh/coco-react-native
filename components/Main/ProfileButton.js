@@ -9,7 +9,7 @@ const ProfileButton = ({ loading, data }) => (
       <TouchableOpacity>
         <Image
           source={{ uri: data.viewMyself.avatar }}
-          style={{ width: 30, height: 30, borderRadius: 15 }}
+          style={{ width: 30, height: 30, borderRadius: 12 }}
         />
       </TouchableOpacity>)
     }
