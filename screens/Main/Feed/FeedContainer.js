@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import FeedPresenter from "./FeedPresenter";
-import { VIEW_FEED } from "../../../queries/Auth/MainQueries";
+import { VIEW_FEED } from "../../../queries/Main/MainQueries";
 
 
 export default () => {
   const [refreshing, setRefreshing] = useState(false);
   const { loading, error, data, refetch } = useQuery(VIEW_FEED);
-  // console.log(data);
 
   const onRefresh = async () => {
     try {

@@ -6,4 +6,6 @@ export default {
   black: "rgb(63, 57, 55)",
   gray: "rgb(198,198,198)",
   grayShadow: "rgba(198,198,198, .5)",
+  red: "#EB7E55",
+  white: "#FFFFFF"
 };
