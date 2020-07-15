@@ -1,15 +1,68 @@
-import React from "react";
-import { useQuery } from "@apollo/react-hooks";
+import React, { useState } from "react";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import PostDetailPresenter from "./PostDetailPresenter";
-import { VIEW_POST } from "../../../queries/Main/MainQueries";
-
+import { VIEW_POST, ADD_COMMENT } from "../../../queries/Main/MainQueries";
+import { Alert } from "react-native";
 
 export default ({ navigation, route }) => {
-    const { loading, error, data, refetch } = useQuery(VIEW_POST, {
-        variables: {id: route.params.id },
-    });
+  const [refreshing, setRefreshing] = useState(false);
+  const [comment, setComment] = useState("");
+  const [height, setHeight] = useState(40);
+  const { loading, error, data, refetch } = useQuery(VIEW_POST, {
+    variables: { id: route.params.id },
+  });
+  const [addCommentMutation] = useMutation(ADD_COMMENT, {
+    variables: {
+      postId: route.params.id,
+      text: comment,
+    },
+    refetchQueries: () => [
+      { query: VIEW_POST, variables: { id: route.params.id } },
+    ],
+  });
 
-    return (
-        <PostDetailPresenter loading={loading} data={data} />
-    );
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await refetch();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const updateInputSize = (height) => {
+    setHeight(height);
+  };
+
+  const handleAddComment = async () => {
+    if (comment === "") {
+      Alert.alert("エラー", "コメントを入力してください。");
+      return;
+    }
+    try {
+      const {
+        data: { addComment },
+      } = await addCommentMutation();
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setComment("");
+    }
+  };
+
+  return (
+    <PostDetailPresenter
+      loading={loading}
+      data={data}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      comment={comment}
+      height={height}
+      setComment={setComment}
+      updateInputSize={updateInputSize}
+      handleAddComment={handleAddComment}
+    />
+  );
 };

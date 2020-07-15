@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, Platform, View } from "react-native";
+import { Image, Platform, View, Text } from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import { Ionicons, Feather } from "@expo/vector-icons";
@@ -13,7 +13,7 @@ const Container = styled.View`
   margin-bottom: 30px;
   background-color: ${colors.white};
   border-radius: 10px;
-  box-shadow: 2px 3px rgba(0,0,0, .08);
+  box-shadow: 2px 3px rgba(0, 0, 0, 0.08);
 `;
 
 const Header = styled.View`
@@ -124,24 +124,23 @@ const Post = ({
         </Touchable>
       </Header>
       <SlideContainer>
-      <Swiper
-        controlsProps={{
-          PrevComponent: () => null,
-          NextComponent: () => null,
-          dotActiveStyle: {
-            backgroundColor: colors.primary,
-          },
-        }}
-      >
-        {
-          files.map((file) => (
+        <Swiper
+          controlsProps={{
+            PrevComponent: () => null,
+            NextComponent: () => null,
+            dotActiveStyle: {
+              backgroundColor: colors.primary,
+            },
+          }}
+        >
+          {files.map((file) => (
             <Image
               key={file.id}
               style={{ width: constants.width, height: constants.height / 2.5 }}
               source={{ uri: file.url }}
             />
           ))}
-      </Swiper>
+        </Swiper>
       </SlideContainer>
       <InfoContainer>
         <IconsContainer>
@@ -154,14 +153,14 @@ const Post = ({
               />
             </IconContainer>
           </Touchable>
-          <Touchable>
-            <IconContainer>
-              <Feather
-                size={24}
-                color={colors.black}
-                name="message-square"
-              />
+          <Touchable
+            onPress={() => navigation.navigate("PostDetail", { id })}
+            style={{ flexDirection: "row", alignItems: "center" }}
+          >
+            <IconContainer style={{ marginRight: 3 }}>
+              <Feather size={24} color={colors.black} name="message-square" />
             </IconContainer>
+            <Text style={{ fontSize: 16 }}>{comments.length}</Text>
           </Touchable>
         </IconsContainer>
         <Touchable>
@@ -170,11 +169,6 @@ const Post = ({
         <Caption>
           <Bold>{user.username}</Bold> {caption}
         </Caption>
-        <Touchable onPress={() =>
-            navigation.navigate("PostDetail", { id })
-          }>
-          <CommentCount>See all {comments.length} comments</CommentCount>
-        </Touchable>
       </InfoContainer>
     </Container>
   );

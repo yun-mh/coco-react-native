@@ -1,17 +1,33 @@
 import React from "react";
-import { ScrollView } from "react-native";
-import Post from "../../../components/Main/Post";
 import Loader from "../../../components/Main/Loader";
+import PostDetail from "../../../components/Main/PostDetail";
+import { View } from "react-native";
 
-
-export default ({ loading, data }) => {
-  return (
-    <ScrollView>
-      {loading ? (
-        <Loader />
-      ) : (
-        data && data.viewPost && <Post {...data.viewPost} />
-      )}
-    </ScrollView>
+export default ({
+  loading,
+  data,
+  refreshing,
+  onRefresh,
+  comment,
+  height,
+  setComment,
+  updateInputSize,
+  handleAddComment,
+}) => {
+  return loading ? (
+    <Loader />
+  ) : (
+    data && data.viewPost && (
+      <PostDetail
+        {...data.viewPost}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        comment={comment}
+        height={height}
+        setComment={setComment}
+        updateInputSize={updateInputSize}
+        handleAddComment={handleAddComment}
+      />
+    )
   );
 };

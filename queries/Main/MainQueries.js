@@ -32,3 +32,9 @@ export const VIEW_POST = gql`
   }
   ${POST_FRAGMENT}
 `;
+
+export const ADD_COMMENT = gql`
+  mutation addComment($postId: String!, $text: String!) {
+    addComment(postId: $postId, text: $text)
+  }
+`;

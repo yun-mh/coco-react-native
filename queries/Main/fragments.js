@@ -22,7 +22,9 @@ export const POST_FRAGMENT = gql`
       user {
         id
         username
+        avatar
       }
+      createdAt
     }
     createdAt
   }

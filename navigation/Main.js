@@ -12,14 +12,16 @@ import Profile from "../screens/Main/Profile";
 import Feed from "../screens/Main/Feed";
 import { View, Text } from "react-native";
 
-import { getFocusedRouteNameFromRoute, useRoute } from "@react-navigation/native";
+import {
+  getFocusedRouteNameFromRoute,
+  useRoute,
+} from "@react-navigation/native";
 import LogoTitle from "../components/Main/LogoTitle";
 import ProfileButton from "../components/Main/ProfileButton";
 import SearchButton from "../components/Main/SearchButton";
 import { useQuery } from "@apollo/react-hooks";
 import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import PostDetail from "../screens/Main/PostDetail";
-
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -42,15 +44,20 @@ const TabsNavigator = createBottomTabNavigator();
 
 const Tabs = ({ navigation, route }) => {
   const { loading, error, data, refetch } = useQuery(PROFILE_THUMBNAIL);
-  const [current, setCurrent] = useState(getFocusedRouteNameFromRoute(route) || "Feed")
+  const [current, setCurrent] = useState(
+    getFocusedRouteNameFromRoute(route) || "Feed"
+  );
 
   useLayoutEffect(() => {
-    setCurrent(getFocusedRouteNameFromRoute(route) || "Feed")
+    setCurrent(getFocusedRouteNameFromRoute(route) || "Feed");
     navigation.setOptions({
       headerTitle: getHeaderTitle(route),
-      headerLeft: () => current === "Feed" ? <SearchButton /> : null,
-      headerRight: () => current === "Feed" ? <ProfileButton loading={loading} data={data} /> : null,
-    }); 
+      headerLeft: () => (current === "Feed" ? <SearchButton /> : null),
+      headerRight: () =>
+        current === "Feed" ? (
+          <ProfileButton loading={loading} data={data} />
+        ) : null,
+    });
   }, [navigation, route, loading, data, current]);
 
   return (
@@ -120,7 +127,11 @@ export default () => {
       }}
     >
       <MainNavigator.Screen name="Tabs" component={Tabs} />
-      <MainNavigator.Screen name="PostDetail" component={PostDetail} />
+      <MainNavigator.Screen
+        name="PostDetail"
+        component={PostDetail}
+        options={{ title: "コメント" }}
+      />
     </MainNavigator.Navigator>
   );
 };
