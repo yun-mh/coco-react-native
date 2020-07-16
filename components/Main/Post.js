@@ -60,12 +60,6 @@ const Caption = styled.Text`
   margin: 3px 0;
 `;
 
-const CommentCount = styled.Text`
-  margin-top: 5px;
-  opacity: 0.5;
-  font-size: 13px;
-`;
-
 const Post = ({
   id,
   user,

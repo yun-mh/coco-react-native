@@ -4,6 +4,7 @@ import { POST_FRAGMENT } from "./fragments";
 export const PROFILE_THUMBNAIL = gql`
   query viewMyself {
     viewMyself {
+      id
       avatar
     }
   }

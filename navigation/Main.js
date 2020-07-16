@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
+import { View, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
@@ -10,7 +11,6 @@ import Notification from "../screens/Main/Notification";
 import Message from "../screens/Main/Message";
 import Profile from "../screens/Main/Profile";
 import Feed from "../screens/Main/Feed";
-import { View, Text } from "react-native";
 
 import {
   getFocusedRouteNameFromRoute,
@@ -131,6 +131,11 @@ export default () => {
         name="PostDetail"
         component={PostDetail}
         options={{ title: "コメント" }}
+      />
+      <MainNavigator.Screen
+        name="Profile"
+        component={Profile}
+        options={{ title: "", headerTransparent: true }}
       />
     </MainNavigator.Navigator>
   );

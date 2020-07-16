@@ -3,7 +3,6 @@ import { useQuery } from "@apollo/react-hooks";
 import FeedPresenter from "./FeedPresenter";
 import { VIEW_FEED } from "../../../queries/Main/MainQueries";
 
-
 export default () => {
   const [refreshing, setRefreshing] = useState(false);
   const { loading, error, data, refetch } = useQuery(VIEW_FEED);
@@ -19,5 +18,12 @@ export default () => {
     }
   };
 
-  return <FeedPresenter loading={loading} data={data} refreshing={refreshing} onRefresh={onRefresh} />;
+  return (
+    <FeedPresenter
+      loading={loading}
+      data={data}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+    />
+  );
 };
