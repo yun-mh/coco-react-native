@@ -2,6 +2,13 @@ import React from "react";
 import styled from "styled-components/native";
 import constants from "../../../constants";
 import colors from "../../../colors";
+import { Image, FlatList } from "react-native";
+import PostGrid from "../../../components/Main/PostGrid";
+import Dog from "../../../components/Main/Dog";
+import Loader from "../../../components/Main/Loader";
+import { Feather } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Button from "../../../components/Main/Button";
 
 const ProfileContainer = styled.View`
   flex: 1;
@@ -12,13 +19,10 @@ const HalfScreen = styled.View`
 `;
 
 const HeaderContainer = styled.View`
-  height: ${(constants.height / 10) * 3}px;
-`;
-
-const HeaderUpperContainer = styled.View`
   flex: 1;
   justify-content: flex-end;
   background-color: ${colors.secondary};
+  height: ${(constants.height / 10) * 3}px;
 `;
 
 const HeaderContentContainer = styled.View`
@@ -39,7 +43,7 @@ const DataContainer = styled.View`
   width: 65%;
 `;
 
-const UsernameContainer = styled.View`
+const UserContainer = styled.View`
   height: 50px;
   flex-direction: row;
   align-items: center;
@@ -83,7 +87,11 @@ const MyDogContainer = styled.View`
 
 const MyDogHeaderContainer = styled.View`
   height: 40px;
-  background-color: ${colors.gray};
+  padding-horizontal: 14px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${colors.lightGray};
 `;
 
 const MyDogContentContainer = styled.View`
@@ -91,63 +99,117 @@ const MyDogContentContainer = styled.View`
   background-color: white;
 `;
 
+const Title = styled.Text`
+  color: ${colors.black};
+`;
+
 const PostContainer = styled.View`
   flex: 1;
-  background-color: violet;
-`;
-
-const PostHeaderContainer = styled.View`
-  height: 40px;
-  background-color: ${colors.gray};
-`;
-
-const PostContentContainer = styled.View`
-  flex: 9;
   background-color: white;
 `;
 
-const ProfilePresenter = () => {
-  return (
-    <ProfileContainer>
-      <HalfScreen>
-        <HeaderContainer>
-          <HeaderUpperContainer>
+const PostHeaderContainer = styled.View`
+  padding-horizontal: 14px;
+  height: 40px;
+  flex-direction: row;
+  align-items: center;
+  background-color: ${colors.lightGray};
+`;
+
+const PostScrollView = styled.ScrollView``;
+
+const PostContentContainer = styled.View`
+  flex-direction: row;
+  flex: 9;
+  flex-wrap: wrap;
+  background-color: white;
+`;
+
+const ProfilePresenter = ({ loading, data }) => {
+  return loading ? (
+    <Loader />
+  ) : (
+    data && (
+      <ProfileContainer>
+        <HalfScreen>
+          <HeaderContainer>
             <HeaderContentContainer>
-              <AvatarContainer></AvatarContainer>
+              <AvatarContainer>
+                <Image
+                  source={{ uri: data.viewUser.avatar }}
+                  style={{ width: 100, height: 100, borderRadius: 50 }}
+                />
+              </AvatarContainer>
               <DataContainer>
-                <UsernameContainer>
-                  <Username>cocodaddy</Username>
-                </UsernameContainer>
+                <UserContainer>
+                  <Username>{data.viewUser.username}</Username>
+                  {data.viewUser.isMyself ? (
+                    <TouchableOpacity>
+                      <Feather name="settings" size={18} color={colors.black} />
+                    </TouchableOpacity>
+                  ) : data.viewUser.isFollowing ? (
+                    <Button text={"アンフォロー"} />
+                  ) : (
+                    <Button text={"フォロー"} accent={true} />
+                  )}
+                </UserContainer>
                 <InfoContainer>
                   <InfoItem>
                     <InfoTitle>投稿</InfoTitle>
-                    <InfoData>50</InfoData>
+                    <InfoData>{data.viewUser.postsCount}</InfoData>
                   </InfoItem>
                   <InfoItem>
                     <InfoTitle>フォロワー</InfoTitle>
-                    <InfoData>50</InfoData>
+                    <InfoData>{data.viewUser.followersCount}</InfoData>
                   </InfoItem>
                   <InfoItem>
                     <InfoTitle>フォロー中</InfoTitle>
-                    <InfoData>50</InfoData>
+                    <InfoData>{data.viewUser.followingCount}</InfoData>
                   </InfoItem>
                 </InfoContainer>
               </DataContainer>
             </HeaderContentContainer>
-          </HeaderUpperContainer>
-        </HeaderContainer>
-        <MyDogContainer>
-          <MyDogHeaderContainer></MyDogHeaderContainer>
-          <MyDogContentContainer></MyDogContentContainer>
-        </MyDogContainer>
-      </HalfScreen>
-      <HalfScreen>
-        <PostContainer>
-          <PostHeaderContainer></PostHeaderContainer>
-          <PostContentContainer></PostContentContainer>
-        </PostContainer>
-      </HalfScreen>
-    </ProfileContainer>
+          </HeaderContainer>
+          <MyDogContainer>
+            <MyDogHeaderContainer>
+              <Title>ドッグ</Title>
+              {data.viewUser.isMyself ? (
+                <TouchableOpacity>
+                  <Feather name="settings" size={18} color={colors.black} />
+                </TouchableOpacity>
+              ) : null}
+            </MyDogHeaderContainer>
+            <MyDogContentContainer>
+              <FlatList
+                style={{ width: "100%", paddingVertical: 15 }}
+                data={data.viewUser.dogs}
+                renderItem={({ item }) => (
+                  <Dog image={item.image} name={item.name} />
+                )}
+                horizontal={true}
+                keyExtractor={(item) => item.id.toString()}
+                showsVerticalScrollIndicator={false}
+              />
+            </MyDogContentContainer>
+          </MyDogContainer>
+        </HalfScreen>
+        <HalfScreen>
+          <PostContainer>
+            <PostHeaderContainer>
+              <Title>ポスト</Title>
+            </PostHeaderContainer>
+            <PostScrollView>
+              <PostContentContainer>
+                {data.viewUser.posts &&
+                  data.viewUser.posts.map((post) => (
+                    <PostGrid key={post.id} {...post} />
+                  ))}
+              </PostContentContainer>
+            </PostScrollView>
+          </PostContainer>
+        </HalfScreen>
+      </ProfileContainer>
+    )
   );
 };
 

@@ -10,6 +10,33 @@ export const PROFILE_THUMBNAIL = gql`
   }
 `;
 
+export const VIEW_USER = gql`
+  query viewUser($id: String!) {
+    viewUser(id: $id) {
+      id
+      avatar
+      username
+      email
+      followingCount
+      followersCount
+      postsCount
+      dogs {
+        id
+        image
+        name
+      }
+      posts {
+        id
+        files {
+          url
+        }
+      }
+      isFollowing
+      isMyself
+    }
+  }
+`;
+
 export const VIEW_FEED = gql`
   query viewFeed {
     viewFeed {

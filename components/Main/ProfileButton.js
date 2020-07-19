@@ -13,7 +13,9 @@ const ProfileButton = ({ loading, data }) => {
         <Loader />
       ) : (
         <TouchableOpacity
-          onPress={() => navigation.navigate("Profile", { id: data.id })}
+          onPress={() =>
+            navigation.navigate("Profile", { id: data.viewMyself.id })
+          }
         >
           <Image
             source={{ uri: data.viewMyself.avatar }}
