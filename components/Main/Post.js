@@ -34,6 +34,7 @@ const Bold = styled.Text`
 
 const Location = styled.Text`
   font-size: 12px;
+  color: ${colors.darkGray};
 `;
 
 const SlideContainer = styled.View`
@@ -57,7 +58,7 @@ const InfoContainer = styled.View`
 `;
 
 const Caption = styled.Text`
-  margin: 3px 0;
+  margin-bottom: 10px;
 `;
 
 const Post = ({
@@ -133,6 +134,7 @@ const Post = ({
         </Swiper>
       </SlideContainer>
       <InfoContainer>
+        <Caption>{caption}</Caption>
         <IconsContainer>
           <Touchable
             onPress={handleLike}
@@ -163,9 +165,6 @@ const Post = ({
             <Text style={{ fontSize: 16 }}>{comments.length}</Text>
           </Touchable>
         </IconsContainer>
-        <Caption>
-          <Bold>{user.username}</Bold> {caption}
-        </Caption>
       </InfoContainer>
     </Container>
   );

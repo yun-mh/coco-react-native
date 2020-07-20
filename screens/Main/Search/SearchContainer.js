@@ -1,0 +1,46 @@
+import React, { useLayoutEffect, useState } from "react";
+import { useQuery } from "@apollo/react-hooks";
+import SearchPresenter from "./SearchPresenter";
+import { SEARCH } from "../../../queries/Main/MainQueries";
+
+export default ({ navigation }) => {
+  const [value, setValue] = useState("");
+  const [isUser, setIsUser] = useState(true);
+  const [fetch, setFetch] = useState(false);
+  const { data, loading, refetch } = useQuery(SEARCH, {
+    variables: {
+      term: value,
+    },
+    skip: !fetch,
+    fetchPolicy: "network-only",
+  });
+
+  const onChange = (text) => {
+    setValue(text);
+  };
+
+  const onSubmit = () => {
+    setFetch(true);
+  };
+
+  const handleUserTab = () => {
+    setIsUser(true);
+  };
+
+  const handlePostTab = () => {
+    setIsUser(false);
+  };
+
+  return (
+    <SearchPresenter
+      value={value}
+      onChange={onChange}
+      onSubmit={onSubmit}
+      loading={loading}
+      data={data}
+      isUser={isUser}
+      handleUserTab={handleUserTab}
+      handlePostTab={handlePostTab}
+    />
+  );
+};

@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
@@ -11,17 +11,14 @@ import Notification from "../screens/Main/Notification";
 import Message from "../screens/Main/Message";
 import Profile from "../screens/Main/Profile";
 import Feed from "../screens/Main/Feed";
-
-import {
-  getFocusedRouteNameFromRoute,
-  useRoute,
-} from "@react-navigation/native";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import LogoTitle from "../components/Main/LogoTitle";
 import ProfileButton from "../components/Main/ProfileButton";
 import SearchButton from "../components/Main/SearchButton";
 import { useQuery } from "@apollo/react-hooks";
 import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import Comment from "../screens/Main/Comment";
+import Search from "../screens/Main/Search";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -128,14 +125,19 @@ export default () => {
     >
       <MainNavigator.Screen name="Tabs" component={Tabs} />
       <MainNavigator.Screen
-        name="Comment"
-        component={Comment}
-        options={{ title: "コメント" }}
+        name="Search"
+        component={Search}
+        options={{ title: "" }}
       />
       <MainNavigator.Screen
         name="Profile"
         component={Profile}
         options={{ title: "", headerTransparent: true }}
+      />
+      <MainNavigator.Screen
+        name="Comment"
+        component={Comment}
+        options={{ title: "コメント" }}
       />
     </MainNavigator.Navigator>
   );

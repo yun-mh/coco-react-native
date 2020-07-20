@@ -3,7 +3,7 @@ import { TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import constants from "../../constants";
 
-const PostGrid = ({ files = [], id }) => {
+const PostGrid = ({ id, files = [] }) => {
   const navigation = useNavigation();
 
   return (
