@@ -1,7 +1,6 @@
 import React from "react";
 import Loader from "../../../components/Main/Loader";
 import PostDetail from "../../../components/Main/PostDetail";
-import { View } from "react-native";
 
 export default ({
   loading,

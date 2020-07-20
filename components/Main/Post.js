@@ -134,17 +134,27 @@ const Post = ({
       </SlideContainer>
       <InfoContainer>
         <IconsContainer>
-          <Touchable onPress={handleLike}>
-            <IconContainer>
+          <Touchable
+            onPress={handleLike}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginRight: 10,
+            }}
+          >
+            <IconContainer style={{ marginRight: 3 }}>
               <Feather
                 size={24}
                 color={isLiked ? colors.red : colors.black}
                 name="heart"
               />
             </IconContainer>
+            <Text style={{ fontSize: 16 }}>
+              {likeCount === 1 ? "1" : `${likeCount}`}
+            </Text>
           </Touchable>
           <Touchable
-            onPress={() => navigation.navigate("PostDetail", { id })}
+            onPress={() => navigation.navigate("Comment", { id })}
             style={{ flexDirection: "row", alignItems: "center" }}
           >
             <IconContainer style={{ marginRight: 3 }}>
@@ -153,9 +163,6 @@ const Post = ({
             <Text style={{ fontSize: 16 }}>{comments.length}</Text>
           </Touchable>
         </IconsContainer>
-        <Touchable>
-          <Bold>{likeCount === 1 ? "1 like" : `${likeCount} likes`}</Bold>
-        </Touchable>
         <Caption>
           <Bold>{user.username}</Bold> {caption}
         </Caption>

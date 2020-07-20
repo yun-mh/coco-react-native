@@ -21,7 +21,7 @@ import ProfileButton from "../components/Main/ProfileButton";
 import SearchButton from "../components/Main/SearchButton";
 import { useQuery } from "@apollo/react-hooks";
 import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
-import PostDetail from "../screens/Main/PostDetail";
+import Comment from "../screens/Main/Comment";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -128,8 +128,8 @@ export default () => {
     >
       <MainNavigator.Screen name="Tabs" component={Tabs} />
       <MainNavigator.Screen
-        name="PostDetail"
-        component={PostDetail}
+        name="Comment"
+        component={Comment}
         options={{ title: "コメント" }}
       />
       <MainNavigator.Screen

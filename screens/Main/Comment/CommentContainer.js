@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import PostDetailPresenter from "./PostDetailPresenter";
-import { VIEW_POST, ADD_COMMENT } from "../../../queries/Main/MainQueries";
 import { Alert } from "react-native";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { VIEW_POST, ADD_COMMENT } from "../../../queries/Main/MainQueries";
+import CommentPresenter from "./CommentPresenter";
 
 export default ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -53,7 +53,7 @@ export default ({ navigation, route }) => {
   };
 
   return (
-    <PostDetailPresenter
+    <CommentPresenter
       loading={loading}
       data={data}
       refreshing={refreshing}

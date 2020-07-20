@@ -7,8 +7,8 @@ const ProfileContainer = ({ navigation, route }) => {
   const { loading, error, data, refetch } = useQuery(VIEW_USER, {
     variables: { id: route.params.id },
   });
+
   const [isFollowing, setIsFollowing] = useState(data.viewUser.isFollowing);
-  console.log(isFollowing);
 
   const [followMutation] = useMutation(FOLLOW, {
     variables: {
