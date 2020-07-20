@@ -125,7 +125,7 @@ const PostContentContainer = styled.View`
   background-color: white;
 `;
 
-const ProfilePresenter = ({ loading, data }) => {
+const ProfilePresenter = ({ loading, data, isFollowing, handleFollow }) => {
   return loading ? (
     <Loader />
   ) : (
@@ -147,10 +147,14 @@ const ProfilePresenter = ({ loading, data }) => {
                     <TouchableOpacity>
                       <Feather name="settings" size={18} color={colors.black} />
                     </TouchableOpacity>
-                  ) : data.viewUser.isFollowing ? (
-                    <Button text={"アンフォロー"} />
+                  ) : isFollowing ? (
+                    <Button text={"アンフォロー"} onPress={handleFollow} />
                   ) : (
-                    <Button text={"フォロー"} accent={true} />
+                    <Button
+                      text={"フォロー"}
+                      accent={true}
+                      onPress={handleFollow}
+                    />
                   )}
                 </UserContainer>
                 <InfoContainer>

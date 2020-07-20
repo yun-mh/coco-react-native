@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Image, FlatList, TouchableOpacity } from "react-native";
+import React from "react";
+import { Image, FlatList } from "react-native";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../colors";

@@ -37,6 +37,18 @@ export const VIEW_USER = gql`
   }
 `;
 
+export const FOLLOW = gql`
+  mutation follow($id: String!) {
+    follow(id: $id)
+  }
+`;
+
+export const UNFOLLOW = gql`
+  mutation unfollow($id: String!) {
+    unfollow(id: $id)
+  }
+`;
+
 export const VIEW_FEED = gql`
   query viewFeed {
     viewFeed {
