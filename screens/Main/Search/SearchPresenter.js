@@ -5,8 +5,8 @@ import SearchBar from "../../../components/Main/SearchBar";
 import Loader from "../../../components/Main/Loader";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../../colors";
-import SearchItem from "../../../components/Main/SearchItem";
 import PostGrid from "../../../components/Main/PostGrid";
+import SearchUser from "../../../components/Main/SearchUser";
 
 const TabContainer = styled.View`
   height: 40px;
@@ -72,7 +72,7 @@ export default ({
             style={{ marginHorizontal: 15, paddingTop: 15 }}
             data={data?.searchUser}
             renderItem={({ item }) => (
-              <SearchItem
+              <SearchUser
                 id={item.id}
                 avatar={item.avatar}
                 username={item.username}

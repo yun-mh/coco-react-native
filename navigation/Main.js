@@ -19,6 +19,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import Comment from "../screens/Main/Comment";
 import Search from "../screens/Main/Search";
+import Post from "../screens/Main/Post";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -133,6 +134,11 @@ export default () => {
         name="Profile"
         component={Profile}
         options={{ title: "", headerTransparent: true }}
+      />
+      <MainNavigator.Screen
+        name="Post"
+        component={Post}
+        options={{ title: "ポスト" }}
       />
       <MainNavigator.Screen
         name="Comment"

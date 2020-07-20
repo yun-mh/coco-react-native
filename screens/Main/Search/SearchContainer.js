@@ -7,7 +7,7 @@ export default ({ navigation }) => {
   const [value, setValue] = useState("");
   const [isUser, setIsUser] = useState(true);
   const [fetch, setFetch] = useState(false);
-  const { data, loading, refetch } = useQuery(SEARCH, {
+  const { data, loading } = useQuery(SEARCH, {
     variables: {
       term: value,
     },
@@ -16,6 +16,7 @@ export default ({ navigation }) => {
   });
 
   const onChange = (text) => {
+    setFetch(false);
     setValue(text);
   };
 

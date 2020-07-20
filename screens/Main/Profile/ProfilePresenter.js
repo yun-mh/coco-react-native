@@ -129,7 +129,7 @@ const ProfilePresenter = ({ loading, data, isFollowing, handleFollow }) => {
   return loading ? (
     <Loader />
   ) : (
-    data && (
+    data?.viewUser && (
       <ProfileContainer>
         <HalfScreen>
           <HeaderContainer>
