@@ -134,8 +134,14 @@ const ProfilePresenter = ({
   handleFollow,
   isUserInfoModalVisible,
   toggleUserInfoModal,
+  toProfileModify,
   isDogInfoModalVisible,
   toggleDogInfoModal,
+  image,
+  dogName,
+  breed,
+  gender,
+  birthdate,
   logout,
 }) => {
   return loading ? (
@@ -148,13 +154,13 @@ const ProfilePresenter = ({
             <HeaderContentContainer>
               <AvatarContainer>
                 <Image
-                  source={{ uri: data.viewUser.avatar }}
+                  source={{ uri: data?.viewUser?.avatar }}
                   style={{ width: 100, height: 100, borderRadius: 50 }}
                 />
               </AvatarContainer>
               <DataContainer>
                 <UserContainer>
-                  <Username>{data.viewUser.username}</Username>
+                  <Username>{data?.viewUser?.username}</Username>
                   {data.viewUser.isMyself ? (
                     <TouchableOpacity onPress={toggleUserInfoModal}>
                       <Feather name="settings" size={18} color={colors.black} />
@@ -172,15 +178,15 @@ const ProfilePresenter = ({
                 <InfoContainer>
                   <InfoItem>
                     <InfoTitle>投稿</InfoTitle>
-                    <InfoData>{data.viewUser.postsCount}</InfoData>
+                    <InfoData>{data?.viewUser?.postsCount}</InfoData>
                   </InfoItem>
                   <InfoItem>
                     <InfoTitle>フォロワー</InfoTitle>
-                    <InfoData>{data.viewUser.followersCount}</InfoData>
+                    <InfoData>{data?.viewUser?.followersCount}</InfoData>
                   </InfoItem>
                   <InfoItem>
                     <InfoTitle>フォロー中</InfoTitle>
-                    <InfoData>{data.viewUser.followingCount}</InfoData>
+                    <InfoData>{data?.viewUser?.followingCount}</InfoData>
                   </InfoItem>
                 </InfoContainer>
               </DataContainer>
@@ -189,7 +195,7 @@ const ProfilePresenter = ({
           <MyDogContainer>
             <MyDogHeaderContainer>
               <Title>ドッグ</Title>
-              {data.viewUser.isMyself ? (
+              {data?.viewUser?.isMyself ? (
                 <TouchableOpacity>
                   <Feather name="settings" size={18} color={colors.black} />
                 </TouchableOpacity>
@@ -198,12 +204,12 @@ const ProfilePresenter = ({
             <MyDogContentContainer>
               <FlatList
                 style={{ width: "100%", paddingVertical: 15 }}
-                data={data.viewUser.dogs}
+                data={data?.viewUser?.dogs}
                 renderItem={({ item }) => (
                   <Dog
                     image={item.image}
                     name={item.name}
-                    onPress={toggleDogInfoModal}
+                    onPress={() => toggleDogInfoModal(item.id)}
                   />
                 )}
                 horizontal={true}
@@ -220,8 +226,8 @@ const ProfilePresenter = ({
             </PostHeaderContainer>
             <PostScrollView>
               <PostContentContainer>
-                {data.viewUser.posts &&
-                  data.viewUser.posts.map((post) => (
+                {data?.viewUser?.posts &&
+                  data?.viewUser?.posts.map((post) => (
                     <PostGrid key={post.id} {...post} />
                   ))}
               </PostContentContainer>
@@ -231,12 +237,17 @@ const ProfilePresenter = ({
         <UserInfoModal
           isUserInfoModalVisible={isUserInfoModalVisible}
           toggleUserInfoModal={toggleUserInfoModal}
+          toProfileModify={toProfileModify}
           logout={logout}
         />
         <DogInfoModal
+          image={image}
+          dogName={dogName}
+          breed={breed}
+          gender={gender}
+          birthdate={birthdate}
           isDogInfoModalVisible={isDogInfoModalVisible}
           toggleDogInfoModal={toggleDogInfoModal}
-          logout={logout}
         />
       </ProfileContainer>
     )

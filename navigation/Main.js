@@ -10,12 +10,9 @@ import Photo from "../screens/Main/Photo";
 import Notification from "../screens/Main/Notification";
 import Message from "../screens/Main/Message";
 import Profile from "../screens/Main/Profile";
+import ProfileModify from "../screens/Main/ProfileModify";
 import Feed from "../screens/Main/Feed";
-import {
-  getFocusedRouteNameFromRoute,
-  useRoute,
-  useNavigation,
-} from "@react-navigation/native";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import LogoTitle from "../components/Main/LogoTitle";
 import ProfileButton from "../components/Main/ProfileButton";
 import SearchButton from "../components/Main/SearchButton";
@@ -140,6 +137,13 @@ export default () => {
         options={{
           title: "",
           headerTransparent: true,
+        }}
+      />
+      <MainNavigator.Screen
+        name="ProfileModify"
+        component={ProfileModify}
+        options={{
+          title: "会員情報変更",
         }}
       />
       <MainNavigator.Screen

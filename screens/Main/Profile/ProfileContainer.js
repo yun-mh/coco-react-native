@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfilePresenter from "./ProfilePresenter";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { VIEW_USER, FOLLOW, UNFOLLOW } from "../../../queries/Main/MainQueries";
@@ -11,9 +11,25 @@ const ProfileContainer = ({ navigation, route }) => {
     variables: { id: route.params.id },
   });
 
-  const [isFollowing, setIsFollowing] = useState(data.viewUser.isFollowing);
+  const [image, setImage] = useState("");
+  const [dogName, setDogName] = useState("");
+  const [breed, setBreed] = useState("");
+  const [gender, setGender] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [isFollowing, setIsFollowing] = useState(data?.viewUser?.isFollowing);
   const [isUserInfoModalVisible, setUserInfoModalVisible] = useState(false);
   const [isDogInfoModalVisible, setDogInfoModalVisible] = useState(false);
+  const [isModified, setIsModified] = useState(
+    route.params.isModified || false
+  );
+
+  useEffect(() => {
+    setIsModified(route.params.isModified || false);
+  }, [route.params.isModified]);
+
+  useEffect(() => {
+    refetch();
+  }, [isModified]);
 
   const [followMutation] = useMutation(FOLLOW, {
     variables: {
@@ -31,7 +47,31 @@ const ProfileContainer = ({ navigation, route }) => {
     setUserInfoModalVisible(!isUserInfoModalVisible);
   };
 
-  const toggleDogInfoModal = () => {
+  const toProfileModify = () => {
+    toggleUserInfoModal();
+    navigation.navigate("ProfileModify", {
+      id: data?.viewUser?.id,
+      email: data?.viewUser?.email,
+      avatar: data?.viewUser?.avatar,
+      username: data?.viewUser?.username,
+      isModified,
+    });
+  };
+
+  const toggleDogInfoModal = (id) => {
+    if (!isDogInfoModalVisible) {
+      const target = data?.viewUser?.dogs.find((el) => el.id === id);
+      setImage(target.image);
+      setDogName(target.name);
+      setBreed(target.breed);
+      setGender(target.gender);
+      setBirthdate(target.birthdate);
+    } else {
+      setDogName("");
+      setBreed("");
+      setGender("");
+      setBirthdate("");
+    }
     setDogInfoModalVisible(!isDogInfoModalVisible);
   };
 
@@ -61,6 +101,12 @@ const ProfileContainer = ({ navigation, route }) => {
       handleFollow={handleFollow}
       isUserInfoModalVisible={isUserInfoModalVisible}
       toggleUserInfoModal={toggleUserInfoModal}
+      toProfileModify={toProfileModify}
+      image={image}
+      dogName={dogName}
+      breed={breed}
+      gender={gender}
+      birthdate={birthdate}
       isDogInfoModalVisible={isDogInfoModalVisible}
       toggleDogInfoModal={toggleDogInfoModal}
       logout={logout}

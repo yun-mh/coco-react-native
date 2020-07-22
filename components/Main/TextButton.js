@@ -10,7 +10,7 @@ const TextContainer = styled.View`
 
 const TextButton = styled.Text`
   color: ${({ color }) => color};
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   padding-vertical: 10px;
 `;

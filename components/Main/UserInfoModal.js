@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { Button, Text, View } from "react-native";
+import React from "react";
 import Modal from "react-native-modal";
 import colors from "../../colors";
 import TextButton from "./TextButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const UserInfoModal = ({
   isUserInfoModalVisible,
   toggleUserInfoModal,
+  toProfileModify,
   logout,
 }) => {
   return (
@@ -14,10 +15,10 @@ const UserInfoModal = ({
       isVisible={isUserInfoModalVisible}
       style={{ justifyContent: "flex-end", margin: 0 }}
     >
-      <View style={{ backgroundColor: "white" }}>
+      <SafeAreaView style={{ backgroundColor: "white", paddingTop: 10 }}>
         <TextButton
           title={"会員情報変更"}
-          onPress={toggleUserInfoModal}
+          onPress={toProfileModify}
           color={colors.primary}
         />
         <TextButton title={"ログアウト"} onPress={logout} color={colors.red} />
@@ -26,7 +27,7 @@ const UserInfoModal = ({
           onPress={toggleUserInfoModal}
           color={colors.gray}
         />
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 };

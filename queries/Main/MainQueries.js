@@ -41,6 +41,9 @@ export const VIEW_USER = gql`
         id
         image
         name
+        breed
+        gender
+        birthdate
       }
       posts {
         id
@@ -54,6 +57,12 @@ export const VIEW_USER = gql`
   }
 `;
 
+export const EDIT_USER = gql`
+  mutation editUser($username: String!, $avatar: String!) {
+    editUser(username: $username, avatar: $avatar)
+  }
+`;
+
 export const FOLLOW = gql`
   mutation follow($id: String!) {
     follow(id: $id)
@@ -63,6 +72,12 @@ export const FOLLOW = gql`
 export const UNFOLLOW = gql`
   mutation unfollow($id: String!) {
     unfollow(id: $id)
+  }
+`;
+
+export const VIEW_DOG = gql`
+  query viewDog($id: String!) {
+    viewDog(id: $id)
   }
 `;
 
