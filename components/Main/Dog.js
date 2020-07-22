@@ -1,15 +1,18 @@
 import React from "react";
-import { Image, View, Text } from "react-native";
+import { Image, Text, TouchableOpacity } from "react-native";
 
-const Dog = ({ image, name }) => {
+const Dog = ({ image, name, onPress }) => {
   return (
-    <View style={{ width: 100, paddingHorizontal: 15, alignItems: "center" }}>
+    <TouchableOpacity
+      style={{ width: 100, paddingHorizontal: 15, alignItems: "center" }}
+      onPress={onPress}
+    >
       <Image
         source={{ uri: image }}
         style={{ width: 70, height: 50, borderRadius: 10 }}
       />
       <Text style={{ fontSize: 10 }}>{name}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -26,16 +26,8 @@ export const AuthProvider = ({ isLoggedIn: isLoggedInProp, children }) => {
     }
   };
 
-  const tempLogIn = async () => {
-    await AsyncStorage.setItem("isLoggedIn", "true");
-    await AsyncStorage.setItem("jwt", "asdassdasdasdasdasd");
-    setIsLoggedIn(true);
-  }; // delete later
-
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn, logUserIn, logUserOut, tempLogIn }}
-    >
+    <AuthContext.Provider value={{ isLoggedIn, logUserIn, logUserOut }}>
       {children}
     </AuthContext.Provider>
   );
@@ -55,8 +47,3 @@ export const useLogOut = () => {
   const { logUserOut } = useContext(AuthContext);
   return logUserOut;
 };
-
-export const useTempLogIn = () => {
-  const { tempLogIn } = useContext(AuthContext);
-  return tempLogIn;
-}; // delete later

@@ -1,12 +1,9 @@
 import React from "react";
-import { Dimensions } from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import Button from "../../components/Button";
 import TextButton from "../../components/Auth/TextButton";
 import colors from "../../colors";
-
-const { height } = Dimensions.get("screen");
 
 const Container = styled.View`
   flex: 1;
@@ -16,7 +13,7 @@ const SlideContainer = styled.View`
   margin-bottom: 10px;
   overflow: hidden;
   width: 100%;
-  height: ${(height / 5) * 4}px;
+  flex: 3;
   border-radius: 4px;
   background-color: ${colors.secondaryShadow};
 `;

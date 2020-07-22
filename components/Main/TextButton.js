@@ -1,7 +1,6 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import colors from "../../colors";
 
 const TextContainer = styled.View`
   flex-direction: row;
@@ -9,23 +8,17 @@ const TextContainer = styled.View`
   justify-content: center;
 `;
 
-const Text = styled.Text`
-  color: ${colors.black};
-  font-size: 14px;
-`;
-
 const TextButton = styled.Text`
-  margin-left: 5px;
-  color: ${colors.primary};
-  font-size: 16px;
-  font-weight: 600;
+  color: ${({ color }) => color};
+  font-size: 18px;
+  font-weight: 500;
+  padding-vertical: 10px;
 `;
 
-export default ({ caption, title, onPress }) => (
+export default ({ title, onPress, color }) => (
   <TextContainer>
-    <Text>{caption}</Text>
     <TouchableOpacity onPress={onPress}>
-      <TextButton>{title}</TextButton>
+      <TextButton color={color}>{title}</TextButton>
     </TouchableOpacity>
   </TextContainer>
 );

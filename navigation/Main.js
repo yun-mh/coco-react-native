@@ -11,7 +11,11 @@ import Notification from "../screens/Main/Notification";
 import Message from "../screens/Main/Message";
 import Profile from "../screens/Main/Profile";
 import Feed from "../screens/Main/Feed";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import {
+  getFocusedRouteNameFromRoute,
+  useRoute,
+  useNavigation,
+} from "@react-navigation/native";
 import LogoTitle from "../components/Main/LogoTitle";
 import ProfileButton from "../components/Main/ProfileButton";
 import SearchButton from "../components/Main/SearchButton";
@@ -133,7 +137,10 @@ export default () => {
       <MainNavigator.Screen
         name="Profile"
         component={Profile}
-        options={{ title: "", headerTransparent: true }}
+        options={{
+          title: "",
+          headerTransparent: true,
+        }}
       />
       <MainNavigator.Screen
         name="Post"

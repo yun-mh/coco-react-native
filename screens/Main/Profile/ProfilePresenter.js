@@ -9,6 +9,8 @@ import Loader from "../../../components/Main/Loader";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../../../components/Main/Button";
+import UserInfoModal from "../../../components/Main/UserInfoModal";
+import DogInfoModal from "../../../components/Main/DogInfoModal";
 
 const ProfileContainer = styled.View`
   flex: 1;
@@ -125,7 +127,17 @@ const PostContentContainer = styled.View`
   background-color: white;
 `;
 
-const ProfilePresenter = ({ loading, data, isFollowing, handleFollow }) => {
+const ProfilePresenter = ({
+  loading,
+  data,
+  isFollowing,
+  handleFollow,
+  isUserInfoModalVisible,
+  toggleUserInfoModal,
+  isDogInfoModalVisible,
+  toggleDogInfoModal,
+  logout,
+}) => {
   return loading ? (
     <Loader />
   ) : (
@@ -144,7 +156,7 @@ const ProfilePresenter = ({ loading, data, isFollowing, handleFollow }) => {
                 <UserContainer>
                   <Username>{data.viewUser.username}</Username>
                   {data.viewUser.isMyself ? (
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={toggleUserInfoModal}>
                       <Feather name="settings" size={18} color={colors.black} />
                     </TouchableOpacity>
                   ) : isFollowing ? (
@@ -188,7 +200,11 @@ const ProfilePresenter = ({ loading, data, isFollowing, handleFollow }) => {
                 style={{ width: "100%", paddingVertical: 15 }}
                 data={data.viewUser.dogs}
                 renderItem={({ item }) => (
-                  <Dog image={item.image} name={item.name} />
+                  <Dog
+                    image={item.image}
+                    name={item.name}
+                    onPress={toggleDogInfoModal}
+                  />
                 )}
                 horizontal={true}
                 keyExtractor={(item) => item.id.toString()}
@@ -212,6 +228,16 @@ const ProfilePresenter = ({ loading, data, isFollowing, handleFollow }) => {
             </PostScrollView>
           </PostContainer>
         </HalfScreen>
+        <UserInfoModal
+          isUserInfoModalVisible={isUserInfoModalVisible}
+          toggleUserInfoModal={toggleUserInfoModal}
+          logout={logout}
+        />
+        <DogInfoModal
+          isDogInfoModalVisible={isDogInfoModalVisible}
+          toggleDogInfoModal={toggleDogInfoModal}
+          logout={logout}
+        />
       </ProfileContainer>
     )
   );
