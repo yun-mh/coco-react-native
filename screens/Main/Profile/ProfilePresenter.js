@@ -197,13 +197,17 @@ const ProfilePresenter = ({
               <Title>ドッグ</Title>
               {data?.viewUser?.isMyself ? (
                 <TouchableOpacity>
-                  <Feather name="settings" size={18} color={colors.black} />
+                  <Feather name="plus-circle" size={18} color={colors.black} />
                 </TouchableOpacity>
               ) : null}
             </MyDogHeaderContainer>
             <MyDogContentContainer>
               <FlatList
-                style={{ width: "100%", paddingVertical: 15 }}
+                style={{
+                  width: "100%",
+                  paddingVertical: 15,
+                }}
+                contentContainerStyle={{ alignItems: "center" }}
                 data={data?.viewUser?.dogs}
                 renderItem={({ item }) => (
                   <Dog

@@ -2,11 +2,16 @@ import React from "react";
 import { KeyboardAvoidingView, View } from "react-native";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
 import TextButton from "../../../components/Auth/TextButton";
 import colors from "../../../colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Container = styled.View`
   flex: 1;
@@ -16,8 +21,6 @@ const Container = styled.View`
 `;
 
 const AvatarContainer = styled.TouchableOpacity`
-  width: 150px;
-  height: 150px;
   border-radius: 75px;
   background-color: ${colors.grayShadow};
   justify-content: center;
@@ -26,19 +29,14 @@ const AvatarContainer = styled.TouchableOpacity`
 
 const Avatar = styled.Image`
   position: absolute;
-  width: 150px;
-  height: 150px;
   border-radius: 75px;
 `;
 
-const InputContainer = styled.View`
-  margin-top: 60px;
-`;
+const InputContainer = styled.View``;
 
 const DividerContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  margin: 40px 0;
 `;
 
 const DividerLine = styled.View`
@@ -91,15 +89,21 @@ export default ({
     <DismissKeyboard>
       <Container>
         <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
-          <View
+          <SafeAreaView
             style={{
-              flex: 0.95,
+              flex: 9,
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <AvatarContainer onPress={handlePickAvatar}>
-              <Avatar source={{ uri: avatar }} />
+            <AvatarContainer
+              style={{ width: wp("30%"), height: wp("30%") }}
+              onPress={handlePickAvatar}
+            >
+              <Avatar
+                style={{ width: wp("30%"), height: wp("30%") }}
+                source={{ uri: avatar }}
+              />
               <Feather
                 name="plus"
                 size={40}
@@ -107,7 +111,7 @@ export default ({
                 style={{ marginTop: 5, marginLeft: 1 }}
               />
             </AvatarContainer>
-            <InputContainer>
+            <InputContainer style={{ marginTop: hp("3%") }}>
               <Input
                 value={username}
                 placeholder="ユーザ名"
@@ -130,7 +134,7 @@ export default ({
               />
             </InputContainer>
             <Button text={"次へ"} accent={true} onPress={handleSubmit} />
-            <DividerContainer>
+            <DividerContainer style={{ marginVertical: hp("2%") }}>
               <DividerLine />
               <DividerText>または</DividerText>
               <DividerLine />
@@ -139,8 +143,8 @@ export default ({
               <SocialLoginButton></SocialLoginButton>
               <SocialLoginButton></SocialLoginButton>
             </SocialLoginContainer>
-          </View>
-          <SignUpFooter>
+          </SafeAreaView>
+          <SignUpFooter style={{ flex: 1 }}>
             <TextButton
               caption={"アカウントをお持ちの場合は"}
               title={"ログイン"}

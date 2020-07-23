@@ -1,6 +1,10 @@
 import React from "react";
 import { TouchableOpacity, Dimensions, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import PropTypes from "prop-types";
 import colors from "../colors";
 
@@ -8,7 +12,6 @@ const { width } = Dimensions.get("screen");
 
 const Btn = styled.View`
   width: ${width / 1.2}px;
-  margin-bottom: 25px;
   border: 1px solid ${(props) => (props.accent ? "transparent" : colors.black)};
   border-radius: 30px;
   padding: 12px 0px;
@@ -26,7 +29,10 @@ const Text = styled.Text`
 `;
 
 const Button = ({ loading, onPress, text, accent = false }) => (
-  <TouchableOpacity onPress={loading ? null : onPress}>
+  <TouchableOpacity
+    onPress={loading ? null : onPress}
+    style={{ marginBottom: hp("3%") }}
+  >
     <Btn accent={accent}>
       {loading ? (
         <ActivityIndicator color={accent ? "white" : "black"} />
