@@ -59,7 +59,31 @@ export const VIEW_USER = gql`
 
 export const EDIT_USER = gql`
   mutation editUser($username: String!, $avatar: String!) {
-    editUser(username: $username, avatar: $avatar)
+    editUser(username: $username, avatar: $avatar) {
+      id
+      avatar
+      username
+      email
+      followingCount
+      followersCount
+      postsCount
+      dogs {
+        id
+        image
+        name
+        breed
+        gender
+        birthdate
+      }
+      posts {
+        id
+        files {
+          url
+        }
+      }
+      isFollowing
+      isMyself
+    }
   }
 `;
 
@@ -75,9 +99,16 @@ export const UNFOLLOW = gql`
   }
 `;
 
-export const VIEW_DOG = gql`
-  query viewDog($id: String!) {
-    viewDog(id: $id)
+export const DELETE_DOG = gql`
+  mutation editDog($id: String!, $action: ACTIONS!) {
+    editDog(id: $id, action: $action) {
+      id
+      image
+      name
+      breed
+      gender
+      birthdate
+    }
   }
 `;
 

@@ -11,6 +11,7 @@ const ProfileContainer = ({ navigation, route }) => {
     variables: { id: route.params.id },
   });
 
+  const [dogId, setDogId] = useState("");
   const [image, setImage] = useState("");
   const [dogName, setDogName] = useState("");
   const [breed, setBreed] = useState("");
@@ -19,17 +20,6 @@ const ProfileContainer = ({ navigation, route }) => {
   const [isFollowing, setIsFollowing] = useState(data?.viewUser?.isFollowing);
   const [isUserInfoModalVisible, setUserInfoModalVisible] = useState(false);
   const [isDogInfoModalVisible, setDogInfoModalVisible] = useState(false);
-  const [isModified, setIsModified] = useState(
-    route.params.isModified || false
-  );
-
-  useEffect(() => {
-    setIsModified(route.params.isModified || false);
-  }, [route.params.isModified]);
-
-  useEffect(() => {
-    refetch();
-  }, [isModified]);
 
   const [followMutation] = useMutation(FOLLOW, {
     variables: {
@@ -54,19 +44,20 @@ const ProfileContainer = ({ navigation, route }) => {
       email: data?.viewUser?.email,
       avatar: data?.viewUser?.avatar,
       username: data?.viewUser?.username,
-      isModified,
     });
   };
 
   const toggleDogInfoModal = (id) => {
     if (!isDogInfoModalVisible) {
       const target = data?.viewUser?.dogs.find((el) => el.id === id);
+      setDogId(target.id);
       setImage(target.image);
       setDogName(target.name);
       setBreed(target.breed);
       setGender(target.gender);
       setBirthdate(target.birthdate);
     } else {
+      setDogId("");
       setDogName("");
       setBreed("");
       setGender("");
@@ -102,12 +93,14 @@ const ProfileContainer = ({ navigation, route }) => {
       isUserInfoModalVisible={isUserInfoModalVisible}
       toggleUserInfoModal={toggleUserInfoModal}
       toProfileModify={toProfileModify}
+      dogId={dogId}
       image={image}
       dogName={dogName}
       breed={breed}
       gender={gender}
       birthdate={birthdate}
       isDogInfoModalVisible={isDogInfoModalVisible}
+      setDogInfoModalVisible={setDogInfoModalVisible}
       toggleDogInfoModal={toggleDogInfoModal}
       logout={logout}
     />

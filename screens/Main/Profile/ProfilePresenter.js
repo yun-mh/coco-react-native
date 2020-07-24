@@ -137,11 +137,13 @@ const ProfilePresenter = ({
   toProfileModify,
   isDogInfoModalVisible,
   toggleDogInfoModal,
+  dogId,
   image,
   dogName,
   breed,
   gender,
   birthdate,
+  setDogInfoModalVisible,
   logout,
 }) => {
   return loading ? (
@@ -245,12 +247,14 @@ const ProfilePresenter = ({
           logout={logout}
         />
         <DogInfoModal
+          dogId={dogId}
           image={image}
           dogName={dogName}
           breed={breed}
           gender={gender}
           birthdate={birthdate}
           isDogInfoModalVisible={isDogInfoModalVisible}
+          setDogInfoModalVisible={setDogInfoModalVisible}
           toggleDogInfoModal={toggleDogInfoModal}
         />
       </ProfileContainer>

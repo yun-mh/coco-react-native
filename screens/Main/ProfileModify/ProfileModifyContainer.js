@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Alert } from "react-native";
 import { useMutation } from "@apollo/react-hooks";
 import * as ImagePicker from "expo-image-picker";
 import { getCameraPermission } from "../../../userPermissions";
 import ProfileModifyPresenter from "./ProfileModifyPresenter";
-import { EDIT_USER, VIEW_USER } from "../../../queries/Main/MainQueries";
+import { VIEW_USER, EDIT_USER } from "../../../queries/Main/MainQueries";
 
 export default ({ navigation, route }) => {
   const [avatar, setAvatar] = useState(
@@ -14,11 +13,30 @@ export default ({ navigation, route }) => {
   const [username, setUsername] = useState(route.params.username || "");
   const [email, setEmail] = useState(route.params.email);
   const [loading, setLoading] = useState(false);
+
+  const updateCache = (cache, { data }) => {
+    const existingUser = cache.readQuery({
+      query: VIEW_USER,
+      variables: {
+        id: route.params.id,
+      },
+    });
+    const newUser = data.editUser;
+    cache.writeQuery({
+      query: VIEW_USER,
+      variables: {
+        id: route.params.id,
+      },
+      data: { ...existingUser, ...newUser },
+    });
+  };
+
   const [editUserMutation] = useMutation(EDIT_USER, {
     variables: {
       username,
       avatar,
     },
+    update: updateCache,
   });
 
   const handlePickAvatar = async () => {
@@ -51,10 +69,8 @@ export default ({ navigation, route }) => {
         data: { editUser },
       } = await editUserMutation();
       if (editUser) {
-        Alert.alert("完了", "会員情報を変更しました。");
-        navigation.navigate("Profile", {
+        await navigation.navigate("Profile", {
           id: route.params.id,
-          isModified: true,
         });
       }
     } catch (e) {

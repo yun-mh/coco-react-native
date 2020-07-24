@@ -42,6 +42,7 @@ const InputContainer = styled.View`
 `;
 
 export default ({
+  loading,
   username,
   setUsername,
   email,
@@ -78,7 +79,12 @@ export default ({
                 stateFn={setUsername}
               />
             </InputContainer>
-            <Button text={"修正"} accent={true} onPress={handleSubmit} />
+            <Button
+              loading={loading}
+              text={"修正"}
+              accent={true}
+              onPress={handleSubmit}
+            />
           </View>
         </KeyboardAvoidingView>
       </Container>
