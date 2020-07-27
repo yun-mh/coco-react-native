@@ -5,7 +5,6 @@ import { Feather } from "@expo/vector-icons";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
-import TextButton from "../../../components/Auth/TextButton";
 import colors from "../../../colors";
 
 const Container = styled.View`
@@ -35,10 +34,7 @@ const InputContainer = styled.View`
   margin-top: 60px;
 `;
 
-const SignUpFooter = styled.View``;
-
 export default ({
-  navigation,
   image,
   name,
   setName,
@@ -51,7 +47,6 @@ export default ({
   handleSubmit,
   handlePickImage,
 }) => {
-  const toSignIn = () => navigation.navigate("SignIn");
   return (
     <DismissKeyboard>
       <Container>
@@ -94,13 +89,6 @@ export default ({
             </InputContainer>
             <Button text={"次へ"} accent={true} onPress={handleSubmit} />
           </View>
-          <SignUpFooter>
-            <TextButton
-              caption={"アカウントをお持ちの場合は"}
-              title={"ログイン"}
-              onPress={toSignIn}
-            />
-          </SignUpFooter>
         </KeyboardAvoidingView>
       </Container>
     </DismissKeyboard>

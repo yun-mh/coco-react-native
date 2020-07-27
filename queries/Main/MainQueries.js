@@ -99,6 +99,31 @@ export const UNFOLLOW = gql`
   }
 `;
 
+export const ADD_DOG = gql`
+  mutation registerDog(
+    $image: String
+    $name: String!
+    $breed: String!
+    $gender: String!
+    $birthdate: String!
+  ) {
+    registerDog(
+      image: $image
+      name: $name
+      breed: $breed
+      gender: $gender
+      birthdate: $birthdate
+    ) {
+      id
+      image
+      name
+      breed
+      gender
+      birthdate
+    }
+  }
+`;
+
 export const DELETE_DOG = gql`
   mutation editDog($id: String!, $action: ACTIONS!) {
     editDog(id: $id, action: $action) {

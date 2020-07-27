@@ -21,6 +21,7 @@ import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import Comment from "../screens/Main/Comment";
 import Search from "../screens/Main/Search";
 import Post from "../screens/Main/Post";
+import AddDog from "../screens/Main/AddDog";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -144,6 +145,13 @@ export default () => {
         component={ProfileModify}
         options={{
           title: "会員情報変更",
+        }}
+      />
+      <MainNavigator.Screen
+        name="AddDog"
+        component={AddDog}
+        options={{
+          title: "犬登録",
         }}
       />
       <MainNavigator.Screen

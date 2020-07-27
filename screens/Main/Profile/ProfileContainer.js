@@ -7,7 +7,7 @@ import { useLogOut } from "../../../contexts/AuthContext";
 const ProfileContainer = ({ navigation, route }) => {
   const logout = useLogOut();
 
-  const { loading, error, data, refetch } = useQuery(VIEW_USER, {
+  const { loading, error, data } = useQuery(VIEW_USER, {
     variables: { id: route.params.id },
   });
 
@@ -44,6 +44,12 @@ const ProfileContainer = ({ navigation, route }) => {
       email: data?.viewUser?.email,
       avatar: data?.viewUser?.avatar,
       username: data?.viewUser?.username,
+    });
+  };
+
+  const toAddDog = () => {
+    navigation.navigate("AddDog", {
+      id: data?.viewUser?.id,
     });
   };
 
@@ -93,6 +99,7 @@ const ProfileContainer = ({ navigation, route }) => {
       isUserInfoModalVisible={isUserInfoModalVisible}
       toggleUserInfoModal={toggleUserInfoModal}
       toProfileModify={toProfileModify}
+      toAddDog={toAddDog}
       dogId={dogId}
       image={image}
       dogName={dogName}

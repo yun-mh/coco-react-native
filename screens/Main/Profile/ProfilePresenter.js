@@ -135,6 +135,7 @@ const ProfilePresenter = ({
   isUserInfoModalVisible,
   toggleUserInfoModal,
   toProfileModify,
+  toAddDog,
   isDogInfoModalVisible,
   toggleDogInfoModal,
   dogId,
@@ -198,7 +199,7 @@ const ProfilePresenter = ({
             <MyDogHeaderContainer>
               <Title>ドッグ</Title>
               {data?.viewUser?.isMyself ? (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={toAddDog}>
                   <Feather name="plus-circle" size={18} color={colors.black} />
                 </TouchableOpacity>
               ) : null}
