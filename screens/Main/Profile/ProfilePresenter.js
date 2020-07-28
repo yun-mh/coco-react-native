@@ -136,6 +136,7 @@ const ProfilePresenter = ({
   toggleUserInfoModal,
   toProfileModify,
   toAddDog,
+  toModifyDog,
   isDogInfoModalVisible,
   toggleDogInfoModal,
   dogId,
@@ -221,7 +222,7 @@ const ProfilePresenter = ({
                 )}
                 horizontal={true}
                 keyExtractor={(item) => item.id.toString()}
-                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
               />
             </MyDogContentContainer>
           </MyDogContainer>
@@ -254,6 +255,7 @@ const ProfilePresenter = ({
           breed={breed}
           gender={gender}
           birthdate={birthdate}
+          toModifyDog={toModifyDog}
           isDogInfoModalVisible={isDogInfoModalVisible}
           setDogInfoModalVisible={setDogInfoModalVisible}
           toggleDogInfoModal={toggleDogInfoModal}

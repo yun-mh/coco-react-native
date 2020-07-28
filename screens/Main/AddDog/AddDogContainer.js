@@ -46,7 +46,10 @@ export default ({ navigation, route }) => {
   });
 
   const handlePickImage = async () => {
-    getCameraPermission();
+    const status = getCameraPermission();
+    if (status != "granted") {
+      Alert.alert("カメラロールの権限が必要です。");
+    }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,

@@ -5,7 +5,6 @@ import * as ImagePicker from "expo-image-picker";
 import RegisterDogPresenter from "./RegisterDogPresenter";
 import { getCameraPermission } from "../../../userPermissions";
 import { SET_DOG } from "../../../queries/Auth/AuthQueries";
-import utils from "../../../utils";
 
 export default ({ navigation, route: { params } }) => {
   const [image, setImage] = useState(
@@ -29,7 +28,10 @@ export default ({ navigation, route: { params } }) => {
   });
 
   const handlePickImage = async () => {
-    getCameraPermission();
+    const status = getCameraPermission();
+    if (status != "granted") {
+      Alert.alert("カメラロールの権限が必要です。");
+    }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,

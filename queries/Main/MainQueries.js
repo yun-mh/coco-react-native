@@ -124,6 +124,35 @@ export const ADD_DOG = gql`
   }
 `;
 
+export const MODIFY_DOG = gql`
+  mutation editDog(
+    $id: String!
+    $name: String
+    $image: String
+    $breed: String
+    $gender: String
+    $birthdate: String
+    $action: ACTIONS!
+  ) {
+    editDog(
+      id: $id
+      name: $name
+      image: $image
+      breed: $breed
+      gender: $gender
+      birthdate: $birthdate
+      action: $action
+    ) {
+      id
+      image
+      name
+      breed
+      gender
+      birthdate
+    }
+  }
+`;
+
 export const DELETE_DOG = gql`
   mutation editDog($id: String!, $action: ACTIONS!) {
     editDog(id: $id, action: $action) {

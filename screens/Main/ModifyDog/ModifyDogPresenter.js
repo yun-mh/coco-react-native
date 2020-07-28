@@ -90,7 +90,7 @@ export default ({
             </InputContainer>
             <Button
               loading={loading}
-              text={"登録"}
+              text={"修正"}
               accent={true}
               onPress={handleSubmit}
             />

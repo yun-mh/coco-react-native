@@ -4,7 +4,7 @@ import Modal from "react-native-modal";
 import colors from "../../colors";
 import TextButton from "./TextButton";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { DELETE_DOG, VIEW_USER } from "../../queries/Main/MainQueries";
+import { VIEW_USER, DELETE_DOG } from "../../queries/Main/MainQueries";
 import { useMutation } from "@apollo/react-hooks";
 import { useRoute } from "@react-navigation/native";
 
@@ -15,6 +15,7 @@ const DogInfoModal = ({
   breed,
   gender,
   birthdate,
+  toModifyDog,
   isDogInfoModalVisible,
   setDogInfoModalVisible,
   toggleDogInfoModal,
@@ -105,7 +106,7 @@ const DogInfoModal = ({
           <>
             <TextButton
               title={"情報修正"}
-              onPress={toggleDogInfoModal}
+              onPress={toModifyDog}
               color={colors.primary}
             />
             <TextButton

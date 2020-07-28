@@ -1,18 +1,21 @@
 import React, { useState } from "react";
+import { Alert } from "react-native";
 import { useMutation } from "@apollo/react-hooks";
 import * as ImagePicker from "expo-image-picker";
 import { getCameraPermission } from "../../../userPermissions";
-import ProfileModifyPresenter from "./ProfileModifyPresenter";
-import { VIEW_USER, EDIT_USER } from "../../../queries/Main/MainQueries";
-import { Alert } from "react-native";
+import { MODIFY_DOG, VIEW_USER } from "../../../queries/Main/MainQueries";
+import ModifyDogPresenter from "./ModifyDogPresenter";
 
 export default ({ navigation, route }) => {
-  const [avatar, setAvatar] = useState(
-    route.params.avatar ||
+  const [image, setImage] = useState(
+    route?.params?.image ||
       "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.globalvetlink.com%2Fwp-content%2Fuploads%2F2015%2F07%2Fanonymous.png&f=1&nofb=1"
   ); // fix this later
-  const [username, setUsername] = useState(route.params.username || "");
-  const [email, setEmail] = useState(route.params.email);
+  const [dogId, setDogId] = useState(route?.params?.dogId);
+  const [name, setName] = useState(route?.params?.dogName);
+  const [gender, setGender] = useState(route?.params?.gender);
+  const [birthdate, setBirthdate] = useState(route?.params?.birthdate);
+  const [breed, setBreed] = useState(route?.params?.breed);
   const [loading, setLoading] = useState(false);
 
   const updateCache = (cache, { data }) => {
@@ -22,25 +25,31 @@ export default ({ navigation, route }) => {
         id: route.params.id,
       },
     });
-    const newUser = data.editUser;
+    const newUser = data.editDog;
+    existingUser.viewUser.dogs = newUser;
     cache.writeQuery({
       query: VIEW_USER,
       variables: {
         id: route.params.id,
       },
-      data: { ...existingUser, ...newUser },
+      data: { ...existingUser },
     });
   };
 
-  const [editUserMutation] = useMutation(EDIT_USER, {
+  const [modifyDogMutation] = useMutation(MODIFY_DOG, {
     variables: {
-      username,
-      avatar,
+      id: dogId,
+      image,
+      name,
+      gender,
+      birthdate,
+      breed,
+      action: "EDIT",
     },
     update: updateCache,
   });
 
-  const handlePickAvatar = async () => {
+  const handlePickImage = async () => {
     const status = getCameraPermission();
     if (status != "granted") {
       Alert.alert("カメラロールの権限が必要です。");
@@ -51,29 +60,18 @@ export default ({ navigation, route }) => {
       aspect: [4, 3],
     });
     if (!result.cancelled) {
-      setAvatar(result.uri);
+      setImage(result.uri);
     }
-  };
-
-  const isFormValid = () => {
-    if (username === "") {
-      Alert.alert("エラー", "すべての項目を入力してください。");
-      return false;
-    }
-    return true;
   };
 
   const handleSubmit = async () => {
-    if (!isFormValid()) {
-      return;
-    }
     setLoading(true);
     try {
       const {
-        data: { editUser },
-      } = await editUserMutation();
-      if (editUser) {
-        await navigation.navigate("Profile", {
+        data: { editDog },
+      } = await modifyDogMutation();
+      if (editDog) {
+        navigation.navigate("Profile", {
           id: route.params.id,
         });
       }
@@ -86,15 +84,19 @@ export default ({ navigation, route }) => {
   };
 
   return (
-    <ProfileModifyPresenter
-      navigation={navigation}
-      username={username}
-      setUsername={setUsername}
-      email={email}
-      avatar={avatar}
+    <ModifyDogPresenter
+      image={image}
+      name={name}
+      setName={setName}
+      breed={breed}
+      setBreed={setBreed}
+      gender={gender}
+      setGender={setGender}
+      birthdate={birthdate}
+      setBirthdate={setBirthdate}
       loading={loading}
       handleSubmit={handleSubmit}
-      handlePickAvatar={handlePickAvatar}
+      handlePickImage={handlePickImage}
     />
   );
 };

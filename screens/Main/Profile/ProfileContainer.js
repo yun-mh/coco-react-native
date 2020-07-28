@@ -47,6 +47,19 @@ const ProfileContainer = ({ navigation, route }) => {
     });
   };
 
+  const toModifyDog = () => {
+    navigation.navigate("ModifyDog", {
+      id: data?.viewUser?.id,
+      dogId,
+      image,
+      dogName,
+      breed,
+      gender,
+      birthdate,
+    });
+    toggleDogInfoModal();
+  };
+
   const toAddDog = () => {
     navigation.navigate("AddDog", {
       id: data?.viewUser?.id,
@@ -100,6 +113,7 @@ const ProfileContainer = ({ navigation, route }) => {
       toggleUserInfoModal={toggleUserInfoModal}
       toProfileModify={toProfileModify}
       toAddDog={toAddDog}
+      toModifyDog={toModifyDog}
       dogId={dogId}
       image={image}
       dogName={dogName}
