@@ -195,3 +195,21 @@ export const ADD_COMMENT = gql`
     addComment(postId: $postId, text: $text)
   }
 `;
+
+export const UPLOAD_POST = gql`
+  mutation uploadPost(
+    $caption: String!
+    $files: [String!]!
+    $location: String
+  ) {
+    uploadPost(caption: $caption, files: $files, location: $location) {
+      id
+      caption
+      files {
+        id
+        url
+      }
+      location
+    }
+  }
+`;

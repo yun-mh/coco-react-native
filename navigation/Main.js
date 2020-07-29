@@ -6,7 +6,6 @@ import { Feather } from "@expo/vector-icons";
 import BackBtn from "../components/BackBtn";
 import colors from "../colors";
 import Walking from "../screens/Main/Walking";
-import Photo from "../screens/Main/Photo";
 import Notification from "../screens/Main/Notification";
 import Message from "../screens/Main/Message";
 import Profile from "../screens/Main/Profile";
@@ -22,6 +21,9 @@ import Comment from "../screens/Main/Comment";
 import Search from "../screens/Main/Search";
 import Post from "../screens/Main/Post";
 import AddDog from "../screens/Main/AddDog";
+import ModifyDog from "../screens/Main/ModifyDog";
+import { PhotoStacks } from "./Photo";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -31,8 +33,6 @@ function getHeaderTitle(route) {
       return () => <LogoTitle />;
     case "Walking":
       return "Walking";
-    case "Photo":
-      return "Photo";
     case "Notification":
       return "Notification";
     case "Message":
@@ -70,7 +70,7 @@ const Tabs = ({ navigation, route }) => {
             iconName = "home";
           } else if (route.name === "Walking") {
             iconName = "map";
-          } else if (route.name === "Photo") {
+          } else if (route.name === "Add") {
             iconName = "plus";
           } else if (route.name === "Notification") {
             iconName = "bell";
@@ -100,15 +100,20 @@ const Tabs = ({ navigation, route }) => {
       tabBarOptions={{
         activeTintColor: colors.secondary,
         showLabel: false,
-        labelStyle: {
-          textTransform: "uppercase",
-          fontWeight: "600",
-        },
       }}
     >
       <TabsNavigator.Screen name="Feed" component={Feed} />
       <TabsNavigator.Screen name="Walking" component={Walking} />
-      <TabsNavigator.Screen name="Photo" component={Photo} />
+      <TabsNavigator.Screen
+        name="Add"
+        component={SafeAreaView}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("Photo");
+          },
+        })}
+      />
       <TabsNavigator.Screen name="Notification" component={Notification} />
       <TabsNavigator.Screen name="Message" component={Message} />
     </TabsNavigator.Navigator>
@@ -127,6 +132,7 @@ export default () => {
       }}
     >
       <MainNavigator.Screen name="Tabs" component={Tabs} />
+      <MainNavigator.Screen name="Photo" component={PhotoStacks} />
       <MainNavigator.Screen
         name="Search"
         component={Search}
@@ -152,6 +158,13 @@ export default () => {
         component={AddDog}
         options={{
           title: "犬登録",
+        }}
+      />
+      <MainNavigator.Screen
+        name="ModifyDog"
+        component={ModifyDog}
+        options={{
+          title: "犬情報修正",
         }}
       />
       <MainNavigator.Screen
