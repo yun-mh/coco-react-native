@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import * as ImagePicker from "expo-image-picker";
 import { getCameraPermission } from "../../../userPermissions";
-import ProfileModifyPresenter from "./ProfileModifyPresenter";
+import ModifyProfilePresenter from "./ModifyProfilePresenter";
 import { VIEW_USER, EDIT_USER } from "../../../queries/Main/MainQueries";
 import { Alert } from "react-native";
 
@@ -86,7 +86,7 @@ export default ({ navigation, route }) => {
   };
 
   return (
-    <ProfileModifyPresenter
+    <ModifyProfilePresenter
       navigation={navigation}
       username={username}
       setUsername={setUsername}

@@ -1,29 +1,29 @@
 import React, { useLayoutEffect, useState } from "react";
 import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useQuery } from "@apollo/react-hooks";
 import { Feather } from "@expo/vector-icons";
 import BackBtn from "../components/BackBtn";
-import colors from "../colors";
+import LogoTitle from "../components/Main/LogoTitle";
+import SearchButton from "../components/Main/SearchButton";
+import ProfileButton from "../components/Main/ProfileButton";
 import Walking from "../screens/Main/Walking";
 import Notification from "../screens/Main/Notification";
 import Message from "../screens/Main/Message";
 import Profile from "../screens/Main/Profile";
-import ProfileModify from "../screens/Main/ProfileModify";
+import ModifyProfile from "../screens/Main/ModifyProfile";
 import Feed from "../screens/Main/Feed";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import LogoTitle from "../components/Main/LogoTitle";
-import ProfileButton from "../components/Main/ProfileButton";
-import SearchButton from "../components/Main/SearchButton";
-import { useQuery } from "@apollo/react-hooks";
-import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import Comment from "../screens/Main/Comment";
 import Search from "../screens/Main/Search";
 import Post from "../screens/Main/Post";
 import AddDog from "../screens/Main/AddDog";
 import ModifyDog from "../screens/Main/ModifyDog";
+import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import { PhotoStacks } from "./Photo";
-import { SafeAreaView } from "react-native-safe-area-context";
+import colors from "../colors";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -148,8 +148,8 @@ export default () => {
         }}
       />
       <MainNavigator.Screen
-        name="ProfileModify"
-        component={ProfileModify}
+        name="ModifyProfile"
+        component={ModifyProfile}
         options={{
           title: "会員情報変更",
         }}

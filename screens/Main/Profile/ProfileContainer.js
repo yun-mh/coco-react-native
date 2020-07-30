@@ -39,7 +39,7 @@ const ProfileContainer = ({ navigation, route }) => {
 
   const toProfileModify = () => {
     toggleUserInfoModal();
-    navigation.navigate("ProfileModify", {
+    navigation.navigate("ModifyProfile", {
       id: data?.viewUser?.id,
       email: data?.viewUser?.email,
       avatar: data?.viewUser?.avatar,
