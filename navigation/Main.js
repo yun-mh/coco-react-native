@@ -23,7 +23,7 @@ import Post from "../screens/Main/Post";
 import AddDog from "../screens/Main/AddDog";
 import ModifyDog from "../screens/Main/ModifyDog";
 import { PhotoStacks } from "./Photo";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -87,12 +87,13 @@ const Tabs = ({ navigation, route }) => {
             <View
               style={{
                 backgroundColor: colors.primary,
-                width: 40,
+                width: 36,
                 borderRadius: 50,
+                justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <Feather name={iconName} size={36} color={"white"} />
+              <Feather name={iconName} size={32} color={"white"} />
             </View>
           );
         },

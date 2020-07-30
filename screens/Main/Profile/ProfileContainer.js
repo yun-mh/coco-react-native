@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ProfilePresenter from "./ProfilePresenter";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { VIEW_USER, FOLLOW, UNFOLLOW } from "../../../queries/Main/MainQueries";

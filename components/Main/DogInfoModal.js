@@ -74,6 +74,7 @@ const DogInfoModal = ({
     <Modal
       isVisible={isDogInfoModalVisible}
       style={{ justifyContent: "flex-end", margin: 0 }}
+      onBackdropPress={toggleDogInfoModal}
     >
       <View
         style={{

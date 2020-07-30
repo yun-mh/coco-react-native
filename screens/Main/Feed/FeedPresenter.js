@@ -3,7 +3,7 @@ import { FlatList, Text, View } from "react-native";
 import Loader from "../../../components/Main/Loader";
 import Post from "../../../components/Main/Post";
 
-export default ({ loading, data, refreshing, onRefresh }) => {
+export default ({ loading, data, refreshing, onRefresh, currentUser }) => {
   return loading ? (
     <Loader />
   ) : (
@@ -22,6 +22,7 @@ export default ({ loading, data, refreshing, onRefresh }) => {
               likeCount={item.likeCount}
               comments={item.comments}
               isLiked={item.isLiked}
+              currentUser={currentUser}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

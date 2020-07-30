@@ -14,6 +14,7 @@ const UserInfoModal = ({
     <Modal
       isVisible={isUserInfoModalVisible}
       style={{ justifyContent: "flex-end", margin: 0 }}
+      onBackdropPress={toggleUserInfoModal}
     >
       <SafeAreaView style={{ backgroundColor: "white", paddingTop: 10 }}>
         <TextButton

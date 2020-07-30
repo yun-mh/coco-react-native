@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import { Image, Platform, View, Text } from "react-native";
+import { Image, TouchableOpacity, Text } from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
-import { Ionicons, Feather } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import colors from "../../colors";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
 import { useNavigation } from "@react-navigation/native";
 import constants from "../../constants";
-import { TOGGLE_LIKE } from "../../queries/Main/MainQueries";
+import {
+  TOGGLE_LIKE,
+  CHECK_MYSELF,
+  VIEW_FEED,
+  DELETE_POST,
+} from "../../queries/Main/MainQueries";
+import PostModal from "./PostModal";
 
 const Container = styled.View`
   margin-bottom: 30px;
@@ -20,9 +26,13 @@ const Header = styled.View`
   padding: 15px;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 `;
 
-const Touchable = styled.TouchableOpacity``;
+const UserContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
 
 const HeaderUserContainer = styled.View`
   margin-left: 10px;
@@ -70,15 +80,42 @@ const Post = ({
   likeCount: likeCountProp,
   comments,
   isLiked: isLikedProp,
+  currentUser,
 }) => {
+  // console.log(user.username);
   const navigation = useNavigation();
+  const [isPostModalVisible, setIsPostModalVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(isLikedProp);
   const [likeCount, setLikeCount] = useState(likeCountProp);
+
   const [toggleLikeMutation] = useMutation(TOGGLE_LIKE, {
     variables: {
       postId: id,
     },
   });
+
+  const [deletePostMutation] = useMutation(DELETE_POST, {
+    variables: {
+      id,
+      action: "DELETE",
+    },
+    refetchQueries: () => [{ query: VIEW_FEED }],
+  });
+
+  const togglePostModal = () => {
+    setIsPostModalVisible(!isPostModalVisible);
+  };
+
+  const handleDeletePost = async () => {
+    try {
+      const { data: editPost } = await deletePostMutation();
+      if (editPost) {
+        setIsPostModalVisible(false);
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+  };
 
   const handleLike = async () => {
     if (isLiked === true) {
@@ -97,22 +134,29 @@ const Post = ({
   return (
     <Container>
       <Header>
-        <Touchable
-          onPress={() => navigation.navigate("Profile", { id: user.id })}
-        >
-          <Image
-            style={{ width: 40, height: 40, borderRadius: 20 }}
-            source={{ uri: user.avatar }}
-          />
-        </Touchable>
-        <Touchable
-          onPress={() => navigation.navigate("Profile", { id: user.id })}
-        >
-          <HeaderUserContainer>
-            <Bold>{user.username}</Bold>
-            <Location>{location}</Location>
-          </HeaderUserContainer>
-        </Touchable>
+        <UserContainer>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Profile", { id: user.id })}
+          >
+            <Image
+              style={{ width: 40, height: 40, borderRadius: 20 }}
+              source={{ uri: user.avatar }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Profile", { id: user.id })}
+          >
+            <HeaderUserContainer>
+              <Bold>{user.username}</Bold>
+              <Location>{location}</Location>
+            </HeaderUserContainer>
+          </TouchableOpacity>
+        </UserContainer>
+        {currentUser === user.id ? (
+          <TouchableOpacity onPress={togglePostModal}>
+            <Feather name="more-horizontal" size={24} color={colors.darkGray} />
+          </TouchableOpacity>
+        ) : null}
       </Header>
       <SlideContainer>
         <Swiper
@@ -136,7 +180,7 @@ const Post = ({
       <InfoContainer>
         <Caption>{caption}</Caption>
         <IconsContainer>
-          <Touchable
+          <TouchableOpacity
             onPress={handleLike}
             style={{
               flexDirection: "row",
@@ -154,8 +198,8 @@ const Post = ({
             <Text style={{ fontSize: 16 }}>
               {likeCount === 1 ? "1" : `${likeCount}`}
             </Text>
-          </Touchable>
-          <Touchable
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => navigation.navigate("Comment", { id })}
             style={{ flexDirection: "row", alignItems: "center" }}
           >
@@ -163,9 +207,14 @@ const Post = ({
               <Feather size={24} color={colors.black} name="message-square" />
             </IconContainer>
             <Text style={{ fontSize: 16 }}>{comments.length}</Text>
-          </Touchable>
+          </TouchableOpacity>
         </IconsContainer>
       </InfoContainer>
+      <PostModal
+        isPostModalVisible={isPostModalVisible}
+        togglePostModal={togglePostModal}
+        handleDeletePost={handleDeletePost}
+      />
     </Container>
   );
 };

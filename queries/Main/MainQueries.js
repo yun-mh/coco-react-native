@@ -1,6 +1,14 @@
 import { gql } from "apollo-boost";
 import { POST_FRAGMENT } from "./fragments";
 
+export const CHECK_MYSELF = gql`
+  query viewMyself {
+    viewMyself {
+      id
+    }
+  }
+`;
+
 export const PROFILE_THUMBNAIL = gql`
   query viewMyself {
     viewMyself {
@@ -210,6 +218,16 @@ export const UPLOAD_POST = gql`
         url
       }
       location
+    }
+  }
+`;
+
+export const DELETE_POST = gql`
+  mutation editPost($id: String!, $action: ACTIONS!) {
+    editPost(id: $id, action: $action) {
+      id
+      location
+      caption
     }
   }
 `;

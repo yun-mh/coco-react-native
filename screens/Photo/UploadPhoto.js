@@ -4,7 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import useInput from "../../hooks/useInput";
 import { useMutation } from "@apollo/react-hooks";
-import { UPLOAD_POST } from "../../queries/Main/MainQueries";
+import { UPLOAD_POST, VIEW_FEED } from "../../queries/Main/MainQueries";
 import colors from "../../colors";
 import Button from "../../components/Button";
 
@@ -45,7 +45,7 @@ export default ({ navigation, route }) => {
       caption: captionInput.value,
       location: locationInput.value,
     },
-    // refetchQueries: () => [{ query: FEED_QUERY }],
+    refetchQueries: () => [{ query: VIEW_FEED }],
   });
 
   const handleSubmit = async () => {
