@@ -9,7 +9,6 @@ import { useNavigation } from "@react-navigation/native";
 import constants from "../../constants";
 import {
   TOGGLE_LIKE,
-  CHECK_MYSELF,
   VIEW_FEED,
   DELETE_POST,
 } from "../../queries/Main/MainQueries";
@@ -82,7 +81,6 @@ const Post = ({
   isLiked: isLikedProp,
   currentUser,
 }) => {
-  // console.log(user.username);
   const navigation = useNavigation();
   const [isPostModalVisible, setIsPostModalVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(isLikedProp);
@@ -115,6 +113,11 @@ const Post = ({
     } catch (e) {
       console.warn(e);
     }
+  };
+
+  const toPostEdit = () => {
+    setIsPostModalVisible(!isPostModalVisible);
+    navigation.navigate("ModifyPost", { id, files, location, caption });
   };
 
   const handleLike = async () => {
@@ -211,8 +214,13 @@ const Post = ({
         </IconsContainer>
       </InfoContainer>
       <PostModal
+        id={id}
+        files={files}
+        location={location}
+        caption={caption}
         isPostModalVisible={isPostModalVisible}
         togglePostModal={togglePostModal}
+        toPostEdit={toPostEdit}
         handleDeletePost={handleDeletePost}
       />
     </Container>

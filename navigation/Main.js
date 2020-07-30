@@ -24,6 +24,7 @@ import ModifyDog from "../screens/Main/ModifyDog";
 import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import { PhotoStacks } from "./Photo";
 import colors from "../colors";
+import ModifyPost from "../screens/Main/ModifyPost/ModifyPost";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -177,6 +178,11 @@ export default () => {
         name="Comment"
         component={Comment}
         options={{ title: "コメント" }}
+      />
+      <MainNavigator.Screen
+        name="ModifyPost"
+        component={ModifyPost}
+        options={{ title: "ポスト修正" }}
       />
     </MainNavigator.Navigator>
   );

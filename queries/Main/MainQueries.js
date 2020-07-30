@@ -222,6 +222,21 @@ export const UPLOAD_POST = gql`
   }
 `;
 
+export const EDIT_POST = gql`
+  mutation editPost(
+    $id: String!
+    $caption: String
+    $location: String
+    $action: ACTIONS!
+  ) {
+    editPost(id: $id, caption: $caption, location: $location, action: $action) {
+      id
+      location
+      caption
+    }
+  }
+`;
+
 export const DELETE_POST = gql`
   mutation editPost($id: String!, $action: ACTIONS!) {
     editPost(id: $id, action: $action) {
