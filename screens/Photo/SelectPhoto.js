@@ -1,14 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Image, ScrollView, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, Fragment, useMemo } from "react";
+import { Image, ScrollView, TouchableOpacity, Alert } from "react-native";
 import styled from "styled-components";
 import * as MediaLibrary from "expo-media-library";
+import { Feather } from "@expo/vector-icons";
+import Swiper from "react-native-web-swiper";
 import constants from "../../constants";
 import { getCameraPermission } from "../../userPermissions";
 import Loader from "../../components/Main/Loader";
 import colors from "../../colors";
+import GallerySwiper from "../../components/Main/GallerySwiper";
 
 const View = styled.View`
   flex: 1;
+`;
+
+const SlideContainer = styled.View`
+  margin-bottom: 10px;
+  overflow: hidden;
+  width: 100%;
+  height: ${constants.height / 2}px;
 `;
 
 const Button = styled.TouchableOpacity`
@@ -31,18 +41,23 @@ const Text = styled.Text`
 export default ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState([]);
   const [allPhotos, setAllPhotos] = useState();
+  console.log(selected);
 
   const changeSelected = (photo) => {
-    setSelected(photo);
+    if (selected.includes(photo)) {
+      const filtered = selected.filter((item) => item !== photo);
+      return setSelected(filtered);
+    }
+    setSelected((prev) => [...prev, photo]);
   };
 
   const getPhotos = async () => {
     try {
       const { assets } = await MediaLibrary.getAssetsAsync();
       const [firstPhoto] = assets;
-      setSelected(firstPhoto);
+      setSelected([firstPhoto]);
       setAllPhotos(assets);
     } catch (error) {
       console.log(error);
@@ -65,6 +80,10 @@ export default ({ navigation }) => {
   };
 
   const handleSelected = () => {
+    if (selected.length === 0) {
+      Alert.alert("エラー", "投稿するイメージを選択してください。");
+      return;
+    }
     navigation.navigate("UploadPhoto", { photo: selected });
   };
 
@@ -80,13 +99,36 @@ export default ({ navigation }) => {
         <View>
           {hasPermission ? (
             <>
-              <Image
-                style={{ width: constants.width, height: constants.height / 2 }}
-                source={{ uri: selected.uri }}
-              />
-              <Button onPress={handleSelected}>
-                <Text>選択</Text>
-              </Button>
+              <SlideContainer>
+                {selected && selected.length > 0 ? (
+                  // <Swiper
+                  //   controlsProps={{
+                  //     PrevComponent: () => null,
+                  //     NextComponent: () => null,
+                  //     dotActiveStyle: {
+                  //       backgroundColor: colors.primary,
+                  //     },
+                  //   }}
+                  // >
+                  //   {selected.map((file) => (
+                  //     <Image
+                  //       key={file.id}
+                  //       style={{
+                  //         width: constants.width,
+                  //         height: constants.height / 2,
+                  //       }}
+                  //       source={{ uri: file.uri }}
+                  //     />
+                  //   ))}
+                  // </Swiper>
+                  <GallerySwiper selected={selected} />
+                ) : null}
+              </SlideContainer>
+              {selected && selected.length > 0 ? (
+                <Button onPress={handleSelected}>
+                  <Text>次へ</Text>
+                </Button>
+              ) : null}
               <ScrollView
                 contentContainerStyle={{
                   flexDirection: "row",
@@ -94,21 +136,40 @@ export default ({ navigation }) => {
                 }}
               >
                 {allPhotos.map((photo) => (
-                  <TouchableOpacity
-                    key={photo.id}
-                    style={{ padding: 7, borderRadius: 10 }}
-                    onPress={() => changeSelected(photo)}
-                  >
-                    <Image
-                      source={{ uri: photo.uri }}
-                      style={{
-                        width: constants.width / 3 - 14,
-                        height: constants.width / 3 - 14,
-                        borderRadius: 10,
-                        opacity: photo.id === selected.id ? 0.5 : 1,
-                      }}
-                    />
-                  </TouchableOpacity>
+                  <Fragment key={photo.id}>
+                    <TouchableOpacity
+                      style={{ padding: 7, borderRadius: 10 }}
+                      onPress={() => changeSelected(photo)}
+                    >
+                      <Image
+                        source={{ uri: photo.uri }}
+                        style={{
+                          width: constants.width / 3 - 14,
+                          height: constants.width / 3 - 14,
+                          borderRadius: 10,
+                          opacity: selected.includes(photo) ? 0.5 : 1,
+                        }}
+                      />
+                      {selected.includes(photo) ? (
+                        <View
+                          style={{
+                            position: "absolute",
+                            top: "15%",
+                            right: "15%",
+                            borderRadius: "50%",
+                            backgroundColor: colors.secondary,
+                            padding: 3,
+                          }}
+                        >
+                          <Feather
+                            name="check"
+                            size={16}
+                            color={colors.white}
+                          />
+                        </View>
+                      ) : null}
+                    </TouchableOpacity>
+                  </Fragment>
                 ))}
               </ScrollView>
             </>

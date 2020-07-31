@@ -15,9 +15,11 @@ const View = styled.View`
   background-color: white;
 `;
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
-  border: 1px;
+  flex-direction: row;
+  border-bottom-width: 1px;
+  border-bottom-color: ${colors.gray};
 `;
 
 const Form = styled.View`
@@ -28,8 +30,8 @@ const Form = styled.View`
 
 const STextInput = styled.TextInput`
   width: ${width / 1.2}px;
-  border-color: ${colors.gray};
   border-bottom-width: 1px;
+  border-bottom-color: ${colors.gray};
   margin-bottom: 10px;
   padding-bottom: 10px;
 `;
@@ -50,17 +52,19 @@ export default ({ navigation, route }) => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    const name = photo.filename;
-    const [, type] = name.split(".");
-    formData.append("file", {
-      name: photo.filename,
-      type: type.toLowerCase(),
-      uri: photo.uri,
-    });
+    for (const item of photo) {
+      const name = item.filename;
+      const [, type] = name.split(".");
+      await formData.append("file", {
+        name: item.filename,
+        type: type.toLowerCase(),
+        uri: item.uri,
+      });
+    }
     try {
       setIsLoading(true);
       const {
-        data: { location },
+        data: { locations },
       } = await axios.post("http://localhost:4000/api/upload", formData, {
         headers: {
           "content-type": "multipart/form-data",
@@ -70,7 +74,7 @@ export default ({ navigation, route }) => {
         data: { uploadPost },
       } = await uploadMutation({
         variables: {
-          files: [location],
+          files: [...locations],
         },
       });
       if (uploadPost.id) {
@@ -85,11 +89,17 @@ export default ({ navigation, route }) => {
 
   return (
     <View>
-      <Container>
-        <Image
-          source={{ uri: photo.uri }}
-          style={{ height: 80, width: 80, marginRight: 30 }}
-        />
+      <Container
+        horizontal={true}
+        contentContainerStyle={{ alignItems: "center", paddingHorizontal: 10 }}
+      >
+        {route.params.photo.map((photo) => (
+          <Image
+            key={photo.id}
+            source={{ uri: photo.uri }}
+            style={{ height: 80, width: 80, marginRight: 10 }}
+          />
+        ))}
       </Container>
       <Form>
         <STextInput

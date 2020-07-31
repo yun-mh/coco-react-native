@@ -43,6 +43,7 @@ export const PhotoStacks = ({ navigation, route }) => {
         options={{
           title: "Upload",
           headerBackTitleVisible: false,
+          gestureEnabled: false,
         }}
       />
     </PhotoStackNavigation.Navigator>

@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../colors";
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { useNavigation } from "@react-navigation/native";
 import constants from "../../constants";
 import {
