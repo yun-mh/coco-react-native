@@ -12,6 +12,7 @@ export default ({
   setComment,
   updateInputSize,
   handleAddComment,
+  currentUser,
 }) => {
   return loading ? (
     <Loader />
@@ -26,6 +27,7 @@ export default ({
         setComment={setComment}
         updateInputSize={updateInputSize}
         handleAddComment={handleAddComment}
+        currentUser={currentUser}
       />
     )
   );

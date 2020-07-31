@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Alert } from "react-native";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import { VIEW_POST, ADD_COMMENT } from "../../../queries/Main/MainQueries";
+import {
+  VIEW_POST,
+  ADD_COMMENT,
+  DELETE_COMMENT,
+  CHECK_MYSELF,
+} from "../../../queries/Main/MainQueries";
 import CommentPresenter from "./CommentPresenter";
 
 export default ({ navigation, route }) => {
@@ -11,6 +16,12 @@ export default ({ navigation, route }) => {
   const { loading, error, data, refetch } = useQuery(VIEW_POST, {
     variables: { id: route.params.id },
   });
+  const {
+    data: {
+      viewMyself: { id: currentUser },
+    },
+  } = useQuery(CHECK_MYSELF);
+
   const [addCommentMutation] = useMutation(ADD_COMMENT, {
     variables: {
       postId: route.params.id,
@@ -63,6 +74,7 @@ export default ({ navigation, route }) => {
       setComment={setComment}
       updateInputSize={updateInputSize}
       handleAddComment={handleAddComment}
+      currentUser={currentUser}
     />
   );
 };

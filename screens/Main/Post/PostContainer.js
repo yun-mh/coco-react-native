@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import PostPresenter from "./PostPresenter";
 import { VIEW_POST } from "../../../queries/Main/MainQueries";
-import { useRoute } from "@react-navigation/native";
 
 export default ({ route }) => {
   const [refreshing, setRefreshing] = useState(false);

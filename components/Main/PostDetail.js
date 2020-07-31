@@ -83,6 +83,7 @@ const PostDetail = ({
   setComment,
   updateInputSize,
   handleAddComment,
+  currentUser,
 }) => {
   const navigation = useNavigation();
 
@@ -91,9 +92,7 @@ const PostDetail = ({
       <PostContentContainer>
         <AuthorContainer>
           <Touchable
-            onPress={() =>
-              navigation.navigate("UserDetail", { username: user.username })
-            }
+            onPress={() => navigation.navigate("Profile", { id: user.id })}
           >
             <Image
               style={{ width: 40, height: 40, borderRadius: 20 }}
@@ -103,9 +102,7 @@ const PostDetail = ({
         </AuthorContainer>
         <ContentDetail>
           <Touchable
-            onPress={() =>
-              navigation.navigate("UserDetail", { username: user.username })
-            }
+            onPress={() => navigation.navigate("Profile", { id: user.id })}
           >
             <UserContainer>
               <Bold>{user.username}</Bold>
@@ -128,6 +125,8 @@ const PostDetail = ({
               user={item.user}
               text={item.text}
               createdAt={item.createdAt}
+              postId={id}
+              currentUser={currentUser}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

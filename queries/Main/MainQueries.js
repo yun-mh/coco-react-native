@@ -204,6 +204,15 @@ export const ADD_COMMENT = gql`
   }
 `;
 
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($id: String!) {
+    deleteComment(id: $id) {
+      id
+      text
+    }
+  }
+`;
+
 export const UPLOAD_POST = gql`
   mutation uploadPost(
     $caption: String!

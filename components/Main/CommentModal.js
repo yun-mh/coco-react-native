@@ -5,16 +5,15 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import colors from "../../colors";
 import TextButton from "./TextButton";
 
-const PostModal = ({
-  isPostModalVisible,
-  toPostEdit,
-  togglePostModal,
-  handleDeletePost,
+const CommentModal = ({
+  isCommentModalVisible,
+  toggleCommentModal,
+  handleDeleteComment,
 }) => {
   return (
     <Modal
-      isVisible={isPostModalVisible}
-      onBackdropPress={togglePostModal}
+      isVisible={isCommentModalVisible}
+      onBackdropPress={toggleCommentModal}
       animationIn="fadeIn"
       animationInTiming={50}
       animationOut="fadeOut"
@@ -32,18 +31,13 @@ const PostModal = ({
         }}
       >
         <TextButton
-          title={"修正"}
-          color={colors.primary}
-          onPress={toPostEdit}
-        />
-        <TextButton
           title={"削除"}
           color={colors.red}
-          onPress={handleDeletePost}
+          onPress={handleDeleteComment}
         />
       </View>
     </Modal>
   );
 };
 
-export default PostModal;
+export default CommentModal;

@@ -1,23 +1,16 @@
 import React, { useState } from "react";
-import { Image, Alert, Dimensions } from "react-native";
+import { Image, Alert } from "react-native";
 import styled from "styled-components";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Swiper from "react-native-web-swiper";
-import axios from "axios";
 import useInput from "../../../hooks/useInput";
 import { useMutation } from "@apollo/react-hooks";
-import {
-  UPLOAD_POST,
-  VIEW_FEED,
-  EDIT_POST,
-} from "../../../queries/Main/MainQueries";
+import { VIEW_FEED, EDIT_POST } from "../../../queries/Main/MainQueries";
 import colors from "../../../colors";
 import Button from "../../../components/Button";
-
-const { width } = Dimensions.get("screen");
 
 const View = styled.View`
   flex: 1;
@@ -38,7 +31,7 @@ const Form = styled.View`
 `;
 
 const STextInput = styled.TextInput`
-  width: ${width / 1.2}px;
+  width: ${wp("83%")}px;
   border-color: ${colors.gray};
   border-bottom-width: 1px;
   margin-bottom: 10px;
@@ -51,14 +44,6 @@ export default ({ navigation, route }) => {
   const [files, setFiles] = useState(route.params.files);
   const captionInput = useInput(route.params.caption);
   const locationInput = useInput(route.params.location);
-
-  // const [uploadMutation] = useMutation(UPLOAD_POST, {
-  //   variables: {
-  //     caption: captionInput.value,
-  //     location: locationInput.value,
-  //   },
-  //   refetchQueries: () => [{ query: VIEW_FEED }],
-  // });
 
   const [editPostMutation] = useMutation(EDIT_POST, {
     variables: {
