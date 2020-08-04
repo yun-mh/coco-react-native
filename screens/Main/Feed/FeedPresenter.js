@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, View } from "react-native";
 import Loader from "../../../components/Main/Loader";
 import Post from "../../../components/Main/Post";
 
@@ -22,7 +22,7 @@ export default ({ loading, data, refreshing, onRefresh, currentUser }) => {
               likeCount={item.likeCount}
               comments={item.comments}
               isLiked={item.isLiked}
-              currentUser={currentUser}
+              currentUser={currentUser.viewMyself.id}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

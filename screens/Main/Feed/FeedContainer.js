@@ -6,11 +6,7 @@ import { VIEW_FEED, CHECK_MYSELF } from "../../../queries/Main/MainQueries";
 export default () => {
   const [refreshing, setRefreshing] = useState(false);
   const { loading, error, data, refetch } = useQuery(VIEW_FEED);
-  const {
-    data: {
-      viewMyself: { id: currentUser },
-    },
-  } = useQuery(CHECK_MYSELF);
+  const { data: check } = useQuery(CHECK_MYSELF);
 
   const onRefresh = async () => {
     try {
@@ -29,7 +25,7 @@ export default () => {
       data={data}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      currentUser={currentUser}
+      currentUser={check}
     />
   );
 };
