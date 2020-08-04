@@ -1,9 +1,8 @@
-import React, { useState, useEffect, Fragment, useMemo } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Image, ScrollView, TouchableOpacity, Alert } from "react-native";
 import styled from "styled-components";
 import * as MediaLibrary from "expo-media-library";
 import { Feather } from "@expo/vector-icons";
-import Swiper from "react-native-web-swiper";
 import constants from "../../constants";
 import { getCameraPermission } from "../../userPermissions";
 import Loader from "../../components/Main/Loader";
@@ -43,7 +42,6 @@ export default ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(false);
   const [selected, setSelected] = useState([]);
   const [allPhotos, setAllPhotos] = useState();
-  console.log(selected);
 
   const changeSelected = (photo) => {
     if (selected.includes(photo)) {
@@ -101,26 +99,6 @@ export default ({ navigation }) => {
             <>
               <SlideContainer>
                 {selected && selected.length > 0 ? (
-                  // <Swiper
-                  //   controlsProps={{
-                  //     PrevComponent: () => null,
-                  //     NextComponent: () => null,
-                  //     dotActiveStyle: {
-                  //       backgroundColor: colors.primary,
-                  //     },
-                  //   }}
-                  // >
-                  //   {selected.map((file) => (
-                  //     <Image
-                  //       key={file.id}
-                  //       style={{
-                  //         width: constants.width,
-                  //         height: constants.height / 2,
-                  //       }}
-                  //       source={{ uri: file.uri }}
-                  //     />
-                  //   ))}
-                  // </Swiper>
                   <GallerySwiper selected={selected} />
                 ) : null}
               </SlideContainer>

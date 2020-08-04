@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Swiper from "react-native-swiper";
-import { Feather } from "@expo/vector-icons";
-import colors from "../../colors";
 
 const styles = StyleSheet.create({
   wrapper: {},
