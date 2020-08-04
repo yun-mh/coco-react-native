@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { StyleSheet, Image } from "react-native";
 import {
   widthPercentageToDP as wp,

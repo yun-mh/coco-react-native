@@ -93,7 +93,7 @@ export default ({ navigation, route }) => {
         horizontal={true}
         contentContainerStyle={{ alignItems: "center", paddingHorizontal: 10 }}
       >
-        {route.params.photo.map((photo) => (
+        {photo.map((photo) => (
           <Image
             key={photo.id}
             source={{ uri: photo.uri }}

@@ -68,7 +68,7 @@ export default ({ navigation }) => {
         exif: true,
       });
       const asset = await MediaLibrary.createAssetAsync(uri);
-      navigation.navigate("UploadPhoto", { photo: asset });
+      await navigation.navigate("UploadPhoto", { photo: [asset] });
     } catch (error) {
       console.log(error);
       setCanTakePhoto(true);
