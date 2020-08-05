@@ -12,7 +12,6 @@ import SearchButton from "../components/Main/SearchButton";
 import ProfileButton from "../components/Main/ProfileButton";
 import Walking from "../screens/Main/Walking";
 import Notification from "../screens/Main/Notification";
-import Message from "../screens/Main/Message";
 import Profile from "../screens/Main/Profile";
 import ModifyProfile from "../screens/Main/ModifyProfile";
 import Feed from "../screens/Main/Feed";
@@ -25,6 +24,8 @@ import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import { PhotoStacks } from "./Photo";
 import colors from "../colors";
 import ModifyPost from "../screens/Main/ModifyPost/ModifyPost";
+import Chatrooms from "../screens/Main/Chatrooms";
+import Chatroom from "../screens/Main/Chatroom";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -37,7 +38,7 @@ function getHeaderTitle(route) {
     case "Notification":
       return "Notification";
     case "Message":
-      return "Message";
+      return "メッセージ";
   }
 }
 
@@ -117,7 +118,7 @@ const Tabs = ({ navigation, route }) => {
         })}
       />
       <TabsNavigator.Screen name="Notification" component={Notification} />
-      <TabsNavigator.Screen name="Message" component={Message} />
+      <TabsNavigator.Screen name="Message" component={Chatrooms} />
     </TabsNavigator.Navigator>
   );
 };
@@ -183,6 +184,11 @@ export default () => {
         name="ModifyPost"
         component={ModifyPost}
         options={{ title: "ポスト修正" }}
+      />
+      <MainNavigator.Screen
+        name="Chatroom"
+        component={Chatroom}
+        options={{ title: "" }}
       />
     </MainNavigator.Navigator>
   );

@@ -255,3 +255,21 @@ export const DELETE_POST = gql`
     }
   }
 `;
+
+export const VIEW_CHATROOMS = gql`
+  query viewChatRooms {
+    viewChatRooms {
+      id
+      participants {
+        id
+        avatar
+        username
+      }
+      messages {
+        id
+        text
+        createdAt
+      }
+    }
+  }
+`;
