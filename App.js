@@ -4,12 +4,41 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import ApolloClient, { InMemoryCache } from "apollo-boost";
 import { persistCache } from "apollo-cache-persist";
-import { ApolloProvider } from "@apollo/react-hooks";
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  split,
+  HttpLink,
+  ApolloLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { WebSocketLink } from "@apollo/client/link/ws";
 import Gate from "./components/Gate";
-import apolloClientOptions from "./apollo";
 import { AuthProvider } from "./contexts/AuthContext";
+
+const httpLink = new HttpLink({
+  uri: "http://localhost:4000/",
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const token = await AsyncStorage.getItem("jwt");
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:4000/`,
+  options: {
+    reconnect: true,
+  },
+});
 
 const cacheImages = (images) =>
   images.map((image) => {
@@ -33,16 +62,24 @@ export default function App() {
       cache,
       storage: AsyncStorage,
     });
+
     const client = new ApolloClient({
       cache,
-      request: async (operation) => {
-        const token = await AsyncStorage.getItem("jwt");
-        return operation.setContext({
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      },
-      ...apolloClientOptions,
+      link: ApolloLink.from([
+        split(
+          ({ query }) => {
+            const definition = getMainDefinition(query);
+            return (
+              definition.kind === "OperationDefinition" &&
+              definition.operation === "subscription"
+            );
+          },
+          authLink.concat(wsLink),
+          authLink.concat(httpLink)
+        ),
+      ]),
     });
+
     const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
     if (!isLoggedIn || isLoggedIn === "false") {
       setIsLoggedIn(false);

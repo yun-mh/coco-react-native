@@ -14,11 +14,11 @@ const ProfileButton = ({ loading, data }) => {
       ) : (
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("Profile", { id: data.viewMyself.id })
+            navigation.navigate("Profile", { id: data?.viewMyself?.id })
           }
         >
           <Image
-            source={{ uri: data.viewMyself.avatar }}
+            source={{ uri: data?.viewMyself?.avatar }}
             style={{ width: 30, height: 30, borderRadius: 15 }}
           />
         </TouchableOpacity>

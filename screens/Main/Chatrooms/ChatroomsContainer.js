@@ -4,7 +4,7 @@ import {
   VIEW_CHATROOMS,
   CHECK_MYSELF,
 } from "../../../queries/Main/MainQueries";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 
 export default () => {
   const { loading, error, data, refetch } = useQuery(VIEW_CHATROOMS);

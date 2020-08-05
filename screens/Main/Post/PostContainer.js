@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import PostPresenter from "./PostPresenter";
 import { VIEW_POST } from "../../../queries/Main/MainQueries";
 

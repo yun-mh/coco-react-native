@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ProfilePresenter from "./ProfilePresenter";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/client";
 import { VIEW_USER, FOLLOW, UNFOLLOW } from "../../../queries/Main/MainQueries";
 import { useLogOut } from "../../../contexts/AuthContext";
 

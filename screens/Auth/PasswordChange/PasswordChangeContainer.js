@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert } from "react-native";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import PasswordChangePresenter from "./PasswordChangePresenter";
 import { PASSWORD_CHANGE } from "../../../queries/Auth/AuthQueries";
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import FeedPresenter from "./FeedPresenter";
 import { VIEW_FEED, CHECK_MYSELF } from "../../../queries/Main/MainQueries";
 

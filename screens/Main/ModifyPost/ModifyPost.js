@@ -7,7 +7,7 @@ import {
 } from "react-native-responsive-screen";
 import Swiper from "react-native-web-swiper";
 import useInput from "../../../hooks/useInput";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { VIEW_FEED, EDIT_POST } from "../../../queries/Main/MainQueries";
 import colors from "../../../colors";
 import Button from "../../../components/Button";

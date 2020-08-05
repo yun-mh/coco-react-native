@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert } from "react-native";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import CodeCheckPresenter from "./CodeCheckPresenter";
 import { CODE_CHECK } from "../../../queries/Auth/AuthQueries";
 

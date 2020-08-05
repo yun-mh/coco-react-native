@@ -3,7 +3,7 @@ import { Image, Alert, Dimensions } from "react-native";
 import styled from "styled-components";
 import axios from "axios";
 import useInput from "../../hooks/useInput";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { UPLOAD_POST, VIEW_FEED } from "../../queries/Main/MainQueries";
 import colors from "../../colors";
 import Button from "../../components/Button";

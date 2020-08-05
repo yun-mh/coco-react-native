@@ -5,7 +5,7 @@ import colors from "../../colors";
 import TextButton from "./TextButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { VIEW_USER, DELETE_DOG } from "../../queries/Main/MainQueries";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { useRoute } from "@react-navigation/native";
 
 const DogInfoModal = ({

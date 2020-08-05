@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import SearchPresenter from "./SearchPresenter";
 import { SEARCH } from "../../../queries/Main/MainQueries";
 

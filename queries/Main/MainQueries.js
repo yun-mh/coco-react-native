@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 import { POST_FRAGMENT } from "./fragments";
 
 export const CHECK_MYSELF = gql`

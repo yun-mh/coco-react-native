@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Image, TouchableHighlight } from "react-native";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { DELETE_COMMENT, VIEW_POST } from "../../queries/Main/MainQueries";
 import colors from "../../colors";
 import CommentModal from "./CommentModal";

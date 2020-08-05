@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { Feather } from "@expo/vector-icons";
 import BackBtn from "../components/BackBtn";
 import LogoTitle from "../components/Main/LogoTitle";

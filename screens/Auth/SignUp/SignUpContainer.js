@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert } from "react-native";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import SignUpPresenter from "./SignUpPresenter";
 import { getCameraPermission } from "../../../userPermissions";
