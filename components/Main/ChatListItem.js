@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import colors from "../../colors";
 import { useNavigation } from "@react-navigation/native";
+import utils from "../../utils";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -58,28 +59,15 @@ const ChatListItems = ({ id, messages, participants, currentUser }) => {
     (person) => person.id !== currentUser
   )[0];
   const orderedMessages = messages.sort(compare);
-  const today = new Date();
-  const messageDate = new Date(orderedMessages[0].createdAt);
-  let date = "";
-  if (today.toDateString() == messageDate.toDateString()) {
-    date += messageDate.getHours() + ":";
-    date +=
-      messageDate.getMinutes().length < 2
-        ? "0" + messageDate.getMinutes()
-        : messageDate.getMinutes();
-  } else if (today.getFullYear() !== messageDate.getFullYear()) {
-    date +=
-      messageDate.getFullYear() +
-      "-" +
-      (messageDate.getMonth() + 1) +
-      "-" +
-      messageDate.getDate();
-  } else {
-    date += messageDate.getMonth() + 1 + ". " + messageDate.getDate() + ".";
-  }
+
+  const date = utils.formatDate(orderedMessages[0].createdAt);
 
   const toChatroom = () => {
-    navigation.navigate("Chatroom", { id, username: counterpart.username });
+    navigation.navigate("Chatroom", {
+      id,
+      username: counterpart.username,
+      myself: currentUser,
+    });
   };
 
   return (

@@ -49,9 +49,9 @@ const CommentContainer = styled.View`
 
 const CommentInputContainer = styled.View`
   flex-direction: row;
-  padding-vertical: 20px;
+  padding-vertical: 10px;
   padding-horizontal: 10px;
-  justify-content: center;
+  align-items: center;
   border-bottom-width: 0.5px;
   border-bottom-color: lightgray;
   border-top-width: 0.5px;
@@ -62,6 +62,7 @@ const CommentInputContainer = styled.View`
 const CommentInput = styled.TextInput`
   flex: 9;
   height: ${(props) => props.height}px;
+  padding-right: 10px;
 `;
 
 const CommentAddContainer = styled.TouchableOpacity`

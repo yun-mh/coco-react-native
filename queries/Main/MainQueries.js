@@ -273,3 +273,25 @@ export const VIEW_CHATROOMS = gql`
     }
   }
 `;
+
+export const VIEW_CHATROOM = gql`
+  query viewChatRoom($id: String!) {
+    viewChatRoom(id: $id) {
+      id
+      participants {
+        id
+        avatar
+        username
+      }
+      messages {
+        id
+        text
+        from {
+          id
+          avatar
+        }
+        createdAt
+      }
+    }
+  }
+`;
