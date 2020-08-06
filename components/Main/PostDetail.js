@@ -1,14 +1,14 @@
 import React from "react";
-import { Image, FlatList } from "react-native";
+import { Image, FlatList, KeyboardAvoidingView } from "react-native";
 import styled from "styled-components/native";
-import { Feather } from "@expo/vector-icons";
-import colors from "../../colors";
 import { useNavigation } from "@react-navigation/native";
+import { useHeaderHeight } from "@react-navigation/stack";
+import { Feather } from "@expo/vector-icons";
 import Comment from "./Comment";
+import colors from "../../colors";
 
-const Container = styled.View`
+const Container = styled.SafeAreaView`
   flex: 1;
-  margin-bottom: 30px;
   background-color: ${colors.white};
 `;
 
@@ -87,73 +87,80 @@ const PostDetail = ({
   currentUser,
 }) => {
   const navigation = useNavigation();
+  const headerHeight = useHeaderHeight();
 
   return (
-    <Container>
-      <PostContentContainer>
-        <AuthorContainer>
-          <Touchable
-            onPress={() => navigation.navigate("Profile", { id: user.id })}
-          >
-            <Image
-              style={{ width: 40, height: 40, borderRadius: 20 }}
-              source={{ uri: user.avatar }}
-            />
-          </Touchable>
-        </AuthorContainer>
-        <ContentDetail>
-          <Touchable
-            onPress={() => navigation.navigate("Profile", { id: user.id })}
-          >
-            <UserContainer>
-              <Bold>{user.username}</Bold>
-            </UserContainer>
-          </Touchable>
-          <PostContent>
-            <Caption>{caption}</Caption>
-            <CreatedAt>{createdAt.split("T")[0]}</CreatedAt>
-          </PostContent>
-        </ContentDetail>
-      </PostContentContainer>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"
+      keyboardVerticalOffset={headerHeight}
+    >
+      <Container>
+        <PostContentContainer>
+          <AuthorContainer>
+            <Touchable
+              onPress={() => navigation.navigate("Profile", { id: user.id })}
+            >
+              <Image
+                style={{ width: 40, height: 40, borderRadius: 20 }}
+                source={{ uri: user.avatar }}
+              />
+            </Touchable>
+          </AuthorContainer>
+          <ContentDetail>
+            <Touchable
+              onPress={() => navigation.navigate("Profile", { id: user.id })}
+            >
+              <UserContainer>
+                <Bold>{user.username}</Bold>
+              </UserContainer>
+            </Touchable>
+            <PostContent>
+              <Caption>{caption}</Caption>
+              <CreatedAt>{createdAt.split("T")[0]}</CreatedAt>
+            </PostContent>
+          </ContentDetail>
+        </PostContentContainer>
 
-      <CommentContainer>
-        <FlatList
-          style={{ width: "100%" }}
-          data={comments}
-          renderItem={({ item }) => (
-            <Comment
-              id={item.id}
-              user={item.user}
-              text={item.text}
-              createdAt={item.createdAt}
-              postId={id}
-              currentUser={currentUser}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          showsVerticalScrollIndicator={false}
-        />
-      </CommentContainer>
+        <CommentContainer>
+          <FlatList
+            style={{ width: "100%" }}
+            data={comments}
+            renderItem={({ item }) => (
+              <Comment
+                id={item.id}
+                user={item.user}
+                text={item.text}
+                createdAt={item.createdAt}
+                postId={id}
+                currentUser={currentUser}
+              />
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            showsVerticalScrollIndicator={false}
+          />
+        </CommentContainer>
 
-      <CommentInputContainer>
-        <CommentInput
-          placeholder="コメントを入力"
-          onChangeText={(comment) => setComment(comment)}
-          height={height}
-          editable={true}
-          multiline={true}
-          value={comment}
-          onContentSizeChange={(e) =>
-            updateInputSize(e.nativeEvent.contentSize.height)
-          }
-        />
-        <CommentAddContainer onPress={handleAddComment}>
-          <Feather name="edit-3" size={24} color="black" />
-        </CommentAddContainer>
-      </CommentInputContainer>
-    </Container>
+        <CommentInputContainer>
+          <CommentInput
+            placeholder="コメントを入力"
+            onChangeText={(comment) => setComment(comment)}
+            height={height}
+            editable={true}
+            multiline={true}
+            value={comment}
+            onContentSizeChange={(e) =>
+              updateInputSize(e.nativeEvent.contentSize.height)
+            }
+          />
+          <CommentAddContainer onPress={handleAddComment}>
+            <Feather name="edit-3" size={24} color="black" />
+          </CommentAddContainer>
+        </CommentInputContainer>
+      </Container>
+    </KeyboardAvoidingView>
   );
 };
 

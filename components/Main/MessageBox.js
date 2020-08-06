@@ -23,7 +23,7 @@ const ContentContainer = styled.View`
   flex: 1;
   flex-direction: row;
   align-items: flex-end;
-  justify-content: flex-start;
+  justify-content: ${({ isMyself }) => (isMyself ? "flex-end" : "flex-start")};
 `;
 
 const MessageContainer = styled.View`
@@ -53,7 +53,7 @@ export default ({ message, isMyself }) => {
   return (
     <Container>
       {!isMyself ? <Avatar source={{ uri: from.avatar }} /> : null}
-      <ContentContainer>
+      <ContentContainer isMyself={isMyself}>
         {isMyself ? <Time>{time}</Time> : null}
         <MessageContainer isMyself={isMyself}>
           <Message isMyself={isMyself}>{text}</Message>

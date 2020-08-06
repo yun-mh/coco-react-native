@@ -3,20 +3,23 @@ import styled from "styled-components";
 import colors from "../../../colors";
 import { Feather } from "@expo/vector-icons";
 import MessageBox from "../../../components/Main/MessageBox";
+import { KeyboardAvoidingView, View } from "react-native";
+import { useHeaderHeight } from "@react-navigation/stack";
+import Loader from "../../../components/Main/Loader";
 
 const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${colors.white};
-  padding-vertical: 20px;
 `;
 
 const ChatContainer = styled.View`
   flex: 1;
   background-color: ${colors.secondaryShadow};
-  padding-vertical: 20px;
 `;
 
-const ScrollView = styled.ScrollView``;
+const ScrollView = styled.ScrollView`
+  padding-vertical: 20px;
+`;
 
 const MessageInputContainer = styled.View`
   background-color: ${colors.white};
@@ -44,36 +47,55 @@ const MessageAddContainer = styled.TouchableOpacity`
 `;
 
 export default ({ loading, height, updateInputSize, data, myself }) => {
-  const {
-    viewChatRoom: { messages },
-  } = data;
+  const headerHeight = useHeaderHeight();
+
+  const messages = !loading ? data.viewChatRoom.messages : null;
 
   return (
-    <Container>
-      <ChatContainer>
-        <ScrollView>
-          {messages.map((message) => (
-            <MessageBox
-              message={message}
-              isMyself={message.from.id === myself ? true : false}
-            />
-          ))}
-        </ScrollView>
-      </ChatContainer>
-      <MessageInputContainer>
-        <MessageInput
-          placeholder="メッセージを入力"
-          editable={true}
-          multiline={true}
-          height={height}
-          onContentSizeChange={(e) =>
-            updateInputSize(e.nativeEvent.contentSize.height)
-          }
-        />
-        <MessageAddContainer>
-          <Feather name="send" size={24} color={colors.darkGray} />
-        </MessageAddContainer>
-      </MessageInputContainer>
-    </Container>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"
+      keyboardVerticalOffset={headerHeight}
+    >
+      <Container>
+        <ChatContainer>
+          {loading ? (
+            <View
+              style={{
+                flex: 1,
+                jusfifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Loader />
+            </View>
+          ) : (
+            <ScrollView>
+              {messages.map((message) => (
+                <MessageBox
+                  key={message.id}
+                  message={message}
+                  isMyself={message.from.id === myself ? true : false}
+                />
+              ))}
+            </ScrollView>
+          )}
+        </ChatContainer>
+        <MessageInputContainer>
+          <MessageInput
+            placeholder="メッセージを入力"
+            editable={true}
+            multiline={true}
+            height={height}
+            onContentSizeChange={(e) =>
+              updateInputSize(e.nativeEvent.contentSize.height)
+            }
+          />
+          <MessageAddContainer>
+            <Feather name="send" size={24} color={colors.darkGray} />
+          </MessageAddContainer>
+        </MessageInputContainer>
+      </Container>
+    </KeyboardAvoidingView>
   );
 };
