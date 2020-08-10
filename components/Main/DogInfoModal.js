@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, Image } from "react-native";
 import Modal from "react-native-modal";
+import moment from "moment";
 import colors from "../../colors";
 import TextButton from "./TextButton";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -91,7 +92,9 @@ const DogInfoModal = ({
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>{dogName}</Text>
           <Text style={{ color: colors.darkGray }}>{gender}</Text>
           <Text style={{ color: colors.darkGray }}>{breed}</Text>
-          <Text style={{ color: colors.darkGray }}>{birthdate}</Text>
+          <Text style={{ color: colors.darkGray }}>
+            {moment(birthdate).format("YYYY-MM-DD")}
+          </Text>
         </View>
       </View>
       <SafeAreaView

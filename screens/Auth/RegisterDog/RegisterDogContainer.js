@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, Keyboard } from "react-native";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import RegisterDogPresenter from "./RegisterDogPresenter";
@@ -8,14 +8,16 @@ import { SET_DOG } from "../../../queries/Auth/AuthQueries";
 
 export default ({ navigation, route: { params } }) => {
   const [image, setImage] = useState(
-    "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.globalvetlink.com%2Fwp-content%2Fuploads%2F2015%2F07%2Fanonymous.png&f=1&nofb=1"
-  ); // fix this later
+    "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg"
+  );
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
+  const [isDateModalVisible, setIsDateModalVisible] = useState(false);
   const [birthdate, setBirthdate] = useState("");
   const [breed, setBreed] = useState("");
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState(params?.email);
+
   const [dogRegisterMutation] = useMutation(SET_DOG, {
     variables: {
       image,
@@ -40,6 +42,11 @@ export default ({ navigation, route: { params } }) => {
     if (!result.cancelled) {
       setImage(result.uri);
     }
+  };
+
+  const toggleSetDate = () => {
+    setIsDateModalVisible(!isDateModalVisible);
+    Keyboard.dismiss();
   };
 
   const handleSubmit = async () => {
@@ -73,8 +80,11 @@ export default ({ navigation, route: { params } }) => {
       birthdate={birthdate}
       setBirthdate={setBirthdate}
       loading={loading}
-      handleSubmit={handleSubmit}
       handlePickImage={handlePickImage}
+      isDateModalVisible={isDateModalVisible}
+      setIsDateModalVisible={setIsDateModalVisible}
+      toggleSetDate={toggleSetDate}
+      handleSubmit={handleSubmit}
     />
   );
 };

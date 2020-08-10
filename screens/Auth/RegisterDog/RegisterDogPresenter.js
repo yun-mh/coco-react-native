@@ -1,12 +1,19 @@
 import React from "react";
-import { KeyboardAvoidingView, View } from "react-native";
+import { KeyboardAvoidingView, View, Dimensions } from "react-native";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import Input from "../../../components/Input";
+import moment from "moment";
 import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
-import TextButton from "../../../components/Auth/TextButton";
 import colors from "../../../colors";
+import DateModal from "../../../components/DateModal";
+
+const { width } = Dimensions.get("screen");
 
 const Container = styled.View`
   flex: 1;
@@ -35,7 +42,13 @@ const InputContainer = styled.View`
   margin-top: 60px;
 `;
 
-const SignUpFooter = styled.View``;
+const DateInput = styled.TextInput`
+  width: ${width / 1.2}px;
+  border: 0.5px solid ${colors.gray};
+  background-color: white;
+  border-radius: 30px;
+  margin-bottom: 15px;
+`;
 
 export default ({
   navigation,
@@ -48,10 +61,12 @@ export default ({
   setGender,
   birthdate,
   setBirthdate,
-  handleSubmit,
   handlePickImage,
+  isDateModalVisible,
+  setIsDateModalVisible,
+  toggleSetDate,
+  handleSubmit,
 }) => {
-  const toSignIn = () => navigation.navigate("SignIn");
   return (
     <DismissKeyboard>
       <Container>
@@ -86,22 +101,27 @@ export default ({
                 stateFn={setBreed}
               />
               <Input value={gender} placeholder="gender" stateFn={setGender} />
-              <Input
-                value={birthdate}
-                placeholder="birthdate"
-                stateFn={setBirthdate}
+              <DateInput
+                caretHidden={true}
+                value={birthdate ? moment(birthdate).format("YYYY-MM-DD") : ""}
+                placeholder="生年月日"
+                onFocus={toggleSetDate}
+                style={{
+                  paddingVertical: hp("1%"),
+                  paddingHorizontal: wp("5%"),
+                }}
               />
             </InputContainer>
             <Button text={"次へ"} accent={true} onPress={handleSubmit} />
           </View>
-          <SignUpFooter>
-            <TextButton
-              caption={"アカウントをお持ちの場合は"}
-              title={"ログイン"}
-              onPress={toSignIn}
-            />
-          </SignUpFooter>
         </KeyboardAvoidingView>
+        <DateModal
+          birthdate={birthdate}
+          setBirthdate={setBirthdate}
+          isDateModalVisible={isDateModalVisible}
+          setIsDateModalVisible={setIsDateModalVisible}
+          toggleSetDate={toggleSetDate}
+        />
       </Container>
     </DismissKeyboard>
   );

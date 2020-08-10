@@ -21,6 +21,8 @@ const Container = styled.View`
 `;
 
 const AvatarContainer = styled.TouchableOpacity`
+  width: ${wp("30%")}px;
+  height: ${wp("30%")}px;
   border-radius: 75px;
   background-color: ${colors.grayShadow};
   justify-content: center;
@@ -29,12 +31,17 @@ const AvatarContainer = styled.TouchableOpacity`
 
 const Avatar = styled.Image`
   position: absolute;
+  width: ${wp("30%")}px;
+  height: ${wp("30%")}px;
   border-radius: 75px;
 `;
 
-const InputContainer = styled.View``;
+const InputContainer = styled.View`
+  margin-top: ${hp("3%")}px;
+`;
 
 const DividerContainer = styled.View`
+  margin-vertical: ${hp("2%")}px;
   flex-direction: row;
   align-items: center;
 `;
@@ -85,6 +92,7 @@ export default ({
   handlePickAvatar,
 }) => {
   const toSignIn = () => navigation.navigate("SignIn");
+
   return (
     <DismissKeyboard>
       <Container>
@@ -96,14 +104,8 @@ export default ({
               justifyContent: "center",
             }}
           >
-            <AvatarContainer
-              style={{ width: wp("30%"), height: wp("30%") }}
-              onPress={handlePickAvatar}
-            >
-              <Avatar
-                style={{ width: wp("30%"), height: wp("30%") }}
-                source={{ uri: avatar }}
-              />
+            <AvatarContainer onPress={handlePickAvatar}>
+              <Avatar source={{ uri: avatar }} />
               <Feather
                 name="plus"
                 size={40}
@@ -111,7 +113,7 @@ export default ({
                 style={{ marginTop: 5, marginLeft: 1 }}
               />
             </AvatarContainer>
-            <InputContainer style={{ marginTop: hp("3%") }}>
+            <InputContainer>
               <Input
                 value={username}
                 placeholder="ユーザ名"
@@ -134,7 +136,7 @@ export default ({
               />
             </InputContainer>
             <Button text={"次へ"} accent={true} onPress={handleSubmit} />
-            <DividerContainer style={{ marginVertical: hp("2%") }}>
+            <DividerContainer>
               <DividerLine />
               <DividerText>または</DividerText>
               <DividerLine />

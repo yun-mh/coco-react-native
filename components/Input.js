@@ -5,14 +5,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import PropTypes from "prop-types";
 import colors from "../colors";
 
 const { width } = Dimensions.get("screen");
 
 const Container = styled.TextInput`
   width: ${width / 1.2}px;
-  border: 1px solid ${colors.gray};
+  border: 0.5px solid ${colors.gray};
   background-color: white;
   border-radius: 30px;
   margin-bottom: 15px;
@@ -36,13 +35,5 @@ const Input = ({
     onChangeText={(text) => stateFn(text)}
   />
 );
-
-Input.propTypes = {
-  value: PropTypes.string,
-  placeholder: PropTypes.string,
-  isPassword: PropTypes.bool,
-  autoCapitalize: PropTypes.string,
-  stateFn: PropTypes.func.isRequired,
-};
 
 export default Input;

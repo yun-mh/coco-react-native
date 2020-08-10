@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, Keyboard } from "react-native";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import AddDogPresenter from "./AddDogPresenter";
@@ -12,6 +12,7 @@ export default ({ navigation, route }) => {
   );
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
+  const [isDateModalVisible, setIsDateModalVisible] = useState(false);
   const [birthdate, setBirthdate] = useState("");
   const [breed, setBreed] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,6 +61,11 @@ export default ({ navigation, route }) => {
     }
   };
 
+  const toggleSetDate = () => {
+    setIsDateModalVisible(!isDateModalVisible);
+    Keyboard.dismiss();
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -91,8 +97,11 @@ export default ({ navigation, route }) => {
       birthdate={birthdate}
       setBirthdate={setBirthdate}
       loading={loading}
-      handleSubmit={handleSubmit}
       handlePickImage={handlePickImage}
+      isDateModalVisible={isDateModalVisible}
+      setIsDateModalVisible={setIsDateModalVisible}
+      toggleSetDate={toggleSetDate}
+      handleSubmit={handleSubmit}
     />
   );
 };

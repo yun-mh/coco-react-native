@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, Keyboard } from "react-native";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import { getCameraPermission } from "../../../userPermissions";
@@ -14,27 +14,10 @@ export default ({ navigation, route }) => {
   const [dogId, setDogId] = useState(route?.params?.dogId);
   const [name, setName] = useState(route?.params?.dogName);
   const [gender, setGender] = useState(route?.params?.gender);
-  const [birthdate, setBirthdate] = useState(route?.params?.birthdate);
+  const [isDateModalVisible, setIsDateModalVisible] = useState(false);
+  const [birthdate, setBirthdate] = useState(route?.params?.birthdate || "");
   const [breed, setBreed] = useState(route?.params?.breed);
   const [loading, setLoading] = useState(false);
-
-  const updateCache = (cache, { data }) => {
-    const existingUser = cache.readQuery({
-      query: VIEW_USER,
-      variables: {
-        id: route.params.id,
-      },
-    });
-    const newUser = data.editDog;
-    existingUser.viewUser.dogs = newUser;
-    cache.writeQuery({
-      query: VIEW_USER,
-      variables: {
-        id: route.params.id,
-      },
-      data: { ...existingUser },
-    });
-  };
 
   const [modifyDogMutation] = useMutation(MODIFY_DOG, {
     variables: {
@@ -46,7 +29,9 @@ export default ({ navigation, route }) => {
       breed,
       action: "EDIT",
     },
-    update: updateCache,
+    refetchQueries: () => [
+      { query: VIEW_USER, variables: { id: route.params.id } },
+    ],
   });
 
   const handlePickImage = async () => {
@@ -62,6 +47,11 @@ export default ({ navigation, route }) => {
     if (!result.cancelled) {
       setImage(result.uri);
     }
+  };
+
+  const toggleSetDate = () => {
+    setIsDateModalVisible(!isDateModalVisible);
+    Keyboard.dismiss();
   };
 
   const handleSubmit = async () => {
@@ -95,8 +85,11 @@ export default ({ navigation, route }) => {
       birthdate={birthdate}
       setBirthdate={setBirthdate}
       loading={loading}
-      handleSubmit={handleSubmit}
       handlePickImage={handlePickImage}
+      isDateModalVisible={isDateModalVisible}
+      setIsDateModalVisible={setIsDateModalVisible}
+      toggleSetDate={toggleSetDate}
+      handleSubmit={handleSubmit}
     />
   );
 };
