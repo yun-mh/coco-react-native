@@ -10,6 +10,7 @@ const Container = styled.View`
   align-items: flex-start;
   justify-content: flex-start;
   padding-horizontal: 14px;
+  margin-vertical: 7px;
 `;
 
 const Avatar = styled.Image`

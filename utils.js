@@ -13,7 +13,7 @@ export default {
     if (today.toDateString() == messageDate.toDateString()) {
       date += messageDate.getHours() + ":";
       date +=
-        messageDate.getMinutes().length < 2
+        messageDate.getMinutes().toString().length < 2
           ? "0" + messageDate.getMinutes()
           : messageDate.getMinutes();
     } else if (today.getFullYear() !== messageDate.getFullYear()) {
@@ -33,7 +33,7 @@ export default {
     const messageTime = new Date(targetDate);
     result += messageTime.getHours() + ":";
     result +=
-      messageTime.getMinutes().length < 2
+      messageTime.getMinutes().toString().length < 2
         ? "0" + messageTime.getMinutes()
         : messageTime.getMinutes();
     return result;

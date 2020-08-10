@@ -58,14 +58,15 @@ const ChatListItems = ({ id, messages, participants, currentUser }) => {
   const counterpart = participants.filter(
     (person) => person.id !== currentUser
   )[0];
-  const orderedMessages = messages.sort(compare);
+  const orderedMessages = messages.concat().sort(compare);
 
   const date = utils.formatDate(orderedMessages[0].createdAt);
 
   const toChatroom = () => {
     navigation.navigate("Chatroom", {
       id,
-      username: counterpart.username,
+      counterpartId: counterpart.id,
+      counterpartUsername: counterpart.username,
       myself: currentUser,
     });
   };

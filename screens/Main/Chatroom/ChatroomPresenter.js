@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import colors from "../../../colors";
 import { Feather } from "@expo/vector-icons";
 import MessageBox from "../../../components/Main/MessageBox";
-import { KeyboardAvoidingView, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  View,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 import { useHeaderHeight } from "@react-navigation/stack";
 import Loader from "../../../components/Main/Loader";
 
@@ -17,9 +22,7 @@ const ChatContainer = styled.View`
   background-color: ${colors.secondaryShadow};
 `;
 
-const ScrollView = styled.ScrollView`
-  padding-vertical: 20px;
-`;
+const ScrollView = styled.ScrollView``;
 
 const MessageInputContainer = styled.View`
   background-color: ${colors.white};
@@ -37,6 +40,7 @@ const MessageInputContainer = styled.View`
 const MessageInput = styled.TextInput`
   flex: 9;
   height: ${({ height }) => height}px;
+  min-height: 24px;
   padding-right: 10px;
 `;
 
@@ -46,31 +50,44 @@ const MessageAddContainer = styled.TouchableOpacity`
   align-items: center;
 `;
 
-export default ({ loading, height, updateInputSize, data, myself }) => {
+export default ({
+  loading,
+  messages,
+  height,
+  updateInputSize,
+  myself,
+  text,
+  setText,
+  handleSendMessage,
+}) => {
   const headerHeight = useHeaderHeight();
-
-  const messages = !loading ? data.viewChatRoom.messages : null;
+  const scrollViewRef = useRef();
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior="padding"
-      keyboardVerticalOffset={headerHeight}
-    >
-      <Container>
-        <ChatContainer>
-          {loading ? (
-            <View
-              style={{
-                flex: 1,
-                jusfifyContent: "center",
-                alignItems: "center",
+    <Container>
+      <ChatContainer>
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              jusfifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Loader />
+          </View>
+        ) : (
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={headerHeight + 10}
+          >
+            <ScrollView
+              ref={scrollViewRef}
+              contentContainerStyle={{ paddingVertical: 20 }}
+              onContentSizeChange={() => {
+                scrollViewRef.current.scrollToEnd({ animated: false });
               }}
             >
-              <Loader />
-            </View>
-          ) : (
-            <ScrollView>
               {messages.map((message) => (
                 <MessageBox
                   key={message.id}
@@ -79,11 +96,18 @@ export default ({ loading, height, updateInputSize, data, myself }) => {
                 />
               ))}
             </ScrollView>
-          )}
-        </ChatContainer>
+          </KeyboardAvoidingView>
+        )}
+      </ChatContainer>
+      <KeyboardAvoidingView
+        behavior="position"
+        keyboardVerticalOffset={headerHeight}
+      >
         <MessageInputContainer>
           <MessageInput
             placeholder="メッセージを入力"
+            value={text}
+            onChangeText={(text) => setText(text)}
             editable={true}
             multiline={true}
             height={height}
@@ -92,10 +116,14 @@ export default ({ loading, height, updateInputSize, data, myself }) => {
             }
           />
           <MessageAddContainer>
-            <Feather name="send" size={24} color={colors.darkGray} />
+            {text !== "" ? (
+              <TouchableOpacity onPress={handleSendMessage}>
+                <Feather name="send" size={24} color={colors.darkGray} />
+              </TouchableOpacity>
+            ) : null}
           </MessageAddContainer>
         </MessageInputContainer>
-      </Container>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </Container>
   );
 };

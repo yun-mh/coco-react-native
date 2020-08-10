@@ -6,6 +6,7 @@ import Main from "../navigation/Main";
 
 export default () => {
   const isLoggedIn = useIsLoggedIn();
+
   return (
     <NavigationContainer>
       {isLoggedIn ? <Main /> : <Auth />}

@@ -295,3 +295,49 @@ export const VIEW_CHATROOM = gql`
     }
   }
 `;
+
+export const SEND_MESSAGE = gql`
+  mutation sendMessage($roomId: String, $message: String!, $toId: String) {
+    sendMessage(roomId: $roomId, message: $message, toId: $toId) {
+      id
+      text
+      from {
+        id
+        username
+        avatar
+      }
+      to {
+        id
+        username
+        avatar
+      }
+      chatroom {
+        id
+      }
+      createdAt
+    }
+  }
+`;
+
+export const GET_MESSAGE = gql`
+  subscription getMessage($roomId: String!) {
+    getMessage(roomId: $roomId) {
+      id
+      text
+      from {
+        id
+        username
+        avatar
+      }
+      to {
+        id
+        username
+        avatar
+      }
+      chatroom {
+        id
+      }
+      createdAt
+    }
+  }
+`;

@@ -1,32 +1,83 @@
-import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation, useSubscription } from "@apollo/client";
 import ChatroomPresenter from "./ChatroomPresenter";
-import { VIEW_CHATROOM } from "../../../queries/Main/MainQueries";
+import {
+  VIEW_CHATROOM,
+  SEND_MESSAGE,
+  GET_MESSAGE,
+} from "../../../queries/Main/MainQueries";
 
 export default ({ navigation, route }) => {
-  const counterpart = route.params.username;
   const myself = route.params.myself;
-  console.log(myself);
+  const [text, setText] = useState("");
   const [height, setHeight] = useState(40);
+  const [messages, setMessages] = useState([]);
 
-  navigation.setOptions({ title: counterpart });
+  const { data: newData } = useSubscription(GET_MESSAGE, {
+    variables: { roomId: route.params.id },
+  });
 
-  const { loading, error, data, refetch } = useQuery(VIEW_CHATROOM, {
+  navigation.setOptions({ title: route.params.counterpartUsername });
+
+  const { loading, error, data } = useQuery(VIEW_CHATROOM, {
     variables: { id: route.params.id },
   });
+
+  const [sendMessageMutation] = useMutation(SEND_MESSAGE, {
+    variables: {
+      roomId: route.params.id,
+      message: text,
+      toId: route.params.counterpartId,
+    },
+    refetchQueries: () => [
+      { query: VIEW_CHATROOM, variables: { id: route.params.id } },
+    ],
+  });
+
+  useEffect(() => {
+    if (!loading) {
+      const {
+        viewChatRoom: { messages },
+      } = data;
+      setMessages(messages);
+    }
+  }, [data]);
+
+  const handleNewMessage = () => {
+    if (newData !== undefined) {
+      const { getMessage } = newData;
+      setMessages((prev) => [...prev, getMessage]);
+    }
+  };
+
+  useEffect(() => {
+    handleNewMessage();
+  }, [newData]);
+
+  const handleSendMessage = async () => {
+    try {
+      await sendMessageMutation();
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setText("");
+    }
+  };
 
   const updateInputSize = (height) => {
     setHeight(height);
   };
 
-  console.log(data);
   return (
     <ChatroomPresenter
       loading={loading}
-      data={data}
+      messages={messages}
+      myself={myself}
+      text={text}
+      setText={setText}
+      handleSendMessage={handleSendMessage}
       height={height}
       updateInputSize={updateInputSize}
-      myself={myself}
     />
   );
 };
