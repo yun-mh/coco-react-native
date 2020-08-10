@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Image } from "react-native";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import { persistCache } from "apollo-cache-persist";
+import { CachePersistor } from "apollo-cache-persist";
 import {
   ApolloProvider,
   ApolloClient,
@@ -18,6 +18,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import Gate from "./components/Gate";
 import { AuthProvider } from "./contexts/AuthContext";
+import { PersistProvider } from "./contexts/PersistContext";
 
 const httpLink = new HttpLink({
   uri: "http://localhost:4000/",
@@ -54,11 +55,12 @@ const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 export default function App() {
   const [isReady, setIsReady] = useState(false);
   const [client, setClient] = useState(null);
+  const [persistor, setPersistor] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   const handleFinish = async () => {
     const cache = new InMemoryCache();
-    await persistCache({
+    const persistor = new CachePersistor({
       cache,
       storage: AsyncStorage,
     });
@@ -87,6 +89,7 @@ export default function App() {
       setIsLoggedIn(true);
     }
     setClient(client);
+    setPersistor(persistor);
     setIsReady(true);
   };
 
@@ -96,7 +99,8 @@ export default function App() {
         require("./assets/intro1.jpg"),
         require("./assets/intro2.jpg"),
         require("./assets/intro3.jpg"),
-        require("./assets/anonymous.png"),
+        "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous.jpg",
+        "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg",
       ];
       const fonts = [Ionicons.font, Feather.font];
       const imagePromises = cacheImages(images);
@@ -109,9 +113,11 @@ export default function App() {
 
   return isReady && client && isLoggedIn !== null ? (
     <ApolloProvider client={client}>
-      <AuthProvider isLoggedIn={isLoggedIn}>
-        <Gate />
-      </AuthProvider>
+      <PersistProvider persistor={persistor}>
+        <AuthProvider isLoggedIn={isLoggedIn}>
+          <Gate />
+        </AuthProvider>
+      </PersistProvider>
     </ApolloProvider>
   ) : (
     <AppLoading

@@ -9,8 +9,8 @@ import { Alert } from "react-native";
 export default ({ navigation, route }) => {
   const [avatar, setAvatar] = useState(
     route.params.avatar ||
-      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.globalvetlink.com%2Fwp-content%2Fuploads%2F2015%2F07%2Fanonymous.png&f=1&nofb=1"
-  ); // fix this later
+      "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous.jpg"
+  );
   const [username, setUsername] = useState(route.params.username || "");
   const [email, setEmail] = useState(route.params.email);
   const [loading, setLoading] = useState(false);

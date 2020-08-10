@@ -9,8 +9,8 @@ import ModifyDogPresenter from "./ModifyDogPresenter";
 export default ({ navigation, route }) => {
   const [image, setImage] = useState(
     route?.params?.image ||
-      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.globalvetlink.com%2Fwp-content%2Fuploads%2F2015%2F07%2Fanonymous.png&f=1&nofb=1"
-  ); // fix this later
+      "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg"
+  );
   const [dogId, setDogId] = useState(route?.params?.dogId);
   const [name, setName] = useState(route?.params?.dogName);
   const [gender, setGender] = useState(route?.params?.gender);

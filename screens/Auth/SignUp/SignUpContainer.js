@@ -9,8 +9,8 @@ import utils from "../../../utils";
 
 export default ({ navigation }) => {
   const [avatar, setAvatar] = useState(
-    "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.globalvetlink.com%2Fwp-content%2Fuploads%2F2015%2F07%2Fanonymous.png&f=1&nofb=1"
-  ); // fix this later
+    "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous.jpg"
+  );
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
