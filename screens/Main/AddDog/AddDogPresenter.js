@@ -12,6 +12,7 @@ import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
 import colors from "../../../colors";
 import DateModal from "../../../components/DateModal";
+import RadioButton from "../../../components/RadioButton";
 
 const { width } = Dimensions.get("screen");
 
@@ -57,6 +58,7 @@ export default ({
   setName,
   breed,
   setBreed,
+  radioProps,
   gender,
   setGender,
   birthdate,
@@ -100,7 +102,11 @@ export default ({
                 autoCapitalize="none"
                 stateFn={setBreed}
               />
-              <Input value={gender} placeholder="性別" stateFn={setGender} />
+              <RadioButton
+                prop={radioProps}
+                gender={gender}
+                setGender={setGender}
+              />
               <DateInput
                 caretHidden={true}
                 value={birthdate ? moment(birthdate).format("YYYY-MM-DD") : ""}

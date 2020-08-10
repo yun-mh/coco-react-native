@@ -7,6 +7,11 @@ import { MODIFY_DOG, VIEW_USER } from "../../../queries/Main/MainQueries";
 import ModifyDogPresenter from "./ModifyDogPresenter";
 
 export default ({ navigation, route }) => {
+  const radioProps = [
+    { key: "male", ios: "ios-male", md: "md-male", text: "男" },
+    { key: "female", ios: "ios-female", md: "md-female", text: "女" },
+  ];
+
   const [image, setImage] = useState(
     route?.params?.image ||
       "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg"
@@ -80,6 +85,7 @@ export default ({ navigation, route }) => {
       setName={setName}
       breed={breed}
       setBreed={setBreed}
+      radioProps={radioProps}
       gender={gender}
       setGender={setGender}
       birthdate={birthdate}

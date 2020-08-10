@@ -7,11 +7,16 @@ import { getCameraPermission } from "../../../userPermissions";
 import { ADD_DOG, VIEW_USER } from "../../../queries/Main/MainQueries";
 
 export default ({ navigation, route }) => {
+  const radioProps = [
+    { key: "male", ios: "ios-male", md: "md-male", text: "男" },
+    { key: "female", ios: "ios-female", md: "md-female", text: "女" },
+  ];
+
   const [image, setImage] = useState(
     "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg"
   );
   const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("male");
   const [isDateModalVisible, setIsDateModalVisible] = useState(false);
   const [birthdate, setBirthdate] = useState("");
   const [breed, setBreed] = useState("");
@@ -92,6 +97,7 @@ export default ({ navigation, route }) => {
       setName={setName}
       breed={breed}
       setBreed={setBreed}
+      radioProps={radioProps}
       gender={gender}
       setGender={setGender}
       birthdate={birthdate}

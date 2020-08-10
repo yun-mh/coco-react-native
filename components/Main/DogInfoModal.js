@@ -90,8 +90,10 @@ const DogInfoModal = ({
         />
         <View style={{ paddingLeft: 10, justifyContent: "space-around" }}>
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>{dogName}</Text>
-          <Text style={{ color: colors.darkGray }}>{gender}</Text>
           <Text style={{ color: colors.darkGray }}>{breed}</Text>
+          <Text style={{ color: colors.darkGray }}>
+            {gender === "male" ? "男" : "女"}
+          </Text>
           <Text style={{ color: colors.darkGray }}>
             {moment(birthdate).format("YYYY-MM-DD")}
           </Text>
