@@ -15,29 +15,14 @@ export default ({ navigation, route }) => {
   const [email, setEmail] = useState(route.params.email);
   const [loading, setLoading] = useState(false);
 
-  const updateCache = (cache, { data }) => {
-    const existingUser = cache.readQuery({
-      query: VIEW_USER,
-      variables: {
-        id: route.params.id,
-      },
-    });
-    const newUser = data.editUser;
-    cache.writeQuery({
-      query: VIEW_USER,
-      variables: {
-        id: route.params.id,
-      },
-      data: { ...existingUser, ...newUser },
-    });
-  };
-
   const [editUserMutation] = useMutation(EDIT_USER, {
     variables: {
       username,
       avatar,
     },
-    update: updateCache,
+    refetchQueries: () => [
+      { query: VIEW_USER, variables: { id: route.params.id } },
+    ],
   });
 
   const handlePickAvatar = async () => {

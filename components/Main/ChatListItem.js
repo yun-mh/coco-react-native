@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import colors from "../../colors";
 import { useNavigation } from "@react-navigation/native";
@@ -55,12 +55,16 @@ function compare(a, b) {
 const ChatListItems = ({ id, messages, participants, currentUser }) => {
   const navigation = useNavigation();
 
+  const [msg, setMsg] = useState([]);
+
   const counterpart = participants.filter(
     (person) => person.id !== currentUser
   )[0];
-  const orderedMessages = messages.concat().sort(compare);
 
-  const date = utils.formatDate(orderedMessages[0].createdAt);
+  useEffect(() => {
+    const reversed = messages.concat().sort(compare);
+    setMsg([...reversed]);
+  }, [messages]);
 
   const toChatroom = () => {
     navigation.navigate("Chatroom", {
@@ -77,12 +81,14 @@ const ChatListItems = ({ id, messages, participants, currentUser }) => {
       <InfoContainer>
         <Username>{counterpart.username}</Username>
         <Message>
-          {orderedMessages[0].text.length > 28
-            ? orderedMessages[0].text.slice(0, 28) + "..."
-            : orderedMessages[0].text}
+          {msg && msg.length > 0
+            ? msg[0].text.length > 28
+              ? msg[0].text.slice(0, 28) + "..."
+              : msg[0].text
+            : ""}
         </Message>
       </InfoContainer>
-      <Time>{date}</Time>
+      <Time>{msg && msg.length > 0 && utils.formatDate(msg[0].createdAt)}</Time>
     </Container>
   );
 };

@@ -22,24 +22,6 @@ export default ({ navigation, route }) => {
   const [breed, setBreed] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const updateCache = (cache, { data }) => {
-    const existingUser = cache.readQuery({
-      query: VIEW_USER,
-      variables: {
-        id: route.params.id,
-      },
-    });
-    const newUser = data.registerDog;
-    existingUser.viewUser.dogs = newUser;
-    cache.writeQuery({
-      query: VIEW_USER,
-      variables: {
-        id: route.params.id,
-      },
-      data: { ...existingUser },
-    });
-  };
-
   const [dogRegisterMutation] = useMutation(ADD_DOG, {
     variables: {
       image,
@@ -48,7 +30,9 @@ export default ({ navigation, route }) => {
       gender,
       birthdate,
     },
-    update: updateCache,
+    refetchQueries: () => [
+      { query: VIEW_USER, variables: { id: route.params.id } },
+    ],
   });
 
   const handlePickImage = async () => {

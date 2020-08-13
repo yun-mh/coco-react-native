@@ -24,30 +24,14 @@ const DogInfoModal = ({
   const route = useRoute();
   const [isDeleteMode, setIsDeleteMode] = useState(false);
 
-  const updateCache = (cache, { data }) => {
-    const existingUser = cache.readQuery({
-      query: VIEW_USER,
-      variables: {
-        id: route.params.id,
-      },
-    });
-    const newUser = data.editDog;
-    existingUser.viewUser.dogs = newUser;
-    cache.writeQuery({
-      query: VIEW_USER,
-      variables: {
-        id: route.params.id,
-      },
-      data: { ...existingUser },
-    });
-  };
-
   const [deleteDogMutation] = useMutation(DELETE_DOG, {
     variables: {
       id: dogId,
       action: "DELETE",
     },
-    update: updateCache,
+    refetchQueries: () => [
+      { query: VIEW_USER, variables: { id: route.params.id } },
+    ],
   });
 
   const deleteDog = async (dogId) => {

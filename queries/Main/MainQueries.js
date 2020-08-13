@@ -270,6 +270,28 @@ export const VIEW_CHATROOMS = gql`
         text
         createdAt
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_CHATROOMS = gql`
+  subscription getChatrooms($id: String!) {
+    getChatrooms(id: $id) {
+      id
+      participants {
+        id
+        avatar
+        username
+      }
+      messages {
+        id
+        text
+        createdAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

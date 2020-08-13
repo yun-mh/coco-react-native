@@ -38,6 +38,14 @@ const wsLink = new WebSocketLink({
   uri: `ws://localhost:4000/`,
   options: {
     reconnect: true,
+    connectionParams: async () => {
+      const token = await AsyncStorage.getItem("jwt");
+      return {
+        headers: {
+          authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    },
   },
 });
 
@@ -76,7 +84,7 @@ export default function App() {
               definition.operation === "subscription"
             );
           },
-          authLink.concat(wsLink),
+          wsLink,
           authLink.concat(httpLink)
         ),
       ]),

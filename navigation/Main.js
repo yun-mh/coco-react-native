@@ -45,7 +45,7 @@ function getHeaderTitle(route) {
 const TabsNavigator = createBottomTabNavigator();
 
 const Tabs = ({ navigation, route }) => {
-  const { loading, error, data, refetch } = useQuery(PROFILE_THUMBNAIL);
+  const { loading, error, data } = useQuery(PROFILE_THUMBNAIL);
   const [current, setCurrent] = useState(
     getFocusedRouteNameFromRoute(route) || "Feed"
   );
@@ -118,7 +118,18 @@ const Tabs = ({ navigation, route }) => {
         })}
       />
       <TabsNavigator.Screen name="Notification" component={Notification} />
-      <TabsNavigator.Screen name="Message" component={Chatrooms} />
+      <TabsNavigator.Screen
+        name="Message"
+        component={Chatrooms}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            if (data !== undefined) {
+              navigation.navigate("Message", { id: data.viewMyself.id });
+            }
+          },
+        })}
+      />
     </TabsNavigator.Navigator>
   );
 };
