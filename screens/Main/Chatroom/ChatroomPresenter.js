@@ -3,12 +3,7 @@ import styled from "styled-components";
 import colors from "../../../colors";
 import { Feather } from "@expo/vector-icons";
 import MessageBox from "../../../components/Main/MessageBox";
-import {
-  KeyboardAvoidingView,
-  View,
-  StatusBar,
-  TouchableOpacity,
-} from "react-native";
+import { KeyboardAvoidingView, View, TouchableOpacity } from "react-native";
 import { useHeaderHeight } from "@react-navigation/stack";
 import Loader from "../../../components/Main/Loader";
 

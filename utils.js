@@ -38,4 +38,16 @@ export default {
         : messageTime.getMinutes();
     return result;
   },
+  compare: (a, b) => {
+    const aDate = a.createdAt;
+    const bDate = b.createdAt;
+
+    let result = 0;
+    if (aDate > bDate) {
+      result = -1;
+    } else if (aDate < bDate) {
+      result = 1;
+    }
+    return result;
+  },
 };

@@ -39,19 +39,6 @@ const Time = styled.Text`
   color: ${colors.darkGray};
 `;
 
-function compare(a, b) {
-  const aDate = a.createdAt;
-  const bDate = b.createdAt;
-
-  let result = 0;
-  if (aDate > bDate) {
-    result = -1;
-  } else if (aDate < bDate) {
-    result = 1;
-  }
-  return result;
-}
-
 const ChatListItems = ({ id, messages, participants, currentUser }) => {
   const navigation = useNavigation();
 
@@ -62,7 +49,7 @@ const ChatListItems = ({ id, messages, participants, currentUser }) => {
   )[0];
 
   useEffect(() => {
-    const reversed = messages.concat().sort(compare);
+    const reversed = messages.concat().sort(utils.compare);
     setMsg([...reversed]);
   }, [messages]);
 
