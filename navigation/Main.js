@@ -11,7 +11,6 @@ import LogoTitle from "../components/Main/LogoTitle";
 import SearchButton from "../components/Main/SearchButton";
 import ProfileButton from "../components/Main/ProfileButton";
 import Walking from "../screens/Main/Walking";
-import Notification from "../screens/Main/Notification";
 import Profile from "../screens/Main/Profile";
 import ModifyProfile from "../screens/Main/ModifyProfile";
 import Feed from "../screens/Main/Feed";
@@ -26,6 +25,7 @@ import colors from "../colors";
 import ModifyPost from "../screens/Main/ModifyPost/ModifyPost";
 import Chatrooms from "../screens/Main/Chatrooms";
 import Chatroom from "../screens/Main/Chatroom";
+import Notification from "../screens/Main/Notification/";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -36,7 +36,7 @@ function getHeaderTitle(route) {
     case "Walking":
       return "Walking";
     case "Notification":
-      return "Notification";
+      return "通知";
     case "Message":
       return "メッセージ";
   }
@@ -117,7 +117,18 @@ const Tabs = ({ navigation, route }) => {
           },
         })}
       />
-      <TabsNavigator.Screen name="Notification" component={Notification} />
+      <TabsNavigator.Screen
+        name="Notification"
+        component={Notification}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            if (data !== undefined) {
+              navigation.navigate("Notification", { id: data.viewMyself.id });
+            }
+          },
+        })}
+      />
       <TabsNavigator.Screen
         name="Message"
         component={Chatrooms}

@@ -256,6 +256,70 @@ export const DELETE_POST = gql`
   }
 `;
 
+export const VIEW_NOTIFICATION = gql`
+  query viewNotification {
+    viewNotification {
+      id
+      from {
+        id
+        avatar
+        username
+        followers {
+          id
+        }
+      }
+      user {
+        id
+      }
+      post {
+        comments {
+          text
+          user {
+            id
+            username
+            avatar
+          }
+          createdAt
+        }
+        likes {
+          id
+          user {
+            id
+            avatar
+            username
+          }
+        }
+      }
+      type
+    }
+  }
+`;
+
+export const GET_COMMENT_NOTIFICATION = gql`
+  subscription getCommentNotification($id: String!) {
+    getCommentNotification(id: $id) {
+      id
+      text
+      user {
+        id
+        avatar
+        username
+      }
+      post {
+        id
+        user {
+          id
+          avatar
+          username
+        }
+      }
+      type
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const VIEW_CHATROOMS = gql`
   query viewChatRooms {
     viewChatRooms {

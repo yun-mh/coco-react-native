@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfilePresenter from "./ProfilePresenter";
 import { useQuery, useMutation } from "@apollo/client";
 import { VIEW_USER, FOLLOW, UNFOLLOW } from "../../../queries/Main/MainQueries";
@@ -20,6 +20,14 @@ const ProfileContainer = ({ navigation, route }) => {
   const [isFollowing, setIsFollowing] = useState(data?.viewUser?.isFollowing);
   const [isUserInfoModalVisible, setUserInfoModalVisible] = useState(false);
   const [isDogInfoModalVisible, setDogInfoModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (data?.viewUser?.isFollowing === true) {
+      setIsFollowing(true);
+    } else {
+      setIsFollowing(false);
+    }
+  }, [data?.viewUser?.isFollowing]);
 
   const [followMutation] = useMutation(FOLLOW, {
     variables: {
