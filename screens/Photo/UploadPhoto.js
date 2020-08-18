@@ -63,13 +63,19 @@ export default ({ navigation, route }) => {
     }
     try {
       setIsLoading(true);
+      console.log("1");
       const {
         data: { locations },
-      } = await axios.post("http://localhost:4000/api/upload", formData, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      });
+      } = await axios.post(
+        "https://api-coco.herokuapp.com/api/upload",
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("2");
       const {
         data: { uploadPost },
       } = await uploadMutation({
@@ -77,9 +83,11 @@ export default ({ navigation, route }) => {
           files: [...locations],
         },
       });
+      console.log("3");
       if (uploadPost.id) {
         navigation.navigate("Feed");
       }
+      console.log("4");
     } catch (error) {
       Alert.alert("エラー", "もう一度アップロードしてください。");
     } finally {

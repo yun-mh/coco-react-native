@@ -72,7 +72,7 @@ function selectIcon(type, followDone) {
   }
 }
 
-const NotificationCard = ({ id, from, type, post, currentUser }) => {
+const NotificationCard = ({ id, from, type, post, cmt, currentUser }) => {
   const [comment, setComment] = useState([]);
   const [followDone, setFollowDone] = useState(false);
 
@@ -95,10 +95,7 @@ const NotificationCard = ({ id, from, type, post, currentUser }) => {
 
   useEffect(() => {
     if (type === "COMMENT") {
-      const target = post.comments.concat().sort(utils.compare)[0];
-      if (target.user.id !== currentUser) {
-        setComment(target);
-      }
+      setComment(cmt);
       return;
     } else if (type === "FOLLOW") {
       const followExists = from.followers.find(

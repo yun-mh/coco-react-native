@@ -7,6 +7,10 @@ import { TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import Loader from "../../components/Main/Loader";
 import colors from "../../colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 const View = styled.View`
   flex: 1;
@@ -105,16 +109,23 @@ export default ({ navigation }) => {
       {loading ? (
         <Loader />
       ) : hasPermission ? (
-        <Camera
-          ref={cameraRef}
-          type={cameraType}
-          style={{ flex: 1, justifyContent: "space-between" }}
-        >
-          <ReverseButtonContainer>
-            <ReverseButton onPress={toggleType}>
-              <Feather name="refresh-ccw" size={20} color="white" />
-            </ReverseButton>
-          </ReverseButtonContainer>
+        <>
+          <Camera
+            ref={cameraRef}
+            type={cameraType}
+            style={{
+              flex: 4,
+              width: wp("100%"),
+              height: wp("75%"),
+              justifyContent: "space-between",
+            }}
+          >
+            <ReverseButtonContainer>
+              <ReverseButton onPress={toggleType}>
+                <Feather name="refresh-ccw" size={20} color="white" />
+              </ReverseButton>
+            </ReverseButtonContainer>
+          </Camera>
           <ButtonContainer>
             <Ring>
               <TouchableOpacity onPress={takePhoto} disabled={!canTakePhoto}>
@@ -122,7 +133,7 @@ export default ({ navigation }) => {
               </TouchableOpacity>
             </Ring>
           </ButtonContainer>
-        </Camera>
+        </>
       ) : null}
     </View>
   );

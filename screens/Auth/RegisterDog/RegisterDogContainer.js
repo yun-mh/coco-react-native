@@ -35,7 +35,7 @@ export default ({ navigation, route: { params } }) => {
   });
 
   const handlePickImage = async () => {
-    const status = getCameraPermission();
+    const status = await getCameraPermission();
     if (status != "granted") {
       Alert.alert("カメラロールの権限が必要です。");
     }

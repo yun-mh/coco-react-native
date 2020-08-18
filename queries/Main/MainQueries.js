@@ -271,16 +271,13 @@ export const VIEW_NOTIFICATION = gql`
       user {
         id
       }
-      post {
-        comments {
-          text
-          user {
-            id
-            username
-            avatar
-          }
-          createdAt
+      comment {
+        post {
+          id
         }
+        text
+      }
+      post {
         likes {
           id
           user {
@@ -295,27 +292,39 @@ export const VIEW_NOTIFICATION = gql`
   }
 `;
 
-export const GET_COMMENT_NOTIFICATION = gql`
-  subscription getCommentNotification($id: String!) {
-    getCommentNotification(id: $id) {
+export const GET_NOTIFICATION = gql`
+  subscription getNotification($id: String!) {
+    getNotification(id: $id) {
       id
-      text
-      user {
+      from {
         id
         avatar
         username
+        followers {
+          id
+        }
+      }
+      user {
+        id
+      }
+      comment {
+        post {
+          id
+        }
+        text
       }
       post {
         id
-        user {
+        likes {
           id
-          avatar
-          username
+          user {
+            id
+            avatar
+            username
+          }
         }
       }
       type
-      createdAt
-      updatedAt
     }
   }
 `;

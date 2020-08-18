@@ -134,7 +134,7 @@ export default ({ navigation }) => {
                             position: "absolute",
                             top: "15%",
                             right: "15%",
-                            borderRadius: "50%",
+                            borderRadius: 50,
                             backgroundColor: colors.secondary,
                             padding: 3,
                           }}

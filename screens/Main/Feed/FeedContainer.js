@@ -5,6 +5,7 @@ import { VIEW_FEED, CHECK_MYSELF } from "../../../queries/Main/MainQueries";
 
 export default () => {
   const [refreshing, setRefreshing] = useState(false);
+
   const { loading, error, data, refetch } = useQuery(VIEW_FEED);
   const { data: check } = useQuery(CHECK_MYSELF);
 

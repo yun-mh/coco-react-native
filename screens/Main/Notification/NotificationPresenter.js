@@ -25,7 +25,7 @@ export default ({ loading, notifications, currentUser }) => {
               id={item.id}
               type={item.type}
               from={item.from}
-              post={item.post}
+              cmt={item.comment}
               currentUser={currentUser}
             />
           )}

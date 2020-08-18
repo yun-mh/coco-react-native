@@ -155,6 +155,7 @@ export default () => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerBackImage: () => <BackBtn />,
+        headerTitleAlign: "center",
       }}
     >
       <MainNavigator.Screen name="Tabs" component={Tabs} />

@@ -24,6 +24,12 @@ export const PASSWORD_CHANGE = gql`
   }
 `;
 
+export const CHECK_USER = gql`
+  query checkUser($email: String!) {
+    checkUser(email: $email)
+  }
+`;
+
 export const CREATE_ACCOUNT = gql`
   mutation createAccount(
     $avatar: String!

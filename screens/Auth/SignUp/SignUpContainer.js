@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Alert } from "react-native";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import SignUpPresenter from "./SignUpPresenter";
 import { getCameraPermission } from "../../../userPermissions";
-import { CREATE_ACCOUNT } from "../../../queries/Auth/AuthQueries";
+import { CREATE_ACCOUNT, CHECK_USER } from "../../../queries/Auth/AuthQueries";
 import utils from "../../../utils";
 
 export default ({ navigation }) => {
@@ -15,6 +15,7 @@ export default ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [createAccountMutation] = useMutation(CREATE_ACCOUNT, {
     variables: {
       avatar,
@@ -25,7 +26,7 @@ export default ({ navigation }) => {
   });
 
   const handlePickAvatar = async () => {
-    const status = getCameraPermission();
+    const status = await getCameraPermission();
     if (status != "granted") {
       Alert.alert("カメラロールの権限が必要です。");
     }
@@ -48,6 +49,7 @@ export default ({ navigation }) => {
       Alert.alert("エラー", "メールアドレスを正しく入力してください。");
       return false;
     }
+
     return true;
   };
 
@@ -62,6 +64,8 @@ export default ({ navigation }) => {
       } = await createAccountMutation();
       if (createAccount) {
         navigation.navigate("RegisterDog", { email });
+      } else {
+        Alert.alert("エラー", "すでに登録されているメールアドレスです。");
       }
     } catch (e) {
       Alert.alert(e);
