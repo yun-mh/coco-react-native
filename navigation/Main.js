@@ -19,13 +19,14 @@ import Search from "../screens/Main/Search";
 import Post from "../screens/Main/Post";
 import AddDog from "../screens/Main/AddDog";
 import ModifyDog from "../screens/Main/ModifyDog";
-import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
-import { PhotoStacks } from "./Photo";
-import colors from "../colors";
 import ModifyPost from "../screens/Main/ModifyPost/ModifyPost";
 import Chatrooms from "../screens/Main/Chatrooms";
 import Chatroom from "../screens/Main/Chatroom";
 import Notification from "../screens/Main/Notification/";
+import Maps from "../screens/Walking/Maps/MapsContainer";
+import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
+import { PhotoStacks } from "./Photo";
+import colors from "../colors";
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
@@ -34,7 +35,7 @@ function getHeaderTitle(route) {
     case "Feed":
       return () => <LogoTitle />;
     case "Walking":
-      return "Walking";
+      return "お散歩の出会い";
     case "Notification":
       return "通知";
     case "Message":
@@ -211,6 +212,11 @@ export default () => {
         name="Chatroom"
         component={Chatroom}
         options={{ title: "" }}
+      />
+      <MainNavigator.Screen
+        name="Maps"
+        component={Maps}
+        options={{ title: "お散歩の出会い" }}
       />
     </MainNavigator.Navigator>
   );

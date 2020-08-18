@@ -107,6 +107,8 @@ export default function App() {
         require("./assets/intro1.jpg"),
         require("./assets/intro2.jpg"),
         require("./assets/intro3.jpg"),
+        require("./assets/walking.jpg"),
+        require("./assets/logo_title.png"),
         "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous.jpg",
         "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg",
       ];

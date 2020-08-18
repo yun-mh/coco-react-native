@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
+import { KeyboardAvoidingView, View, TouchableOpacity } from "react-native";
 import styled from "styled-components";
-import colors from "../../../colors";
+import { useHeaderHeight } from "@react-navigation/stack";
 import { Feather } from "@expo/vector-icons";
 import MessageBox from "../../../components/Main/MessageBox";
-import { KeyboardAvoidingView, View, TouchableOpacity } from "react-native";
-import { useHeaderHeight } from "@react-navigation/stack";
 import Loader from "../../../components/Main/Loader";
+import colors from "../../../colors";
 
 const Container = styled.SafeAreaView`
   flex: 1;

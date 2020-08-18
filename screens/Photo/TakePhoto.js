@@ -3,7 +3,6 @@ import styled from "styled-components";
 import * as Permissions from "expo-permissions";
 import * as MediaLibrary from "expo-media-library";
 import { Camera } from "expo-camera";
-import constants from "../../constants";
 import { TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import Loader from "../../components/Main/Loader";
