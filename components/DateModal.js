@@ -6,13 +6,24 @@ import colors from "../colors";
 import TextButton from "./Main/TextButton";
 
 const DateModal = ({
+  os,
   birthdate,
   setBirthdate,
   isDateModalVisible,
   setIsDateModalVisible,
   toggleSetDate,
 }) => {
-  return (
+  return os === "android" && isDateModalVisible === true ? (
+    <DateTimePicker
+      value={birthdate ? new Date(birthdate) : new Date()}
+      mode="date"
+      display="default"
+      locale="ja-JP"
+      onChange={(e, birthdate) => {
+        setBirthdate(birthdate);
+      }}
+    />
+  ) : os === "ios" && isDateModalVisible === true ? (
     <Modal
       isVisible={isDateModalVisible}
       style={{ justifyContent: "flex-end", margin: 0 }}
@@ -25,21 +36,23 @@ const DateModal = ({
           display="default"
           locale="ja-JP"
           onChange={(e, birthdate) => {
-            if (Platform.OS === "ios") {
-              setBirthdate(birthdate);
+            if (e.type === "dismissed") {
+              setIsDateModalVisible(false);
+            } else if (e.type === "set") {
+              console.log("hahhaha");
+              setIsDateModalVisible(false);
             }
+            setBirthdate(birthdate);
           }}
         />
-        {Platform.OS === "ios" && (
-          <TextButton
-            title={"設定"}
-            onPress={() => toggleSetDate()}
-            color={colors.primary}
-          />
-        )}
+        <TextButton
+          title={"設定"}
+          onPress={() => toggleSetDate()}
+          color={colors.primary}
+        />
       </SafeAreaView>
     </Modal>
-  );
+  ) : null;
 };
 
 export default DateModal;

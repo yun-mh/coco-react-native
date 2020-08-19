@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Keyboard } from "react-native";
+import { Alert, Keyboard, Platform } from "react-native";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import RegisterDogPresenter from "./RegisterDogPresenter";
@@ -22,6 +22,7 @@ export default ({ navigation, route: { params } }) => {
   const [breed, setBreed] = useState("");
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState(params?.email);
+  const [os, setOs] = useState(Platform.OS);
 
   const [dogRegisterMutation] = useMutation(SET_DOG, {
     variables: {
@@ -50,8 +51,8 @@ export default ({ navigation, route: { params } }) => {
   };
 
   const toggleSetDate = () => {
-    setIsDateModalVisible(!isDateModalVisible);
     Keyboard.dismiss();
+    setIsDateModalVisible(!isDateModalVisible);
   };
 
   const handleSubmit = async () => {
@@ -62,7 +63,10 @@ export default ({ navigation, route: { params } }) => {
       } = await dogRegisterMutation();
       if (setDog) {
         Alert.alert("登録完了", "会員登録が完了しました。");
-        navigation.navigate("SignIn", { email });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "SignIn", params: { email } }],
+        });
       }
     } catch (e) {
       Alert.alert(e);
@@ -87,6 +91,7 @@ export default ({ navigation, route: { params } }) => {
       setBirthdate={setBirthdate}
       loading={loading}
       handlePickImage={handlePickImage}
+      os={os}
       isDateModalVisible={isDateModalVisible}
       setIsDateModalVisible={setIsDateModalVisible}
       toggleSetDate={toggleSetDate}

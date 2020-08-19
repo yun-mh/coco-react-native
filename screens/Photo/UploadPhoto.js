@@ -55,7 +55,7 @@ export default ({ navigation, route }) => {
     for (const item of photo) {
       const name = item.filename;
       const [, type] = name.split(".");
-      await formData.append("file", {
+      formData.append("file", {
         name: item.filename,
         type: type.toLowerCase(),
         uri: item.uri,
@@ -89,6 +89,7 @@ export default ({ navigation, route }) => {
       }
       console.log("4");
     } catch (error) {
+      console.log(error);
       Alert.alert("エラー", "もう一度アップロードしてください。");
     } finally {
       setIsLoading(false);

@@ -67,13 +67,14 @@ export default ({ navigation }) => {
     try {
       setCanTakePhoto(false);
       const { uri } = await cameraRef.current.takePictureAsync({
-        quality: 1,
-        exif: true,
+        skipProcessing: true,
       });
       const asset = await MediaLibrary.createAssetAsync(uri);
-      await navigation.navigate("UploadPhoto", { photo: [asset] });
+      navigation.navigate("UploadPhoto", { photo: [asset] });
     } catch (error) {
       console.log(error);
+      setCanTakePhoto(true);
+    } finally {
       setCanTakePhoto(true);
     }
   };

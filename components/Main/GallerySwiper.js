@@ -41,16 +41,17 @@ const GallerySwiper = ({ selected }) => {
       showsHorizontalScrollIndicator={true}
       showsPagination={false}
     >
-      {selected.map((file) => (
-        <Image
-          key={file.id}
-          style={{
-            width: wp("100%"),
-            height: hp("50%"),
-          }}
-          source={{ uri: file.uri }}
-        />
-      ))}
+      {selected.length > 0 &&
+        selected.map((file) => (
+          <Image
+            key={file.id}
+            style={{
+              width: wp("100%"),
+              height: hp("50%"),
+            }}
+            source={{ uri: file.uri }}
+          />
+        ))}
     </Swiper>
   );
 };

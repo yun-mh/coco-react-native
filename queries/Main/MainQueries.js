@@ -214,11 +214,7 @@ export const DELETE_COMMENT = gql`
 `;
 
 export const UPLOAD_POST = gql`
-  mutation uploadPost(
-    $caption: String!
-    $files: [String!]!
-    $location: String
-  ) {
+  mutation uploadPost($caption: String, $files: [String!]!, $location: String) {
     uploadPost(caption: $caption, files: $files, location: $location) {
       id
       caption

@@ -63,7 +63,10 @@ export default ({ navigation }) => {
         data: { createAccount },
       } = await createAccountMutation();
       if (createAccount) {
-        navigation.navigate("RegisterDog", { email });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "RegisterDog", params: { email } }],
+        });
       } else {
         Alert.alert("エラー", "すでに登録されているメールアドレスです。");
       }

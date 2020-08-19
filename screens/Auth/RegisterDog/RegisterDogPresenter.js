@@ -63,6 +63,7 @@ export default ({
   birthdate,
   setBirthdate,
   handlePickImage,
+  os,
   isDateModalVisible,
   setIsDateModalVisible,
   toggleSetDate,
@@ -121,6 +122,7 @@ export default ({
           </View>
         </KeyboardAvoidingView>
         <DateModal
+          os={os}
           birthdate={birthdate}
           setBirthdate={setBirthdate}
           isDateModalVisible={isDateModalVisible}
