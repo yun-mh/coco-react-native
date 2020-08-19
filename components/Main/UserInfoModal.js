@@ -5,6 +5,7 @@ import TextButton from "./TextButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { usePersistor } from "../../contexts/PersistContext";
 import { useApolloClient } from "@apollo/client";
+import { View } from "react-native";
 
 const UserInfoModal = ({
   isUserInfoModalVisible,
@@ -22,26 +23,28 @@ const UserInfoModal = ({
       onBackdropPress={toggleUserInfoModal}
     >
       <SafeAreaView style={{ backgroundColor: "white", paddingTop: 10 }}>
-        <TextButton
-          title={"会員情報変更"}
-          onPress={toProfileModify}
-          color={colors.primary}
-        />
-        <TextButton
-          title={"ログアウト"}
-          onPress={async () => {
-            await persistor.pause();
-            await persistor.purge();
-            await client.resetStore();
-            logout();
-          }}
-          color={colors.red}
-        />
-        <TextButton
-          title={"キャンセル"}
-          onPress={toggleUserInfoModal}
-          color={colors.gray}
-        />
+        <View style={{ paddingBottom: 10 }}>
+          <TextButton
+            title={"会員情報変更"}
+            onPress={toProfileModify}
+            color={colors.primary}
+          />
+          <TextButton
+            title={"ログアウト"}
+            onPress={async () => {
+              await persistor.pause();
+              await persistor.purge();
+              await client.resetStore();
+              logout();
+            }}
+            color={colors.red}
+          />
+          <TextButton
+            title={"キャンセル"}
+            onPress={toggleUserInfoModal}
+            color={colors.gray}
+          />
+        </View>
       </SafeAreaView>
     </Modal>
   );

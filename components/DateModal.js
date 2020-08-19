@@ -13,6 +13,15 @@ const DateModal = ({
   setIsDateModalVisible,
   toggleSetDate,
 }) => {
+  const onClose = (date) => {
+    if (date && os !== "ios") {
+      setIsDateModalVisible(false);
+      setBirthdate(date);
+    } else {
+      setIsDateModalVisible(false);
+    }
+  };
+
   return os === "android" && isDateModalVisible === true ? (
     <DateTimePicker
       value={birthdate ? new Date(birthdate) : new Date()}
@@ -20,7 +29,7 @@ const DateModal = ({
       display="default"
       locale="ja-JP"
       onChange={(e, birthdate) => {
-        setBirthdate(birthdate);
+        onClose(birthdate);
       }}
     />
   ) : os === "ios" && isDateModalVisible === true ? (
@@ -36,18 +45,12 @@ const DateModal = ({
           display="default"
           locale="ja-JP"
           onChange={(e, birthdate) => {
-            if (e.type === "dismissed") {
-              setIsDateModalVisible(false);
-            } else if (e.type === "set") {
-              console.log("hahhaha");
-              setIsDateModalVisible(false);
-            }
             setBirthdate(birthdate);
           }}
         />
         <TextButton
           title={"設定"}
-          onPress={() => toggleSetDate()}
+          onPress={() => onClose(birthdate)}
           color={colors.primary}
         />
       </SafeAreaView>

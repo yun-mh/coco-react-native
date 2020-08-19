@@ -23,6 +23,7 @@ export default ({ navigation, route }) => {
   const [birthdate, setBirthdate] = useState(route?.params?.birthdate || "");
   const [breed, setBreed] = useState(route?.params?.breed);
   const [loading, setLoading] = useState(false);
+  const [os, setOs] = useState(Platform.OS);
 
   const [modifyDogMutation] = useMutation(MODIFY_DOG, {
     variables: {
@@ -55,8 +56,8 @@ export default ({ navigation, route }) => {
   };
 
   const toggleSetDate = () => {
-    setIsDateModalVisible(!isDateModalVisible);
     Keyboard.dismiss();
+    setIsDateModalVisible(!isDateModalVisible);
   };
 
   const handleSubmit = async () => {
@@ -91,6 +92,7 @@ export default ({ navigation, route }) => {
       birthdate={birthdate}
       setBirthdate={setBirthdate}
       loading={loading}
+      os={os}
       handlePickImage={handlePickImage}
       isDateModalVisible={isDateModalVisible}
       setIsDateModalVisible={setIsDateModalVisible}

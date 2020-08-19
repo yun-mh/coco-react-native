@@ -55,12 +55,14 @@ export default ({ navigation, route }) => {
     for (const item of photo) {
       const name = item.filename;
       const [, type] = name.split(".");
+      console.log(type);
       formData.append("file", {
         name: item.filename,
-        type: type.toLowerCase(),
+        type: `image/${type.toLowerCase()}`,
         uri: item.uri,
       });
     }
+    console.log(formData);
     try {
       setIsLoading(true);
       console.log("1");

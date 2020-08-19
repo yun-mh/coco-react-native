@@ -20,7 +20,7 @@ export default ({ route }) => {
     if (!loading) {
       const { viewNotification } = data;
       const target = viewNotification.filter(
-        (item) => item.from !== currentUser
+        (item) => item.from.id !== currentUser
       );
       setNotifications([...target]);
     }

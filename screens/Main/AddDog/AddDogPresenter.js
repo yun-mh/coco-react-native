@@ -64,6 +64,7 @@ export default ({
   birthdate,
   setBirthdate,
   handlePickImage,
+  os,
   isDateModalVisible,
   setIsDateModalVisible,
   toggleSetDate,
@@ -108,6 +109,7 @@ export default ({
                 setGender={setGender}
               />
               <DateInput
+                showSoftInputOnFocus={false}
                 caretHidden={true}
                 value={birthdate ? moment(birthdate).format("YYYY-MM-DD") : ""}
                 placeholder="生年月日"
@@ -127,6 +129,7 @@ export default ({
           </View>
         </KeyboardAvoidingView>
         <DateModal
+          os={os}
           birthdate={birthdate}
           setBirthdate={setBirthdate}
           isDateModalVisible={isDateModalVisible}

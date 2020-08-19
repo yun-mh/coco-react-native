@@ -74,9 +74,9 @@ const ProfileContainer = ({ navigation, route }) => {
     });
   };
 
-  const toggleDogInfoModal = (id) => {
+  const toggleDogInfoModal = (dogid) => {
     if (!isDogInfoModalVisible) {
-      const target = data?.viewUser?.dogs.find((el) => el.id === id);
+      const target = data?.viewUser?.dogs.find((el) => el.id === dogid);
       setDogId(target.id);
       setImage(target.image);
       setDogName(target.name);

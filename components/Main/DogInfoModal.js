@@ -51,15 +51,15 @@ const DogInfoModal = ({
   };
 
   const closeDogInfoModal = () => {
-    toggleDogInfoModal();
     setIsDeleteMode(false);
+    toggleDogInfoModal();
   };
 
   return (
     <Modal
       isVisible={isDogInfoModalVisible}
       style={{ justifyContent: "flex-end", margin: 0 }}
-      onBackdropPress={toggleDogInfoModal}
+      onBackdropPress={closeDogInfoModal}
     >
       <View
         style={{
@@ -86,14 +86,14 @@ const DogInfoModal = ({
       <SafeAreaView
         style={{
           paddingTop: 10,
-          borderTopWidth: "0.5px",
+          borderTopWidth: 0.5,
           borderStyle: "solid",
           borderTopColor: colors.gray,
           backgroundColor: "white",
         }}
       >
         {!isDeleteMode ? (
-          <>
+          <View style={{ paddingBottom: 10 }}>
             <TextButton
               title={"情報修正"}
               onPress={toModifyDog}
@@ -109,9 +109,9 @@ const DogInfoModal = ({
               onPress={closeDogInfoModal}
               color={colors.gray}
             />
-          </>
+          </View>
         ) : (
-          <View style={{ alignItems: "center" }}>
+          <View style={{ alignItems: "center", paddingBottom: 10 }}>
             <Text style={{ paddingVertical: 10 }}>
               本当に削除してよろしいですか？
             </Text>

@@ -108,6 +108,7 @@ export default ({
                 setGender={setGender}
               />
               <DateInput
+                showSoftInputOnFocus={false}
                 caretHidden={true}
                 value={birthdate ? moment(birthdate).format("YYYY-MM-DD") : ""}
                 placeholder="生年月日"
