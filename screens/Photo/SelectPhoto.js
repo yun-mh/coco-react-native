@@ -1,5 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { Image, ScrollView, TouchableOpacity, Alert } from "react-native";
+import {
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  FlatList,
+} from "react-native";
 import styled from "styled-components";
 import * as MediaLibrary from "expo-media-library";
 import { Feather } from "@expo/vector-icons";
@@ -14,7 +20,6 @@ const View = styled.View`
 `;
 
 const SlideContainer = styled.View`
-  margin-bottom: 10px;
   overflow: hidden;
   width: 100%;
   height: ${constants.height / 2}px;
@@ -41,6 +46,7 @@ export default ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [endCursor, setEndCursor] = useState();
   const [allPhotos, setAllPhotos] = useState();
 
   const changeSelected = (photo) => {
@@ -53,14 +59,48 @@ export default ({ navigation }) => {
 
   const getPhotos = async () => {
     try {
-      const { assets } = await MediaLibrary.getAssetsAsync();
+      const {
+        assets,
+        endCursor,
+        hasNextPage,
+      } = await MediaLibrary.getAssetsAsync({
+        first: 9,
+        sortBy: ["creationTime"],
+      });
       const [firstPhoto] = assets;
       setSelected([firstPhoto]);
+      if (hasNextPage) {
+        setEndCursor(endCursor);
+      }
       setAllPhotos(assets);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchMore = async (cursor) => {
+    if (cursor !== undefined) {
+      try {
+        const {
+          assets,
+          endCursor,
+          hasNextPage,
+        } = await MediaLibrary.getAssetsAsync({
+          first: 9,
+          after: cursor,
+          sortBy: ["creationTime"],
+        });
+        if (hasNextPage) {
+          setEndCursor(endCursor);
+        } else {
+          setEndCursor();
+        }
+        setAllPhotos((prev) => [...prev, ...assets]);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -107,28 +147,25 @@ export default ({ navigation }) => {
                   <Text>次へ</Text>
                 </Button>
               ) : null}
-              <ScrollView
-                contentContainerStyle={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                }}
-              >
-                {allPhotos.map((photo) => (
-                  <Fragment key={photo.id}>
+              <FlatList
+                style={{ width: "100%" }}
+                data={allPhotos}
+                renderItem={({ item }) => (
+                  <Fragment key={item.id}>
                     <TouchableOpacity
                       style={{ padding: 7, borderRadius: 10 }}
-                      onPress={() => changeSelected(photo)}
+                      onPress={() => changeSelected(item)}
                     >
                       <Image
-                        source={{ uri: photo.uri }}
+                        source={{ uri: item.uri }}
                         style={{
                           width: constants.width / 3 - 14,
                           height: constants.width / 3 - 14,
                           borderRadius: 10,
-                          opacity: selected.includes(photo) ? 0.5 : 1,
+                          opacity: selected.includes(item) ? 0.5 : 1,
                         }}
                       />
-                      {selected.includes(photo) ? (
+                      {selected.includes(item) ? (
                         <View
                           style={{
                             position: "absolute",
@@ -148,8 +185,13 @@ export default ({ navigation }) => {
                       ) : null}
                     </TouchableOpacity>
                   </Fragment>
-                ))}
-              </ScrollView>
+                )}
+                numColumns={3}
+                showsHorizontalScrollIndicator={true}
+                keyExtractor={(item) => item.id.toString()}
+                onEndReached={() => fetchMore(endCursor)}
+                onEndReachedThreshold={0.1}
+              />
             </>
           ) : null}
         </View>
