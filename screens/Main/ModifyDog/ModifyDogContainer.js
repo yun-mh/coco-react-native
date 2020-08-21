@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Alert, Keyboard } from "react-native";
+import axios from "axios";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import { getCameraPermission } from "../../../userPermissions";
 import { MODIFY_DOG, VIEW_USER } from "../../../queries/Main/MainQueries";
 import ModifyDogPresenter from "./ModifyDogPresenter";
+import utils from "../../../utils";
 
 export default ({ navigation, route }) => {
   const radioProps = [
@@ -16,6 +18,7 @@ export default ({ navigation, route }) => {
     route?.params?.image ||
       "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg"
   );
+  const [changeImage, setChangeImage] = useState(false);
   const [dogId, setDogId] = useState(route?.params?.dogId);
   const [name, setName] = useState(route?.params?.dogName);
   const [gender, setGender] = useState(route?.params?.gender);
@@ -52,6 +55,7 @@ export default ({ navigation, route }) => {
     });
     if (!result.cancelled) {
       setImage(result.uri);
+      setChangeImage(true);
     }
   };
 
@@ -60,21 +64,66 @@ export default ({ navigation, route }) => {
     setIsDateModalVisible(!isDateModalVisible);
   };
 
+  const isFormValid = () => {
+    if (name === "" || birthdate == "" || breed == "") {
+      Alert.alert("エラー", "すべての情報を入力してください。");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!isFormValid()) {
+      return;
+    }
     setLoading(true);
+
+    let location = "";
+    if (changeImage) {
+      const formData = new FormData();
+      const [, type] = utils.splitExtension(image);
+      formData.append("file", {
+        name: `av-${new Date().getTime()}`,
+        type: `image/${type.toLowerCase()}`,
+        uri: image,
+      });
+      const {
+        data: { locations },
+      } = await axios.post(
+        "https://api-coco.herokuapp.com/api/upload",
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        }
+      );
+      location = locations[0];
+    }
+
     try {
       const {
         data: { editDog },
-      } = await modifyDogMutation();
+      } = await modifyDogMutation({
+        variables: {
+          id: dogId,
+          image: location !== "" ? location : image,
+          name,
+          breed,
+          gender,
+          birthdate,
+          action: "EDIT",
+        },
+      });
       if (editDog) {
         navigation.navigate("Profile", {
           id: route.params.id,
         });
       }
     } catch (e) {
-      Alert.alert(e);
       console.warn(e);
     } finally {
+      setChangeImage(false);
       setLoading(false);
     }
   };

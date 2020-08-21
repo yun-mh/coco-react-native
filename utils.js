@@ -50,4 +50,8 @@ export default {
     }
     return result;
   },
+  splitExtension: (image) => {
+    const regEx = /(?:\.([^.]+))?$/;
+    return regEx.exec(image);
+  },
 };

@@ -81,6 +81,7 @@ const SignUpFooter = styled.View``;
 
 export default ({
   navigation,
+  loading,
   username,
   setUsername,
   email,
@@ -135,7 +136,12 @@ export default ({
                 stateFn={setPassword}
               />
             </InputContainer>
-            <Button text={"次へ"} accent={true} onPress={handleSubmit} />
+            <Button
+              text={"次へ"}
+              loading={loading}
+              accent={true}
+              onPress={handleSubmit}
+            />
             <DividerContainer>
               <DividerLine />
               <DividerText>または</DividerText>

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Alert, Keyboard, Platform } from "react-native";
+import axios from "axios";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import RegisterDogPresenter from "./RegisterDogPresenter";
 import { getCameraPermission } from "../../../userPermissions";
 import { SET_DOG } from "../../../queries/Auth/AuthQueries";
+import utils from "../../../utils";
 
 export default ({ navigation, route: { params } }) => {
   const radioProps = [
@@ -15,6 +17,7 @@ export default ({ navigation, route: { params } }) => {
   const [image, setImage] = useState(
     "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg"
   );
+  const [changeImage, setChangeImage] = useState(false);
   const [name, setName] = useState("");
   const [gender, setGender] = useState("male");
   const [isDateModalVisible, setIsDateModalVisible] = useState(false);
@@ -47,6 +50,7 @@ export default ({ navigation, route: { params } }) => {
     });
     if (!result.cancelled) {
       setImage(result.uri);
+      setChangeImage(true);
     }
   };
 
@@ -55,23 +59,71 @@ export default ({ navigation, route: { params } }) => {
     setIsDateModalVisible(!isDateModalVisible);
   };
 
+  const isFormValid = () => {
+    if (name === "" || birthdate == "" || breed == "") {
+      Alert.alert("エラー", "すべての情報を入力してください。");
+      return false;
+    }
+    return true;
+  };
+
+  const handleToLogin = () => {
+    Alert.alert("登録完了", "会員登録が完了しました。");
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "SignIn", params: { email } }],
+    });
+  };
+
   const handleSubmit = async () => {
+    if (!isFormValid()) {
+      return;
+    }
     setLoading(true);
+
+    let location = "";
+    if (changeImage) {
+      const formData = new FormData();
+      const [, type] = utils.splitExtension(image);
+      formData.append("file", {
+        name: `av-${new Date().getTime()}`,
+        type: `image/${type.toLowerCase()}`,
+        uri: image,
+      });
+      const {
+        data: { locations },
+      } = await axios.post(
+        "https://api-coco.herokuapp.com/api/upload",
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        }
+      );
+      location = locations[0];
+    }
+
     try {
       const {
         data: { setDog },
-      } = await dogRegisterMutation();
+      } = await dogRegisterMutation({
+        variables: {
+          image: location !== "" ? location : image,
+          name,
+          breed,
+          gender,
+          birthdate,
+          email,
+        },
+      });
       if (setDog) {
-        Alert.alert("登録完了", "会員登録が完了しました。");
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "SignIn", params: { email } }],
-        });
+        handleToLogin();
       }
     } catch (e) {
-      Alert.alert(e);
       console.warn(e);
     } finally {
+      setChangeImage(false);
       setLoading(false);
     }
   };
@@ -95,6 +147,7 @@ export default ({ navigation, route: { params } }) => {
       isDateModalVisible={isDateModalVisible}
       setIsDateModalVisible={setIsDateModalVisible}
       toggleSetDate={toggleSetDate}
+      handleToLogin={handleToLogin}
       handleSubmit={handleSubmit}
     />
   );

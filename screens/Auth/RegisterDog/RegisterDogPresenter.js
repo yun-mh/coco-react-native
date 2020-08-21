@@ -52,6 +52,7 @@ const DateInput = styled.TextInput`
 `;
 
 export default ({
+  loading,
   image,
   name,
   setName,
@@ -67,6 +68,7 @@ export default ({
   isDateModalVisible,
   setIsDateModalVisible,
   toggleSetDate,
+  handleToLogin,
   handleSubmit,
 }) => {
   return (
@@ -119,7 +121,15 @@ export default ({
                 }}
               />
             </InputContainer>
-            <Button text={"次へ"} accent={true} onPress={handleSubmit} />
+            <View style={{ marginTop: hp("3%") }}>
+              <Button
+                text={"次へ"}
+                loading={loading}
+                accent={true}
+                onPress={handleSubmit}
+              />
+              <Button text={"スキップ"} onPress={handleToLogin} />
+            </View>
           </View>
         </KeyboardAvoidingView>
         <DateModal

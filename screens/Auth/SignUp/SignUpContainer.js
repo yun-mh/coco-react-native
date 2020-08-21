@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { Alert } from "react-native";
-import { useMutation, useQuery } from "@apollo/client";
+import axios from "axios";
+import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import SignUpPresenter from "./SignUpPresenter";
 import { getCameraPermission } from "../../../userPermissions";
-import { CREATE_ACCOUNT, CHECK_USER } from "../../../queries/Auth/AuthQueries";
+import { CREATE_ACCOUNT } from "../../../queries/Auth/AuthQueries";
 import utils from "../../../utils";
 
 export default ({ navigation }) => {
   const [avatar, setAvatar] = useState(
     "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous.jpg"
   );
+  const [changeAvatar, setChangeAvatar] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,6 +39,7 @@ export default ({ navigation }) => {
     });
     if (!result.cancelled) {
       setAvatar(result.uri);
+      setChangeAvatar(true);
     }
   };
 
@@ -58,10 +61,41 @@ export default ({ navigation }) => {
       return;
     }
     setLoading(true);
+
+    let location = "";
+    if (changeAvatar) {
+      const formData = new FormData();
+      const [, type] = utils.splitExtension(avatar);
+      formData.append("file", {
+        name: `av-${new Date().getTime()}`,
+        type: `image/${type.toLowerCase()}`,
+        uri: avatar,
+      });
+      const {
+        data: { locations },
+      } = await axios.post(
+        "https://api-coco.herokuapp.com/api/upload",
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        }
+      );
+      location = locations[0];
+    }
+
     try {
       const {
         data: { createAccount },
-      } = await createAccountMutation();
+      } = await createAccountMutation({
+        variables: {
+          avatar: location !== "" ? location : avatar,
+          username,
+          email,
+          password,
+        },
+      });
       if (createAccount) {
         navigation.reset({
           index: 0,
@@ -71,9 +105,9 @@ export default ({ navigation }) => {
         Alert.alert("エラー", "すでに登録されているメールアドレスです。");
       }
     } catch (e) {
-      Alert.alert(e);
       console.warn(e);
     } finally {
+      setChangeAvatar(false);
       setLoading(false);
     }
   };

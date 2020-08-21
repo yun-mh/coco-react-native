@@ -55,17 +55,14 @@ export default ({ navigation, route }) => {
     for (const item of photo) {
       const name = item.filename;
       const [, type] = name.split(".");
-      console.log(type);
       formData.append("file", {
         name: item.filename,
         type: `image/${type.toLowerCase()}`,
         uri: item.uri,
       });
     }
-    console.log(formData);
     try {
       setIsLoading(true);
-      console.log("1");
       const {
         data: { locations },
       } = await axios.post(
@@ -77,7 +74,6 @@ export default ({ navigation, route }) => {
           },
         }
       );
-      console.log("2");
       const {
         data: { uploadPost },
       } = await uploadMutation({
@@ -85,11 +81,9 @@ export default ({ navigation, route }) => {
           files: [...locations],
         },
       });
-      console.log("3");
       if (uploadPost.id) {
         navigation.navigate("Feed");
       }
-      console.log("4");
     } catch (error) {
       console.log(error);
       Alert.alert("エラー", "もう一度アップロードしてください。");
