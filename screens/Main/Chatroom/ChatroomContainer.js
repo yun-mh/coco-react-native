@@ -13,11 +13,11 @@ export default ({ navigation, route }) => {
   const [height, setHeight] = useState(40);
   const [messages, setMessages] = useState([]);
 
+  navigation.setOptions({ title: route.params.counterpartUsername });
+
   const { data: newData } = useSubscription(GET_MESSAGE, {
     variables: { roomId: route.params.id },
   });
-
-  navigation.setOptions({ title: route.params.counterpartUsername });
 
   const { loading, error, data } = useQuery(VIEW_CHATROOM, {
     variables: { id: route.params.id },

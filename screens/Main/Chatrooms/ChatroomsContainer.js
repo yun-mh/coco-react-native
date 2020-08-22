@@ -3,12 +3,14 @@ import { useQuery, useSubscription } from "@apollo/client";
 import {
   VIEW_CHATROOMS,
   GET_CHATROOMS,
+  GET_FRIENDS,
 } from "../../../queries/Main/MainQueries";
 import ChatroomsPresenter from "./ChatroomsPresenter";
 
 export default ({ route }) => {
   const [currentUser, setCurrentUser] = useState(route.params.id);
   const [rooms, setRooms] = useState([]);
+  const [friends, setFriends] = useState([]);
 
   const { data: newData } = useSubscription(GET_CHATROOMS, {
     variables: { id: route.params.id },
@@ -16,12 +18,23 @@ export default ({ route }) => {
 
   const { loading, error, data } = useQuery(VIEW_CHATROOMS);
 
+  const { loading: friendLoading, data: friendData } = useQuery(GET_FRIENDS);
+
   useEffect(() => {
     if (!loading) {
       const { viewChatRooms } = data;
       setRooms([...viewChatRooms]);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!friendLoading) {
+      const {
+        viewMyself: { following },
+      } = friendData;
+      setFriends([...following]);
+    }
+  }, [friendData]);
 
   const handleNewChatroom = () => {
     if (newData !== undefined) {
@@ -47,6 +60,8 @@ export default ({ route }) => {
     <ChatroomsPresenter
       loading={loading}
       rooms={rooms}
+      friendLoading={friendLoading}
+      friends={friends}
       currentUser={currentUser}
     />
   );

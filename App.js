@@ -14,7 +14,10 @@ import {
   ApolloLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { getMainDefinition } from "@apollo/client/utilities";
+import {
+  getMainDefinition,
+  offsetLimitPagination,
+} from "@apollo/client/utilities";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import Gate from "./components/Gate";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -45,7 +48,7 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/`,
+  uri: `ws://api-coco.herokuapp.com/`,
   options: {
     reconnect: true,
     connectionParams: async () => {
