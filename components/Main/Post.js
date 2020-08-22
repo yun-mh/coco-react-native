@@ -3,10 +3,13 @@ import { Image, TouchableOpacity, Text } from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import { Feather } from "@expo/vector-icons";
-import colors from "../../colors";
-import { useMutation } from "@apollo/client";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
-import constants from "../../constants";
+import { useMutation } from "@apollo/client";
+import colors from "../../colors";
 import {
   TOGGLE_LIKE,
   VIEW_FEED,
@@ -42,7 +45,7 @@ const Bold = styled.Text`
 `;
 
 const Location = styled.Text`
-  font-size: 12px;
+  font-size: 9px;
   color: ${colors.darkGray};
 `;
 
@@ -50,7 +53,7 @@ const SlideContainer = styled.View`
   margin-bottom: 10px;
   overflow: hidden;
   width: 100%;
-  height: ${constants.height / 2.5}px;
+  height: ${hp("50%")}px;
 `;
 
 const IconsContainer = styled.View`
@@ -174,7 +177,7 @@ const Post = ({
           {files.map((file) => (
             <Image
               key={file.id}
-              style={{ width: constants.width, height: constants.height / 2.5 }}
+              style={{ width: wp("100%"), height: hp("50%") }}
               source={{ uri: file.url }}
             />
           ))}

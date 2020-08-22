@@ -6,11 +6,15 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Swiper from "react-native-web-swiper";
-import useInput from "../../../hooks/useInput";
 import { useMutation } from "@apollo/client";
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
+import { Feather } from "@expo/vector-icons";
 import { VIEW_FEED, EDIT_POST } from "../../../queries/Main/MainQueries";
 import colors from "../../../colors";
 import Button from "../../../components/Button";
+import TextButton from "../../../components/TextButton";
+import ENV from "../../../components/env";
 
 const View = styled.View`
   flex: 1;
@@ -30,7 +34,12 @@ const Form = styled.View`
   align-items: center;
 `;
 
-const STextInput = styled.TextInput`
+const LocationBtnContainer = styled.View`
+  flex-direction: row;
+  margin-bottom: 10px;
+`;
+
+const TextInput = styled.TextInput`
   width: ${wp("83%")}px;
   border-color: ${colors.gray};
   border-bottom-width: 1px;
@@ -42,18 +51,50 @@ export default ({ navigation, route }) => {
   const [loading, setIsLoading] = useState(false);
   const id = route.params.id;
   const [files, setFiles] = useState(route.params.files);
-  const captionInput = useInput(route.params.caption);
-  const locationInput = useInput(route.params.location);
+  const [location, setLocation] = useState(route.params.location);
+  const [caption, setCaption] = useState(route.params.caption);
 
   const [editPostMutation] = useMutation(EDIT_POST, {
     variables: {
       id,
-      caption: captionInput.value,
-      location: locationInput.value,
+      caption,
+      location,
       action: "EDIT",
     },
     refetchQueries: () => [{ query: VIEW_FEED }],
   });
+
+  const askPermission = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== "granted") {
+      return false;
+    }
+    return true;
+  };
+
+  const handleGetLocation = async () => {
+    const hasPermission = await askPermission();
+    if (!hasPermission) {
+      return;
+    }
+
+    try {
+      //   setIsFetching(true);
+      const location = await Location.getCurrentPositionAsync({
+        timeout: 5000,
+      });
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${ENV.googleApiKey}&language=ja`
+      );
+      const resData = await res.json();
+      const address = resData.results[0].formatted_address.split(" ")[1];
+      setLocation(address);
+    } catch (e) {
+      console.warn(e);
+    } finally {
+    }
+    // setIsFetching(false);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -93,15 +134,24 @@ export default ({ navigation, route }) => {
         </Swiper>
       </SlideContainer>
       <Form>
-        <STextInput
-          onChangeText={locationInput.onChange}
-          value={locationInput.value}
+        <TextInput
+          value={location}
+          onChangeText={(text) => setLocation(text)}
           placeholder="位置"
           multiline={true}
         />
-        <STextInput
-          onChangeText={captionInput.onChange}
-          value={captionInput.value}
+        <LocationBtnContainer>
+          <TextButton
+            icon={<Feather name="map-pin" size={14} color={colors.primary} />}
+            title={"現在の位置を取得する"}
+            weight="normal"
+            size={14}
+            onPress={handleGetLocation}
+          />
+        </LocationBtnContainer>
+        <TextInput
+          value={caption}
+          onChangeText={(text) => setCaption(text)}
           placeholder="本文"
           multiline={true}
         />

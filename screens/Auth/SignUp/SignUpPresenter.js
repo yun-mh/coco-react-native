@@ -1,5 +1,5 @@
 import React from "react";
-import { KeyboardAvoidingView, View } from "react-native";
+import { KeyboardAvoidingView, View, SafeAreaView } from "react-native";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import {
@@ -9,9 +9,8 @@ import {
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
-import TextButton from "../../../components/Auth/TextButton";
+import TextButton from "../../../components/TextButton";
 import colors from "../../../colors";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const Container = styled.View`
   flex: 1;

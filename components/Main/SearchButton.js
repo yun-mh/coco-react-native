@@ -13,7 +13,7 @@ const SearchButton = () => {
           name="search"
           size={24}
           color={"grey"}
-          style={{ marginLeft: 8 }}
+          style={{ marginLeft: 12 }}
         />
       </TouchableOpacity>
     </View>

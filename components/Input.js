@@ -1,5 +1,4 @@
 import React from "react";
-import { Dimensions } from "react-native";
 import styled from "styled-components/native";
 import {
   widthPercentageToDP as wp,
@@ -7,10 +6,8 @@ import {
 } from "react-native-responsive-screen";
 import colors from "../colors";
 
-const { width } = Dimensions.get("screen");
-
 const Container = styled.TextInput`
-  width: ${width / 1.2}px;
+  width: ${wp("100%") / 1.2}px;
   border: 0.5px solid ${colors.gray};
   background-color: white;
   border-radius: 30px;

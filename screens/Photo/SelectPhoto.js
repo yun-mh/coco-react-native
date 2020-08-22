@@ -1,15 +1,12 @@
 import React, { useState, useEffect, Fragment } from "react";
-import {
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  FlatList,
-} from "react-native";
+import { Image, TouchableOpacity, Alert, FlatList } from "react-native";
 import styled from "styled-components";
 import * as MediaLibrary from "expo-media-library";
 import { Feather } from "@expo/vector-icons";
-import constants from "../../constants";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { getCameraPermission } from "../../userPermissions";
 import Loader from "../../components/Main/Loader";
 import colors from "../../colors";
@@ -22,7 +19,7 @@ const View = styled.View`
 const SlideContainer = styled.View`
   overflow: hidden;
   width: 100%;
-  height: ${constants.height / 2}px;
+  height: ${hp("50%")}px;
 `;
 
 const Button = styled.TouchableOpacity`
@@ -159,8 +156,8 @@ export default ({ navigation }) => {
                       <Image
                         source={{ uri: item.uri }}
                         style={{
-                          width: constants.width / 3 - 14,
-                          height: constants.width / 3 - 14,
+                          width: wp("100%") / 3 - 14,
+                          height: wp("100%") / 3 - 14,
                           borderRadius: 10,
                           opacity: selected.includes(item) ? 0.5 : 1,
                         }}

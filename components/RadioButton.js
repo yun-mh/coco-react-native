@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, Platform, Dimensions } from "react-native";
+import { Platform } from "react-native";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -8,11 +8,9 @@ import {
 } from "react-native-responsive-screen";
 import colors from "../colors";
 
-const { width } = Dimensions.get("screen");
-
 const Container = styled.View`
   flex-direction: row;
-  width: ${width / 1.2}px;
+  width: ${wp("100%") / 1.2}px;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;

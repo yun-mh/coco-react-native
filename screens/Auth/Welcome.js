@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import Button from "../../components/Button";
-import TextButton from "../../components/Auth/TextButton";
+import TextButton from "../../components/TextButton";
 import colors from "../../colors";
 
 const Container = styled.View`

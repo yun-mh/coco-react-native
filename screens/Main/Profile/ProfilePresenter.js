@@ -1,13 +1,15 @@
 import React from "react";
+import { Image, FlatList, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import constants from "../../../constants";
+import { Feather } from "@expo/vector-icons";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import colors from "../../../colors";
-import { Image, FlatList } from "react-native";
 import PostGrid from "../../../components/Main/PostGrid";
 import Dog from "../../../components/Main/Dog";
 import Loader from "../../../components/Main/Loader";
-import { Feather } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../../../components/Main/Button";
 import UserInfoModal from "../../../components/Main/UserInfoModal";
 import DogInfoModal from "../../../components/Main/DogInfoModal";
@@ -17,14 +19,14 @@ const ProfileContainer = styled.View`
 `;
 
 const HalfScreen = styled.View`
-  height: ${constants.height / 2}px;
+  height: ${hp("50%")}px;
 `;
 
 const HeaderContainer = styled.View`
   flex: 1;
   justify-content: flex-end;
   background-color: ${colors.secondary};
-  height: ${(constants.height / 10) * 3}px;
+  height: ${hp("30%")}px;
 `;
 
 const HeaderContentContainer = styled.View`
@@ -83,7 +85,7 @@ const InfoData = styled.Text`
 `;
 
 const MyDogContainer = styled.View`
-  height: ${(constants.height / 10) * 2}px;
+  height: ${hp("20%")}px;
   background-color: green;
 `;
 
@@ -117,8 +119,6 @@ const PostHeaderContainer = styled.View`
   align-items: center;
   background-color: ${colors.lightGray};
 `;
-
-const PostScrollView = styled.ScrollView``;
 
 const PostContentContainer = styled.View`
   flex-direction: row;
@@ -232,14 +232,20 @@ const ProfilePresenter = ({
             <PostHeaderContainer>
               <Title>ポスト</Title>
             </PostHeaderContainer>
-            <PostScrollView>
-              <PostContentContainer>
-                {data?.viewUser?.posts &&
-                  data?.viewUser?.posts.map((post) => (
-                    <PostGrid key={post.id} {...post} />
-                  ))}
-              </PostContentContainer>
-            </PostScrollView>
+            <PostContentContainer>
+              {/* <FlatList
+                style={{ width: "100%" }}
+                data={data.viewUser.posts}
+                renderItem={({ item }) => (
+                  <PostGrid id={item.id} files={item.files} />
+                )}
+                numColumns={3}
+                keyExtractor={(item) => item.id.toString()}
+                // onEndReached={onEndReached}
+                // onEndReachedThreshold={0.5}
+                showsVerticalScrollIndicator={false}
+              /> */}
+            </PostContentContainer>
           </PostContainer>
         </HalfScreen>
         <UserInfoModal

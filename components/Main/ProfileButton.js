@@ -8,7 +8,7 @@ const ProfileButton = ({ loading, data }) => {
   const navigation = useNavigation();
 
   return (
-    <View style={{ marginRight: 8 }}>
+    <View style={{ marginRight: 12 }}>
       {loading ? (
         <Loader />
       ) : (

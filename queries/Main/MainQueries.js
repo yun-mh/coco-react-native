@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { POST_FRAGMENT } from "./fragments";
 
 export const CHECK_MYSELF = gql`
   query viewMyself {
@@ -175,12 +174,35 @@ export const DELETE_DOG = gql`
 `;
 
 export const VIEW_FEED = gql`
-  query viewFeed {
-    viewFeed {
-      ...PostParts
+  query viewFeed($offset: Int!, $limit: Int!) {
+    viewFeed(offset: $offset, limit: $limit) {
+      id
+      location
+      caption
+      user {
+        id
+        avatar
+        username
+      }
+      files {
+        id
+        url
+      }
+      likeCount
+      isLiked
+      comments {
+        id
+        text
+        user {
+          id
+          username
+          avatar
+        }
+        createdAt
+      }
+      createdAt
     }
   }
-  ${POST_FRAGMENT}
 `;
 
 export const TOGGLE_LIKE = gql`
@@ -192,10 +214,33 @@ export const TOGGLE_LIKE = gql`
 export const VIEW_POST = gql`
   query viewPost($id: String!) {
     viewPost(id: $id) {
-      ...PostParts
+      id
+      location
+      caption
+      user {
+        id
+        avatar
+        username
+      }
+      files {
+        id
+        url
+      }
+      likeCount
+      isLiked
+      comments {
+        id
+        text
+        user {
+          id
+          username
+          avatar
+        }
+        createdAt
+      }
+      createdAt
     }
   }
-  ${POST_FRAGMENT}
 `;
 
 export const ADD_COMMENT = gql`
@@ -361,6 +406,26 @@ export const GET_CHATROOMS = gql`
       }
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const GET_FRIENDS = gql`
+  query viewMyself {
+    viewMyself {
+      following {
+        id
+        avatar
+        username
+      }
+    }
+  }
+`;
+
+export const CREATE_CHATROOM = gql`
+  mutation createChatRoom($toId: String!) {
+    createChatRoom(toId: $toId) {
+      id
     }
   }
 `;

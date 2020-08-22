@@ -1,12 +1,15 @@
 import React from "react";
 import { TextInput } from "react-native";
-import constants from "../../constants";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import colors from "../../colors";
 
 const SearchBar = ({ onChange, value, onSubmit }) => (
   <TextInput
     style={{
-      width: constants.width / 1.5,
+      width: wp("100%") / 1.5,
       height: 35,
       padding: 10,
       borderStyle: "solid",

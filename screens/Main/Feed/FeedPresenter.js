@@ -3,7 +3,14 @@ import { FlatList, View } from "react-native";
 import Loader from "../../../components/Main/Loader";
 import Post from "../../../components/Main/Post";
 
-export default ({ loading, data, refreshing, onRefresh, currentUser }) => {
+export default ({
+  loading,
+  data,
+  onEndReached,
+  refreshing,
+  onRefresh,
+  currentUser,
+}) => {
   return loading ? (
     <Loader />
   ) : (
@@ -22,12 +29,14 @@ export default ({ loading, data, refreshing, onRefresh, currentUser }) => {
               likeCount={item.likeCount}
               comments={item.comments}
               isLiked={item.isLiked}
-              currentUser={currentUser.viewMyself.id}
+              currentUser={currentUser?.viewMyself?.id}
             />
           )}
           keyExtractor={(item) => item.id.toString()}
           refreshing={refreshing}
           onRefresh={onRefresh}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.5}
           showsVerticalScrollIndicator={false}
         />
       </View>

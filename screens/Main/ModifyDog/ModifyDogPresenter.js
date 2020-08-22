@@ -1,5 +1,5 @@
 import React from "react";
-import { KeyboardAvoidingView, View, Dimensions } from "react-native";
+import { KeyboardAvoidingView, View } from "react-native";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import {
@@ -13,8 +13,6 @@ import DismissKeyboard from "../../../components/DismissKeyboard";
 import colors from "../../../colors";
 import DateModal from "../../../components/DateModal";
 import RadioButton from "../../../components/RadioButton";
-
-const { width } = Dimensions.get("screen");
 
 const Container = styled.View`
   flex: 1;
@@ -44,7 +42,7 @@ const InputContainer = styled.View`
 `;
 
 const DateInput = styled.TextInput`
-  width: ${width / 1.2}px;
+  width: ${wp("100%") / 1.2}px;
   border: 0.5px solid ${colors.gray};
   background-color: white;
   border-radius: 30px;
