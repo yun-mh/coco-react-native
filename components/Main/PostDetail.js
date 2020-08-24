@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, FlatList, KeyboardAvoidingView } from "react-native";
+import { Image, FlatList, KeyboardAvoidingView, Platform } from "react-native";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { useHeaderHeight } from "@react-navigation/stack";
@@ -92,7 +92,7 @@ const PostDetail = ({
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior="padding"
+      behavior={Platform.OS === "ios" ? "padding" : null}
       keyboardVerticalOffset={headerHeight}
     >
       <Container>

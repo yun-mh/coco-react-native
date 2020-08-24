@@ -34,7 +34,7 @@ export default ({ loading, rooms, friendLoading, friends, currentUser }) => {
           <FlatList
             style={{
               width: "100%",
-              paddingVertical: 15,
+              paddingVertical: 7,
             }}
             contentContainerStyle={{ alignItems: "center" }}
             data={friends}

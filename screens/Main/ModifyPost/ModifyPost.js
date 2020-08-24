@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, Alert } from "react-native";
+import { Image, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import styled from "styled-components";
 import {
   widthPercentageToDP as wp,
@@ -15,17 +15,20 @@ import colors from "../../../colors";
 import Button from "../../../components/Button";
 import TextButton from "../../../components/TextButton";
 import ENV from "../../../components/env";
+import { useHeaderHeight } from "@react-navigation/stack";
+import DismissKeyboard from "../../../components/DismissKeyboard";
 
-const View = styled.View`
+const Container = styled.View`
   flex: 1;
   background-color: white;
 `;
 
-const SlideContainer = styled.View`
-  margin-bottom: 10px;
-  overflow: hidden;
-  width: 100%;
-  height: ${hp("50%")}px;
+const ScrollContainer = styled.ScrollView`
+  flex: 1;
+  flex-direction: row;
+  padding: 10px;
+  border-bottom-width: 1px;
+  border-bottom-color: ${colors.gray};
 `;
 
 const Form = styled.View`
@@ -48,6 +51,8 @@ const TextInput = styled.TextInput`
 `;
 
 export default ({ navigation, route }) => {
+  const headerHeight = useHeaderHeight();
+
   const [loading, setIsLoading] = useState(false);
   const id = route.params.id;
   const [files, setFiles] = useState(route.params.files);
@@ -113,55 +118,61 @@ export default ({ navigation, route }) => {
   };
 
   return (
-    <View>
-      <SlideContainer>
-        <Swiper
-          controlsProps={{
-            PrevComponent: () => null,
-            NextComponent: () => null,
-            dotActiveStyle: {
-              backgroundColor: colors.primary,
-            },
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      keyboardVerticalOffset={headerHeight + 10}
+    >
+      <Container>
+        <ScrollContainer
+          horizontal={true}
+          contentContainerStyle={{
+            alignItems: "center",
           }}
         >
-          {files.map((file) => (
+          {files.map((photo) => (
             <Image
-              key={file.id}
-              style={{ width: wp("100%"), height: hp("50%") }}
-              source={{ uri: file.url }}
+              key={photo.id}
+              source={{ uri: photo.url }}
+              style={{ height: 80, width: 80, marginRight: 10 }}
             />
           ))}
-        </Swiper>
-      </SlideContainer>
-      <Form>
-        <TextInput
-          value={location}
-          onChangeText={(text) => setLocation(text)}
-          placeholder="位置"
-          multiline={true}
-        />
-        <LocationBtnContainer>
-          <TextButton
-            icon={<Feather name="map-pin" size={14} color={colors.primary} />}
-            title={"現在の位置を取得する"}
-            weight="normal"
-            size={14}
-            onPress={handleGetLocation}
-          />
-        </LocationBtnContainer>
-        <TextInput
-          value={caption}
-          onChangeText={(text) => setCaption(text)}
-          placeholder="本文"
-          multiline={true}
-        />
-        <Button
-          loading={loading}
-          text={"修正"}
-          accent={true}
-          onPress={handleSubmit}
-        />
-      </Form>
-    </View>
+        </ScrollContainer>
+
+        <DismissKeyboard>
+          <Form>
+            <TextInput
+              value={location}
+              onChangeText={(text) => setLocation(text)}
+              placeholder="位置"
+              multiline={true}
+            />
+            <LocationBtnContainer>
+              <TextButton
+                icon={
+                  <Feather name="map-pin" size={14} color={colors.primary} />
+                }
+                title={"現在の位置を取得する"}
+                weight="normal"
+                size={14}
+                onPress={handleGetLocation}
+              />
+            </LocationBtnContainer>
+            <TextInput
+              value={caption}
+              onChangeText={(text) => setCaption(text)}
+              placeholder="本文"
+              multiline={true}
+            />
+            <Button
+              loading={loading}
+              text={"修正"}
+              accent={true}
+              onPress={handleSubmit}
+            />
+          </Form>
+        </DismissKeyboard>
+      </Container>
+    </KeyboardAvoidingView>
   );
 };

@@ -64,7 +64,6 @@ export default ({
   loading,
   toSignUp,
   toPasswordReset,
-  navigation,
 }) => {
   return (
     <DismissKeyboard>

@@ -8,11 +8,11 @@ import UploadPhoto from "../screens/Photo/UploadPhoto";
 import colors from "../colors";
 
 function getHeaderTitle(route) {
-  const outerRouteIndex = route.state ? route.state.index : 0;
-  switch (outerRouteIndex) {
+  const routerRouteIndex = route.state ? route.state.index : 0;
+  switch (routerRouteIndex) {
     case 0:
-      const innerRouteIndex = route.state
-        ? route.state.routes[0].state.index
+      const innerRouteIndex = route?.state
+        ? route?.state?.routes[0]?.state?.index
         : 0;
       switch (innerRouteIndex) {
         case 0:
@@ -43,7 +43,6 @@ export const PhotoStacks = ({ navigation, route }) => {
         options={{
           title: "Upload",
           headerBackTitleVisible: false,
-          gestureEnabled: false,
         }}
       />
     </PhotoStackNavigation.Navigator>

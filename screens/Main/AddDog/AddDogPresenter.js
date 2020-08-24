@@ -1,5 +1,5 @@
-import React from "react";
-import { KeyboardAvoidingView, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { KeyboardAvoidingView, View, Keyboard } from "react-native";
 import styled from "styled-components/native";
 import {
   widthPercentageToDP as wp,
@@ -13,6 +13,7 @@ import DismissKeyboard from "../../../components/DismissKeyboard";
 import colors from "../../../colors";
 import DateModal from "../../../components/DateModal";
 import RadioButton from "../../../components/RadioButton";
+import { useHeaderHeight } from "@react-navigation/stack";
 
 const Container = styled.View`
   flex: 1;
@@ -22,8 +23,8 @@ const Container = styled.View`
 `;
 
 const AvatarContainer = styled.TouchableOpacity`
-  width: 150px;
-  height: 150px;
+  width: ${({ imageHeight }) => imageHeight}px;
+  height: ${({ imageHeight }) => imageHeight}px;
   border-radius: 75px;
   background-color: ${colors.grayShadow};
   justify-content: center;
@@ -32,13 +33,13 @@ const AvatarContainer = styled.TouchableOpacity`
 
 const Avatar = styled.Image`
   position: absolute;
-  width: 150px;
-  height: 150px;
+  width: ${({ imageHeight }) => imageHeight}px;
+  height: ${({ imageHeight }) => imageHeight}px;
   border-radius: 75px;
 `;
 
 const InputContainer = styled.View`
-  margin-top: 60px;
+  margin-top: ${({ marginTop }) => marginTop}px;
 `;
 
 const DateInput = styled.TextInput`
@@ -68,10 +69,38 @@ export default ({
   toggleSetDate,
   handleSubmit,
 }) => {
+  const headerHeight = useHeaderHeight();
+
+  const [imageHeight, setImageHeight] = useState(150);
+  const [marginTop, setMarginTop] = useState(40);
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
+    Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
+
+    return () => {
+      Keyboard.removeListener("keyboardWillShow", _keyboardWillShow);
+      Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
+    };
+  }, []);
+
+  const _keyboardWillShow = () => {
+    setImageHeight(75);
+    setMarginTop(10);
+  };
+
+  const _keyboardWillHide = () => {
+    setImageHeight(150);
+    setMarginTop(40);
+  };
+
   return (
-    <DismissKeyboard>
-      <Container>
-        <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
+    <Container>
+      <DismissKeyboard>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
+          keyboardVerticalOffset={headerHeight}
+        >
           <View
             style={{
               flex: 0.95,
@@ -79,8 +108,11 @@ export default ({
               justifyContent: "center",
             }}
           >
-            <AvatarContainer onPress={handlePickImage}>
-              <Avatar source={{ uri: image }} />
+            <AvatarContainer
+              onPress={handlePickImage}
+              imageHeight={imageHeight}
+            >
+              <Avatar source={{ uri: image }} imageHeight={imageHeight} />
               <Feather
                 name="plus"
                 size={40}
@@ -88,7 +120,7 @@ export default ({
                 style={{ marginTop: 5, marginLeft: 1 }}
               />
             </AvatarContainer>
-            <InputContainer>
+            <InputContainer marginTop={marginTop}>
               <Input
                 value={name}
                 placeholder="犬名"
@@ -122,19 +154,20 @@ export default ({
               loading={loading}
               text={"登録"}
               accent={true}
+              marginBottom={false}
               onPress={handleSubmit}
             />
           </View>
+          <DateModal
+            os={os}
+            birthdate={birthdate}
+            setBirthdate={setBirthdate}
+            isDateModalVisible={isDateModalVisible}
+            setIsDateModalVisible={setIsDateModalVisible}
+            toggleSetDate={toggleSetDate}
+          />
         </KeyboardAvoidingView>
-        <DateModal
-          os={os}
-          birthdate={birthdate}
-          setBirthdate={setBirthdate}
-          isDateModalVisible={isDateModalVisible}
-          setIsDateModalVisible={setIsDateModalVisible}
-          toggleSetDate={toggleSetDate}
-        />
-      </Container>
-    </DismissKeyboard>
+      </DismissKeyboard>
+    </Container>
   );
 };

@@ -16,8 +16,8 @@ const Btn = styled.View`
   align-items: center;
   background-color: ${(props) =>
     props.accent ? colors.primary : "transparent"};
-  box-shadow: 0px 3px 6px
-    ${(props) => (props.accent ? colors.primaryShadow : "")};
+  box-shadow: ${(props) =>
+    props.accent ? `0px 3px 6px ${colors.primaryShadow}` : "none"};
 `;
 
 const Text = styled.Text`
@@ -26,10 +26,16 @@ const Text = styled.Text`
   color: ${(props) => (props.accent ? "white" : colors.black)};
 `;
 
-const Button = ({ loading, onPress, text, accent = false }) => (
+const Button = ({
+  loading,
+  onPress,
+  text,
+  accent = false,
+  marginBottom = true,
+}) => (
   <TouchableOpacity
     onPress={loading ? null : onPress}
-    style={{ marginBottom: hp("3%") }}
+    style={{ marginBottom: marginBottom ? hp("3%") : 0 }}
   >
     <Btn accent={accent}>
       {loading ? (

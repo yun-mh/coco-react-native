@@ -6,6 +6,7 @@ import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
 import colors from "../../../colors";
+import { useHeaderHeight } from "@react-navigation/stack";
 
 const Container = styled.View`
   flex: 1;
@@ -50,10 +51,15 @@ export default ({
   handleSubmit,
   handlePickAvatar,
 }) => {
+  const headerHeight = useHeaderHeight();
+
   return (
     <DismissKeyboard>
       <Container>
-        <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
+          keyboardVerticalOffset={headerHeight}
+        >
           <View
             style={{
               flex: 0.95,

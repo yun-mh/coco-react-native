@@ -1,5 +1,10 @@
 import React, { useRef } from "react";
-import { KeyboardAvoidingView, View, TouchableOpacity } from "react-native";
+import {
+  KeyboardAvoidingView,
+  View,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import styled from "styled-components";
 import { useHeaderHeight } from "@react-navigation/stack";
 import { Feather } from "@expo/vector-icons";
@@ -73,7 +78,7 @@ export default ({
           </View>
         ) : (
           <KeyboardAvoidingView
-            behavior="position"
+            behavior={Platform.OS === "ios" ? "position" : null}
             keyboardVerticalOffset={headerHeight + 10}
           >
             <ScrollView
@@ -95,7 +100,7 @@ export default ({
         )}
       </ChatContainer>
       <KeyboardAvoidingView
-        behavior="position"
+        behavior={Platform.OS === "ios" ? "position" : null}
         keyboardVerticalOffset={headerHeight}
       >
         <MessageInputContainer>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "react-native";
+import { Image, KeyboardAvoidingView, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import {
   widthPercentageToDP as wp,
@@ -9,6 +9,8 @@ import styled from "styled-components";
 import colors from "../../../colors";
 import Button from "../../../components/Button";
 import TextButton from "../../../components/TextButton";
+import DismissKeyboard from "../../../components/DismissKeyboard";
+import { useHeaderHeight } from "@react-navigation/stack";
 
 const Container = styled.View`
   flex: 1;
@@ -18,6 +20,7 @@ const Container = styled.View`
 const ScrollContainer = styled.ScrollView`
   flex: 1;
   flex-direction: row;
+  padding: 10px;
   border-bottom-width: 1px;
   border-bottom-color: ${colors.gray};
 `;
@@ -51,49 +54,63 @@ export default ({
   handleGetLocation,
   handleSubmit,
 }) => {
+  const headerHeight = useHeaderHeight();
+
   return (
-    <Container>
-      <ScrollContainer
-        horizontal={true}
-        contentContainerStyle={{ alignItems: "center", paddingHorizontal: 10 }}
-      >
-        {photo.map((photo) => (
-          <Image
-            key={photo.id}
-            source={{ uri: photo.uri }}
-            style={{ height: 80, width: 80, marginRight: 10 }}
-          />
-        ))}
-      </ScrollContainer>
-      <Form>
-        <TextInput
-          value={location}
-          onChangeText={(text) => setLocation(text)}
-          placeholder="位置"
-          multiline={true}
-        />
-        <LocationBtnContainer>
-          <TextButton
-            icon={<Feather name="map-pin" size={14} color={colors.primary} />}
-            title={"現在の位置を取得する"}
-            weight="normal"
-            size={14}
-            onPress={handleGetLocation}
-          />
-        </LocationBtnContainer>
-        <TextInput
-          value={caption}
-          onChangeText={(text) => setCaption(text)}
-          placeholder="本文"
-          multiline={true}
-        />
-        <Button
-          loading={loading}
-          text={"投稿"}
-          accent={true}
-          onPress={handleSubmit}
-        />
-      </Form>
-    </Container>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      keyboardVerticalOffset={headerHeight + 10}
+    >
+      <Container>
+        <ScrollContainer
+          horizontal={true}
+          contentContainerStyle={{
+            alignItems: "center",
+          }}
+        >
+          {photo.map((photo) => (
+            <Image
+              key={photo.id}
+              source={{ uri: photo.uri }}
+              style={{ height: 80, width: 80, marginRight: 10 }}
+            />
+          ))}
+        </ScrollContainer>
+        <DismissKeyboard>
+          <Form>
+            <TextInput
+              value={location}
+              onChangeText={(text) => setLocation(text)}
+              placeholder="位置"
+              multiline={true}
+            />
+            <LocationBtnContainer>
+              <TextButton
+                icon={
+                  <Feather name="map-pin" size={14} color={colors.primary} />
+                }
+                title={"現在の位置を取得する"}
+                weight="normal"
+                size={14}
+                onPress={handleGetLocation}
+              />
+            </LocationBtnContainer>
+            <TextInput
+              value={caption}
+              onChangeText={(text) => setCaption(text)}
+              placeholder="本文"
+              multiline={true}
+            />
+            <Button
+              loading={loading}
+              text={"投稿"}
+              accent={true}
+              onPress={handleSubmit}
+            />
+          </Form>
+        </DismissKeyboard>
+      </Container>
+    </KeyboardAvoidingView>
   );
 };

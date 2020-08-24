@@ -60,9 +60,9 @@ const Friend = ({ id, avatar, username, currentUser }) => {
         <Image
           source={{ uri: avatar }}
           style={{
-            width: widthPercentageToDP("12%"),
-            height: widthPercentageToDP("12%"),
-            borderRadius: widthPercentageToDP("12%") / 2,
+            width: widthPercentageToDP("10%"),
+            height: widthPercentageToDP("10%"),
+            borderRadius: widthPercentageToDP("10%") / 2,
           }}
         />
         <Username>{username}</Username>
