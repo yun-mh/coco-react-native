@@ -18,7 +18,7 @@ export default ({
       <View style={{ paddingHorizontal: 10 }}>
         <FlatList
           style={{ width: "100%", paddingTop: 15 }}
-          data={data.viewFeed}
+          data={data}
           renderItem={({ item }) => (
             <Post
               id={item.id}

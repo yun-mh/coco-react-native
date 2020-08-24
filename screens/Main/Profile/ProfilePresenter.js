@@ -233,7 +233,7 @@ const ProfilePresenter = ({
               <Title>ポスト</Title>
             </PostHeaderContainer>
             <PostContentContainer>
-              {/* <FlatList
+              <FlatList
                 style={{ width: "100%" }}
                 data={data.viewUser.posts}
                 renderItem={({ item }) => (
@@ -244,7 +244,7 @@ const ProfilePresenter = ({
                 // onEndReached={onEndReached}
                 // onEndReachedThreshold={0.5}
                 showsVerticalScrollIndicator={false}
-              /> */}
+              />
             </PostContentContainer>
           </PostContainer>
         </HalfScreen>

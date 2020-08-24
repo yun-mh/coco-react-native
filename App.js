@@ -80,7 +80,15 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   const handleFinish = async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            viewFeed: offsetLimitPagination(),
+          },
+        },
+      },
+    });
     const persistor = new CachePersistor({
       cache,
       storage: AsyncStorage,
