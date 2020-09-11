@@ -230,34 +230,4 @@ const Post = ({
   );
 };
 
-// Post.propTypes = {
-//   id: PropTypes.string.isRequired,
-//   user: PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//     avatar: PropTypes.string,
-//     username: PropTypes.string.isRequired,
-//   }),
-//   files: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.string.isRequired,
-//       url: PropTypes.string.isRequired,
-//     })
-//   ).isRequired,
-//   likeCount: PropTypes.number.isRequired,
-//   isLiked: PropTypes.bool.isRequired,
-//   comments: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.string.isRequired,
-//       text: PropTypes.string.isRequired,
-//       user: PropTypes.shape({
-//         id: PropTypes.string.isRequired,
-//         username: PropTypes.string.isRequired,
-//       }).isRequired,
-//     })
-//   ),
-//   caption: PropTypes.string.isRequired,
-//   location: PropTypes.string,
-//   createdAt: PropTypes.string.isRequired,
-// };
-
 export default Post;
