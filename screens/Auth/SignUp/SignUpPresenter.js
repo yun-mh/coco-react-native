@@ -39,43 +39,6 @@ const InputContainer = styled.View`
   margin-top: ${hp("3%")}px;
 `;
 
-const DividerContainer = styled.View`
-  margin-vertical: ${hp("2%")}px;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const DividerLine = styled.View`
-  flex: 1;
-  height: 1px;
-  background-color: ${colors.gray};
-`;
-
-const DividerText = styled.Text`
-  width: 50px;
-  text-align: center;
-  color: ${colors.gray};
-`;
-
-const SocialLoginContainer = styled.View`
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  position: relative;
-`;
-
-const SocialLoginButton = styled.View`
-  width: 100px;
-  margin-bottom: 25px;
-  border: 1px solid ${colors.gray};
-  border-radius: 30px;
-  padding: 12px 0px;
-  align-items: center;
-  background-color: white;
-  box-shadow: 0px 3px 6px ${colors.grayShadow};
-`;
-
 const SignUpFooter = styled.View``;
 
 export default ({
@@ -141,15 +104,6 @@ export default ({
               accent={true}
               onPress={handleSubmit}
             />
-            <DividerContainer>
-              <DividerLine />
-              <DividerText>または</DividerText>
-              <DividerLine />
-            </DividerContainer>
-            <SocialLoginContainer>
-              <SocialLoginButton></SocialLoginButton>
-              <SocialLoginButton></SocialLoginButton>
-            </SocialLoginContainer>
           </SafeAreaView>
           <SignUpFooter style={{ flex: 1 }}>
             <TextButton

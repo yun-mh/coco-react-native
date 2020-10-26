@@ -16,43 +16,6 @@ const Container = styled.View`
 
 const InputContainer = styled.View``;
 
-const DividerContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin: 40px 0;
-`;
-
-const DividerLine = styled.View`
-  flex: 1;
-  height: 1px;
-  background-color: ${colors.gray};
-`;
-
-const DividerText = styled.Text`
-  width: 50px;
-  text-align: center;
-  color: ${colors.gray};
-`;
-
-const SocialLoginContainer = styled.View`
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  position: relative;
-`;
-
-const SocialLoginButton = styled.View`
-  width: 100px;
-  margin-bottom: 25px;
-  border: 1px solid ${colors.gray};
-  border-radius: 30px;
-  padding: 12px 0px;
-  align-items: center;
-  background-color: white;
-  box-shadow: 0px 3px 6px ${colors.grayShadow};
-`;
-
 const SignUpFooter = styled.View``;
 
 export default ({
@@ -102,15 +65,6 @@ export default ({
               title={"パスワード再設定"}
               onPress={toPasswordReset}
             />
-            <DividerContainer>
-              <DividerLine />
-              <DividerText>または</DividerText>
-              <DividerLine />
-            </DividerContainer>
-            <SocialLoginContainer>
-              <SocialLoginButton></SocialLoginButton>
-              <SocialLoginButton></SocialLoginButton>
-            </SocialLoginContainer>
           </View>
           <SignUpFooter>
             <TextButton

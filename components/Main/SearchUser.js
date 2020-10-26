@@ -32,7 +32,7 @@ export default ({ id, avatar, username }) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("Profile", { id })}>
+    <TouchableOpacity style={{ marginVertical: 5 }} onPress={() => navigation.navigate("Profile", { id })}>
       <ItemContainer>
         <Image
           style={{ width: 50, height: 50, borderRadius: 25 }}

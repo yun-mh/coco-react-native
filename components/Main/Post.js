@@ -100,7 +100,7 @@ const Post = ({
       id,
       action: "DELETE",
     },
-    refetchQueries: () => [{ query: VIEW_FEED }],
+    refetchQueries: () => [{ query: VIEW_FEED, variables: { offset: 0, limit: 3 }}],
   });
 
   const togglePostModal = () => {

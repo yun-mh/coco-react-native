@@ -19,7 +19,7 @@ export default ({ navigation, route }) => {
       caption,
       location,
     },
-    refetchQueries: () => [{ query: VIEW_FEED }],
+    refetchQueries: () => [{ query: VIEW_FEED, variables: { offset: 0, limit: 3 } }],
   });
 
   const askPermission = async () => {
