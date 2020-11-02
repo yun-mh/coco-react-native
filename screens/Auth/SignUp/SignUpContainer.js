@@ -101,10 +101,9 @@ export default ({ navigation }) => {
           index: 0,
           routes: [{ name: "RegisterDog", params: { email } }],
         });
-      } else {
-        Alert.alert("エラー", "すでに登録されているメールアドレスです。");
       }
     } catch (e) {
+      Alert.alert("エラー", e.message);
       console.warn(e);
     } finally {
       setChangeAvatar(false);

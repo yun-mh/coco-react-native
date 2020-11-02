@@ -95,6 +95,7 @@ export default ({ navigation, route }) => {
         });
       }
     } catch (e) {
+      Alert.alert("エラー", e.message);
       console.warn(e);
     } finally {
       setChangeAvatar(false);
