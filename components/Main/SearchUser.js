@@ -28,8 +28,10 @@ const BreedingInfo = styled.Text`
   color: ${colors.gray};
 `;
 
-export default ({ id, avatar, username }) => {
+export default ({ id, avatar, username, dogs }) => {
   const navigation = useNavigation();
+
+  const representativeDog = dogs[0];
 
   return (
     <TouchableOpacity style={{ marginVertical: 5 }} onPress={() => navigation.navigate("Profile", { id })}>
@@ -40,7 +42,7 @@ export default ({ id, avatar, username }) => {
         />
         <DataContainer>
           <Username>{username}</Username>
-          <BreedingInfo>を飼っています</BreedingInfo>
+          <BreedingInfo>{ dogs.length > 0 ? `${dogs[0].name + ( dogs.length > 1 ? "の他" + (dogs.length - 1) + "匹" : "" )}を飼っています` : ""}</BreedingInfo>
         </DataContainer>
       </ItemContainer>
     </TouchableOpacity>

@@ -76,6 +76,7 @@ export default ({
                 id={item.id}
                 avatar={item.avatar}
                 username={item.username}
+                dogs={item.dogs}
               />
             )}
             keyExtractor={(item) => item.id.toString()}

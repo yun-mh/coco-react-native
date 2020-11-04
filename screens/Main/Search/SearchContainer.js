@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import SearchPresenter from "./SearchPresenter";
 import { SEARCH } from "../../../queries/Main/MainQueries";
@@ -14,6 +14,8 @@ export default ({ navigation }) => {
     skip: !fetch,
     fetchPolicy: "network-only",
   });
+
+  console.log(data)
 
   const onChange = (text) => {
     setFetch(false);
