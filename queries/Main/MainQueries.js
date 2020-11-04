@@ -30,6 +30,9 @@ export const SEARCH = gql`
       id
       avatar
       username
+      dogs {
+        name
+      }
     }
   }
 `;

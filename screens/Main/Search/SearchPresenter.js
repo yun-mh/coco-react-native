@@ -58,10 +58,10 @@ export default ({
           onPress={handleUserTab}
           style={{ borderRightWidth: 1, borderColor: colors.lightGray }}
         >
-          <Text style={{ color: colors.black }}>ユーザー</Text>
+          <Text style={{ color: isUser? colors.black : colors.darkGray, fontWeight: isUser ? "bold" : "normal" }}>ユーザー</Text>
         </Tab>
         <Tab onPress={handlePostTab}>
-          <Text style={{ color: colors.black }}>ポスト</Text>
+          <Text style={{ color: isUser? colors.darkGray : colors.black, fontWeight: isUser ? "normal" : "bold"}}>ポスト</Text>
         </Tab>
       </TabContainer>
       <View style={{ flex: 1, justifyContent: "center" }}>
