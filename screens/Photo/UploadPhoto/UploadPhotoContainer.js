@@ -3,10 +3,42 @@ import { Alert } from "react-native";
 import axios from "axios";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import { useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import { UPLOAD_POST, VIEW_FEED } from "../../../queries/Main/MainQueries";
 import UploadPhotoPresenter from "./UploadPhotoPresenter";
 import ENV from "../../../components/env";
+
+const query = gql`
+  query viewFeed {
+    viewFeed {
+      id
+      location
+      caption
+      user {
+        id
+        avatar
+        username
+      }
+      files {
+        id
+        url
+      }
+      likeCount
+      isLiked
+      comments {
+        id
+        text
+        user {
+          id
+          username
+          avatar
+        }
+        createdAt
+      }
+      createdAt
+    }
+  }
+`;
 
 export default ({ navigation, route }) => {
   const photo = route.params.photo;
@@ -14,12 +46,13 @@ export default ({ navigation, route }) => {
   const [location, setLocation] = useState("");
   const [caption, setCaption] = useState("");
 
+  const client = useApolloClient();
+
   const [uploadMutation] = useMutation(UPLOAD_POST, {
     variables: {
       caption,
       location,
     },
-    refetchQueries: () => [{ query: VIEW_FEED, variables: { offset: 0, limit: 3 } }],
   });
 
   const askPermission = async () => {
@@ -88,7 +121,19 @@ export default ({ navigation, route }) => {
         },
       });
       if (uploadPost.id) {
-        navigation.navigate("Feed");
+        client.cache.modify({
+          fields: {
+            viewFeed(existingPostRefs = [], { readField }) {
+              return client.cache.writeQuery({
+                query,
+                data: {
+                  viewFeed: [...existingPostRefs, uploadPost]
+                }
+              });
+            },
+          },
+        })
+        navigation.navigate("Feed", { posted: uploadPost.id });
       }
     } catch (error) {
       console.log(error);

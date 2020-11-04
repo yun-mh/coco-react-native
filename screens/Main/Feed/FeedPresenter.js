@@ -4,6 +4,7 @@ import Loader from "../../../components/Main/Loader";
 import Post from "../../../components/Main/Post";
 
 export default ({
+  flatlistEl,
   loading,
   data,
   onEndReached,
@@ -17,6 +18,7 @@ export default ({
     data && (
       <View style={{ paddingHorizontal: 10 }}>
         <FlatList
+          ref={flatlistEl}
           style={{ width: "100%", paddingTop: 15 }}
           data={data}
           renderItem={({ item }) => (

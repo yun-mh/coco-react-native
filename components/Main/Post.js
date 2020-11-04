@@ -100,7 +100,17 @@ const Post = ({
       id,
       action: "DELETE",
     },
-    refetchQueries: () => [{ query: VIEW_FEED, variables: { offset: 0, limit: 3 }}],
+    update(cache, { data: { editPost } }) {
+      cache.modify({
+        fields: {
+          viewFeed(existingPostRefs, { readField }) {
+            return existingPostRefs.filter(
+              postRef => id !== readField('id', postRef)
+            );
+          },
+        },
+      })
+    }
   });
 
   const togglePostModal = () => {

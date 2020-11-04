@@ -262,12 +262,30 @@ export const UPLOAD_POST = gql`
   mutation uploadPost($caption: String, $files: [String!]!, $location: String) {
     uploadPost(caption: $caption, files: $files, location: $location) {
       id
+      location
       caption
+      user {
+        id
+        avatar
+        username
+      }
       files {
         id
         url
       }
-      location
+      likeCount
+      isLiked
+      comments {
+        id
+        text
+        user {
+          id
+          username
+          avatar
+        }
+        createdAt
+      }
+      createdAt
     }
   }
 `;
