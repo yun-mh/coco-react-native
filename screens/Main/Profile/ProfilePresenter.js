@@ -246,15 +246,13 @@ const ProfilePresenter = ({
             </PostHeaderContainer>
             <PostContentContainer>
               <FlatList
-                style={{ width: "100%" }}
+                style={{ width: "100%", height: "100%" }}
                 data={data.viewUser.posts}
                 renderItem={({ item }) => (
                   <PostGrid id={item.id} files={item.files} />
                 )}
                 numColumns={3}
                 keyExtractor={(item) => item.id.toString()}
-                // onEndReached={onEndReached}
-                // onEndReachedThreshold={0.5}
                 showsVerticalScrollIndicator={false}
               />
             </PostContentContainer>

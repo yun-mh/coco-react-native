@@ -41,8 +41,8 @@ const GallerySwiper = ({ selected }) => {
       showsHorizontalScrollIndicator={true}
       showsPagination={false}
     >
-      {selected.length > 0 &&
-        selected.map((file) => (
+      {selected.length !== 0 &&
+        selected.map((file) => file && (
           <Image
             key={file.id}
             style={{

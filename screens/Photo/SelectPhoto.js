@@ -135,11 +135,17 @@ export default ({ navigation }) => {
           {hasPermission ? (
             <>
               <SlideContainer>
-                {selected && selected.length > 0 ? (
+                {selected && selected.length > 0 && selected[0] !== undefined ? (
                   <GallerySwiper selected={selected} />
-                ) : null}
+                ) : (
+                  <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
+                    <Text style={{ fontSize: 20, color: colors.darkGray }}>
+                      ストレージにイメージがありません。
+                    </Text>
+                  </View>
+                )}
               </SlideContainer>
-              {selected && selected.length > 0 ? (
+              {selected && selected.length > 0 && selected[0] !== undefined ? (
                 <Button onPress={handleSelected}>
                   <Text>次へ</Text>
                 </Button>
