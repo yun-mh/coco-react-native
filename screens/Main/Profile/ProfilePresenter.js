@@ -13,6 +13,7 @@ import Loader from "../../../components/Main/Loader";
 import Button from "../../../components/Main/Button";
 import UserInfoModal from "../../../components/Main/UserInfoModal";
 import DogInfoModal from "../../../components/Main/DogInfoModal";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileContainer = styled.View`
   flex: 1;
@@ -72,6 +73,11 @@ const InfoItem = styled.View`
   flex: 1;
   align-items: center;
 `;
+
+const TouchableInfoItem = styled.TouchableOpacity`
+  flex: 1;
+  align-items: center;
+`
 
 const InfoTitle = styled.Text`
   flex: 1;
@@ -148,6 +154,8 @@ const ProfilePresenter = ({
   setDogInfoModalVisible,
   logout,
 }) => {
+  const navigation = useNavigation();
+
   return loading ? (
     <Loader />
   ) : (
@@ -185,12 +193,16 @@ const ProfilePresenter = ({
                     <InfoData>{data?.viewUser?.postsCount}</InfoData>
                   </InfoItem>
                   <InfoItem>
-                    <InfoTitle>フォロワー</InfoTitle>
-                    <InfoData>{data?.viewUser?.followersCount}</InfoData>
+                    <TouchableInfoItem onPress={() => navigation.navigate("Relation", { viewUser: data?.viewUser })}>
+                      <InfoTitle>フォロワー</InfoTitle>
+                      <InfoData>{data?.viewUser?.followersCount}</InfoData>
+                    </TouchableInfoItem>
                   </InfoItem>
                   <InfoItem>
-                    <InfoTitle>フォロー中</InfoTitle>
-                    <InfoData>{data?.viewUser?.followingCount}</InfoData>
+                    <TouchableInfoItem onPress={() => navigation.navigate("Relation", { viewUser: data?.viewUser })}>
+                      <InfoTitle>フォロー中</InfoTitle>
+                      <InfoData>{data?.viewUser?.followingCount}</InfoData>
+                    </TouchableInfoItem>
                   </InfoItem>
                 </InfoContainer>
               </DataContainer>

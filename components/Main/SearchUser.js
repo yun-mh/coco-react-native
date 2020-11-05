@@ -31,8 +31,6 @@ const BreedingInfo = styled.Text`
 export default ({ id, avatar, username, dogs }) => {
   const navigation = useNavigation();
 
-  const representativeDog = dogs[0];
-
   return (
     <TouchableOpacity style={{ marginVertical: 5 }} onPress={() => navigation.navigate("Profile", { id })}>
       <ItemContainer>

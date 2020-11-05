@@ -44,6 +44,24 @@ export const VIEW_USER = gql`
       avatar
       username
       email
+      followers {
+        id
+        avatar
+        username
+        dogs {
+          name
+        }
+        isFollowing
+      }
+      following {
+        id
+        avatar
+        username
+        dogs {
+          name
+        }
+        isFollowing
+      }
       followingCount
       followersCount
       postsCount

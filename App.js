@@ -85,6 +85,10 @@ export default function App() {
         Query: {
           fields: {
             viewFeed: offsetLimitPagination(),
+            viewUser: {
+              // Short for options.mergeObjects(existing, incoming).
+              merge: true,
+            },
           },
         },
       },

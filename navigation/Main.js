@@ -23,6 +23,7 @@ import ModifyPost from "../screens/Main/ModifyPost/ModifyPost";
 import Chatrooms from "../screens/Main/Chatrooms";
 import Chatroom from "../screens/Main/Chatroom";
 import Notification from "../screens/Main/Notification/";
+import Relation from "../screens/Main/Relation";
 import Maps from "../screens/Walking/Maps/MapsContainer";
 import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
 import { PhotoStacks } from "./Photo";
@@ -172,6 +173,11 @@ export default () => {
           title: "",
           headerTransparent: true,
         }}
+      />
+      <MainNavigator.Screen
+        name="Relation"
+        component={Relation}
+        options={{ title: "" }}
       />
       <MainNavigator.Screen
         name="ModifyProfile"

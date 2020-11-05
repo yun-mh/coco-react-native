@@ -15,8 +15,6 @@ export default ({ navigation }) => {
     fetchPolicy: "network-only",
   });
 
-  console.log(data)
-
   const onChange = (text) => {
     setFetch(false);
     setValue(text);
