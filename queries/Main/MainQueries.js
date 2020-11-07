@@ -81,6 +81,7 @@ export const VIEW_USER = gql`
       }
       isFollowing
       isMyself
+      token
     }
   }
 `;
@@ -474,6 +475,9 @@ export const CREATE_CHATROOM = gql`
   mutation createChatRoom($toId: String!) {
     createChatRoom(toId: $toId) {
       id
+      participants {
+        id
+      }
     }
   }
 `;
@@ -501,8 +505,8 @@ export const VIEW_CHATROOM = gql`
 `;
 
 export const SEND_MESSAGE = gql`
-  mutation sendMessage($roomId: String, $message: String!, $myUsername: String!, $toId: String, $token: String) {
-    sendMessage(roomId: $roomId, message: $message, myUsername: $myUsername, toId: $toId, token: $token) {
+  mutation sendMessage($roomId: String, $message: String!, $toId: String, $token: String) {
+    sendMessage(roomId: $roomId, message: $message, toId: $toId, token: $token) {
       id
       text
       from {

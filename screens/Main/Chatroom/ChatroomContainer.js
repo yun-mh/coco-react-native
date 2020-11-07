@@ -29,7 +29,6 @@ export default ({ navigation, route }) => {
     variables: {
       roomId: route.params.id,
       message: text,
-      myUsername: route.params.myUsername,
       toId: route.params.counterpartId,
       token: route.params.token,
     },
@@ -62,7 +61,6 @@ export default ({ navigation, route }) => {
     try {
       await sendMessageMutation();
     } catch (error) {
-      console.warn(error);
     } finally {
       setText("");
     }

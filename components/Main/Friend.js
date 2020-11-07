@@ -31,7 +31,7 @@ const Friend = ({ id, avatar, username, currentUser }) => {
       toId: id,
     },
     refetchQueries: () => [
-      { query: VIEW_CHATROOMS, variables: { id: currentUser } },
+      { query: VIEW_CHATROOMS },
     ],
   });
 

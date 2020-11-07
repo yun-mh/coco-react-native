@@ -33,14 +33,15 @@ const HeaderContainer = styled.View`
 const HeaderContentContainer = styled.View`
   flex-direction: row;
   justify-content: space-around;
+  align-items: flex-end;
   width: 100%;
   margin-bottom: 20px;
 `;
 
 const AvatarContainer = styled.View`
-  width: 100px;
-  height: 100px;
-  border-radius: 50px;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
   background-color: black;
 `;
 
@@ -48,11 +49,16 @@ const DataContainer = styled.View`
   width: 65%;
 `;
 
+const UsernameContainer = styled.View`
+  height: 24px;
+`;
+
 const UserContainer = styled.View`
-  height: 50px;
+  height: 29px;
+  margin-vertical: 10px;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 
 const Username = styled.Text`
@@ -140,6 +146,7 @@ const ProfilePresenter = ({
   handleFollow,
   isUserInfoModalVisible,
   toggleUserInfoModal,
+  toChatroom,
   toProfileModify,
   toAddDog,
   toModifyDog,
@@ -167,14 +174,16 @@ const ProfilePresenter = ({
               <AvatarContainer>
                 <Image
                   source={{ uri: data?.viewUser?.avatar }}
-                  style={{ width: 100, height: 100, borderRadius: 50 }}
+                  style={{ width: 120, height: 120, borderRadius: 60 }}
                 />
               </AvatarContainer>
               <DataContainer>
-                <UserContainer>
+                <UsernameContainer>
                   <Username>{data?.viewUser?.username}</Username>
+                </UsernameContainer>
+                <UserContainer>
                   {data.viewUser.isMyself ? (
-                    <TouchableOpacity onPress={toggleUserInfoModal}>
+                    <TouchableOpacity onPress={toggleUserInfoModal} style={{ marginHorizontal: 10 }}>
                       <Feather name="settings" size={18} color={colors.black} />
                     </TouchableOpacity>
                   ) : isFollowing ? (
@@ -185,6 +194,11 @@ const ProfilePresenter = ({
                       accent={true}
                       onPress={handleFollow}
                     />
+                  )}
+                  {data.viewUser.isMyself ? null : (
+                    <TouchableOpacity onPress={toChatroom} style={{ marginHorizontal: 10, backgroundColor: colors.primary, padding: 5, borderRadius: 5 }}>
+                      <Feather name="send" size={18} color={colors.white} />
+                    </TouchableOpacity>
                   )}
                 </UserContainer>
                 <InfoContainer>

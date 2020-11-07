@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProfilePresenter from "./ProfilePresenter";
 import { useQuery, useMutation } from "@apollo/client";
-import { VIEW_USER, FOLLOW, UNFOLLOW } from "../../../queries/Main/MainQueries";
+import { VIEW_USER, FOLLOW, UNFOLLOW, CREATE_CHATROOM, VIEW_CHATROOMS } from "../../../queries/Main/MainQueries";
 import { useLogOut } from "../../../contexts/AuthContext";
 
 const ProfileContainer = ({ navigation, route }) => {
@@ -40,6 +40,37 @@ const ProfileContainer = ({ navigation, route }) => {
       id: route.params.id,
     },
   });
+
+  const [createChatRoomMutation] = useMutation(CREATE_CHATROOM, {
+    variables: {
+      toId: route.params.id,
+    },
+    refetchQueries: () => [
+      { query: VIEW_CHATROOMS },
+    ],
+  });
+
+  const toChatroom = async () => {
+    try {
+      const {
+        data: {
+          createChatRoom: { id: roomId, participants },
+        },
+      } = await createChatRoomMutation();
+
+      const currentUser = participants.filter((p) => p.id !== route.params.id)[0];
+
+      navigation.navigate("Chatroom", {
+        id: roomId,
+        counterpartId: route.params.id,
+        counterpartUsername: data?.viewUser?.username,
+        myself: currentUser.id,
+        token: data?.viewUser?.token,
+      });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 
   const toggleUserInfoModal = () => {
     setUserInfoModalVisible(!isUserInfoModalVisible);
@@ -128,6 +159,7 @@ const ProfileContainer = ({ navigation, route }) => {
       breed={breed}
       gender={gender}
       birthdate={birthdate}
+      toChatroom={toChatroom}
       isDogInfoModalVisible={isDogInfoModalVisible}
       setDogInfoModalVisible={setDogInfoModalVisible}
       toggleDogInfoModal={toggleDogInfoModal}
