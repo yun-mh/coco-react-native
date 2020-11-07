@@ -13,7 +13,9 @@ export default ({ navigation, route }) => {
   const [height, setHeight] = useState(40);
   const [messages, setMessages] = useState([]);
 
-  navigation.setOptions({ title: route.params.counterpartUsername });
+  useEffect(() => {
+    navigation.setOptions({ title: route.params.counterpartUsername });
+  })
 
   const { data: newData } = useSubscription(GET_MESSAGE, {
     variables: { roomId: route.params.id },
@@ -27,7 +29,9 @@ export default ({ navigation, route }) => {
     variables: {
       roomId: route.params.id,
       message: text,
+      myUsername: route.params.myUsername,
       toId: route.params.counterpartId,
+      token: route.params.token,
     },
     refetchQueries: () => [
       { query: VIEW_CHATROOM, variables: { id: route.params.id } },

@@ -44,6 +44,10 @@ const ChatListItems = ({ id, messages, participants, currentUser }) => {
 
   const [msg, setMsg] = useState([]);
 
+  const myself = participants.filter(
+    (person) => person.id === currentUser
+  )[0];
+
   const counterpart = participants.filter(
     (person) => person.id !== currentUser
   )[0];
@@ -56,8 +60,10 @@ const ChatListItems = ({ id, messages, participants, currentUser }) => {
   const toChatroom = () => {
     navigation.navigate("Chatroom", {
       id,
+      myUsername: myself.username,
       counterpartId: counterpart.id,
       counterpartUsername: counterpart.username,
+      token: counterpart.token,
       myself: currentUser,
     });
   };

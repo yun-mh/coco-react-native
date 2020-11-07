@@ -115,6 +115,14 @@ export const EDIT_USER = gql`
   }
 `;
 
+export const SET_TOKEN = gql`
+  mutation setToken($token: String!) {
+    setToken(token: $token) {
+      id
+    }
+  }
+`;
+
 export const FOLLOW = gql`
   mutation follow($id: String!) {
     follow(id: $id)
@@ -417,6 +425,7 @@ export const VIEW_CHATROOMS = gql`
         id
         avatar
         username
+        token
       }
       messages {
         id
@@ -492,8 +501,8 @@ export const VIEW_CHATROOM = gql`
 `;
 
 export const SEND_MESSAGE = gql`
-  mutation sendMessage($roomId: String, $message: String!, $toId: String) {
-    sendMessage(roomId: $roomId, message: $message, toId: $toId) {
+  mutation sendMessage($roomId: String, $message: String!, $myUsername: String!, $toId: String, $token: String) {
+    sendMessage(roomId: $roomId, message: $message, myUsername: $myUsername, toId: $toId, token: $token) {
       id
       text
       from {

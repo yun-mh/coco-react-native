@@ -30,6 +30,8 @@ import { PersistProvider } from "./contexts/PersistContext";
 //       : "https://api-coco.herokuapp.com/",
 // });
 
+
+
 const httpLink = new HttpLink({
   uri:
     process.env.NODE_ENV === "development"
@@ -157,7 +159,7 @@ export default function App() {
   ) : (
     <AppLoading
       startAsync={preload}
-      onError={console.error}
+      onError={console.warn}
       onFinish={handleFinish}
     />
   );
