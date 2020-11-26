@@ -17,6 +17,7 @@ const ProfileContainer = ({ navigation, route }) => {
   const [breed, setBreed] = useState("");
   const [gender, setGender] = useState("");
   const [birthdate, setBirthdate] = useState("");
+  const [isMissed, setIsMissed] = useState();
   const [isFollowing, setIsFollowing] = useState(data?.viewUser?.isFollowing);
   const [isUserInfoModalVisible, setUserInfoModalVisible] = useState(false);
   const [isDogInfoModalVisible, setDogInfoModalVisible] = useState(false);
@@ -99,6 +100,20 @@ const ProfileContainer = ({ navigation, route }) => {
     toggleDogInfoModal();
   };
 
+  const toSetLost = () => {
+    navigation.navigate("SetLost", {
+      id: data?.viewUser?.id,
+      dogId,
+      image,
+      dogName,
+      breed,
+      gender,
+      birthdate,
+      isMissed,
+    });
+    toggleDogInfoModal();
+  };
+
   const toAddDog = () => {
     navigation.navigate("AddDog", {
       id: data?.viewUser?.id,
@@ -114,12 +129,14 @@ const ProfileContainer = ({ navigation, route }) => {
       setBreed(target.breed);
       setGender(target.gender);
       setBirthdate(target.birthdate);
+      setIsMissed(target.isMissed);
     } else {
       setDogId("");
       setDogName("");
       setBreed("");
       setGender("");
       setBirthdate("");
+      setIsMissed();
     }
     setDogInfoModalVisible(!isDogInfoModalVisible);
   };
@@ -153,6 +170,7 @@ const ProfileContainer = ({ navigation, route }) => {
       toProfileModify={toProfileModify}
       toAddDog={toAddDog}
       toModifyDog={toModifyDog}
+      toSetLost={toSetLost}
       dogId={dogId}
       image={image}
       dogName={dogName}

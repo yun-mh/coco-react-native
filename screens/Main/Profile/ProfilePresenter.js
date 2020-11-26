@@ -150,6 +150,7 @@ const ProfilePresenter = ({
   toProfileModify,
   toAddDog,
   toModifyDog,
+  toSetLost,
   isDogInfoModalVisible,
   toggleDogInfoModal,
   dogId,
@@ -286,6 +287,7 @@ const ProfilePresenter = ({
           gender={gender}
           birthdate={birthdate}
           toModifyDog={toModifyDog}
+          toSetLost={toSetLost}
           isDogInfoModalVisible={isDogInfoModalVisible}
           setDogInfoModalVisible={setDogInfoModalVisible}
           toggleDogInfoModal={toggleDogInfoModal}

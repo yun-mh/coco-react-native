@@ -72,6 +72,7 @@ export const VIEW_USER = gql`
         breed
         gender
         birthdate
+        isMissed
       }
       posts {
         id
@@ -187,6 +188,18 @@ export const MODIFY_DOG = gql`
       gender
       birthdate
     }
+  }
+`;
+
+export const TOGGLE_STATUS = gql`
+  mutation toggleMissingStatus(
+    $id: String!
+    $isMissed: Boolean!
+  ) {
+    toggleMissingStatus(
+      id: $id
+      isMissed: $isMissed
+    )
   }
 `;
 
@@ -430,8 +443,12 @@ export const VIEW_CHATROOMS = gql`
       }
       messages {
         id
+        from {
+          id
+        }
         text
         createdAt
+        read
       }
       createdAt
       updatedAt

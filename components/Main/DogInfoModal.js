@@ -17,6 +17,7 @@ const DogInfoModal = ({
   gender,
   birthdate,
   toModifyDog,
+  toSetLost,
   isDogInfoModalVisible,
   setDogInfoModalVisible,
   toggleDogInfoModal,
@@ -98,6 +99,11 @@ const DogInfoModal = ({
               title={"情報修正"}
               onPress={toModifyDog}
               color={colors.primary}
+            />
+            <TextButton
+              title={"迷子設定"}
+              onPress={toSetLost}
+              color={colors.secondary}
             />
             <TextButton
               title={"登録解除"}

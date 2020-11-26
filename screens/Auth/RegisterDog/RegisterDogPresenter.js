@@ -12,7 +12,7 @@ import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
 import colors from "../../../colors";
 import DateModal from "../../../components/DateModal";
-import RadioButton from "../../../components/RadioButton";
+import GenderRadioButton from "../../../components/GenderRadioButton";
 import { useHeaderHeight } from "@react-navigation/stack";
 import TextButton from "../../../components/Main/TextButton";
 
@@ -135,7 +135,7 @@ export default ({
                 autoCapitalize="none"
                 stateFn={setBreed}
               />
-              <RadioButton
+              <GenderRadioButton
                 prop={radioProps}
                 gender={gender}
                 setGender={setGender}
