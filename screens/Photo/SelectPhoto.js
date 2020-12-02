@@ -7,7 +7,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { getCameraPermission } from "../../userPermissions";
+import { getPermission } from "../../userPermissions";
 import Loader from "../../components/Main/Loader";
 import colors from "../../colors";
 import GallerySwiper from "../../components/Main/GallerySwiper";
@@ -103,7 +103,7 @@ export default ({ navigation }) => {
 
   const askPermission = async () => {
     try {
-      const status = await getCameraPermission();
+      const status = await getPermission("cameraRoll");
       if (status === "granted") {
         setHasPermission(true);
         getPhotos();
@@ -135,10 +135,18 @@ export default ({ navigation }) => {
           {hasPermission ? (
             <>
               <SlideContainer>
-                {selected && selected.length > 0 && selected[0] !== undefined ? (
+                {selected &&
+                selected.length > 0 &&
+                selected[0] !== undefined ? (
                   <GallerySwiper selected={selected} />
                 ) : (
-                  <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <Text style={{ fontSize: 20, color: colors.darkGray }}>
                       ストレージにイメージがありません。
                     </Text>

@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { TouchableOpacity } from "react-native";
 import styled from "styled-components";
-import * as Permissions from "expo-permissions";
 import * as MediaLibrary from "expo-media-library";
 import { Camera } from "expo-camera";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Feather } from "@expo/vector-icons";
 import Loader from "../../components/Main/Loader";
 import colors from "../../colors";
+import { getPermission } from "../../userPermissions";
 
 const View = styled.View`
   flex: 1;
@@ -81,7 +78,7 @@ export default ({ navigation }) => {
 
   const askPermission = async () => {
     try {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      const status = await getPermission("camera");
       if (status === "granted") {
         setHasPermission(true);
       }

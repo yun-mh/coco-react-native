@@ -19,13 +19,18 @@ import Search from "../screens/Main/Search";
 import Post from "../screens/Main/Post";
 import AddDog from "../screens/Main/AddDog";
 import ModifyDog from "../screens/Main/ModifyDog";
+import SetLost from "../screens/Main/SetLost";
 import ModifyPost from "../screens/Main/ModifyPost/ModifyPost";
 import Chatrooms from "../screens/Main/Chatrooms";
 import Chatroom from "../screens/Main/Chatroom";
 import Notification from "../screens/Main/Notification/";
 import Relation from "../screens/Main/Relation";
 import Maps from "../screens/Walking/Maps/MapsContainer";
-import { PROFILE_THUMBNAIL } from "../queries/Main/MainQueries";
+import {
+  PROFILE_THUMBNAIL,
+  VIEW_CHATROOMS,
+  VIEW_NOTIFICATION,
+} from "../queries/Main/MainQueries";
 import { PhotoStacks } from "./Photo";
 import colors from "../colors";
 
@@ -48,9 +53,31 @@ const TabsNavigator = createBottomTabNavigator();
 
 const Tabs = ({ navigation, route }) => {
   const { loading, error, data } = useQuery(PROFILE_THUMBNAIL);
+  const { loading: chatLoading, data: chatData } = useQuery(VIEW_CHATROOMS);
+  const { loading: notiLoading, data: notiData } = useQuery(VIEW_NOTIFICATION);
+
   const [current, setCurrent] = useState(
     getFocusedRouteNameFromRoute(route) || "Feed"
   );
+
+  const [chatBadge, setChatBadge] = useState(false);
+  const [notificationBadge, setNotificationBadge] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!chatLoading) {
+      for (const chat of chatData?.viewChatRooms) {
+        const messages = chat.messages;
+        for (const message of messages) {
+          if (
+            message.read === false &&
+            message.from.id !== data?.viewMyself?.id
+          ) {
+            setChatBadge(true);
+          }
+        }
+      }
+    }
+  }, [chatLoading, chatData]);
 
   useLayoutEffect(() => {
     setCurrent(getFocusedRouteNameFromRoute(route) || "Feed");
@@ -81,25 +108,75 @@ const Tabs = ({ navigation, route }) => {
           } else if (route.name === "Message") {
             iconName = "send";
           }
-          return iconName !== "plus" ? (
-            <Feather
-              name={iconName}
-              size={24}
-              color={focused ? colors.secondary : "grey"}
-            />
-          ) : (
-            <View
-              style={{
-                backgroundColor: colors.primary,
-                width: 36,
-                borderRadius: 50,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Feather name={iconName} size={32} color={"white"} />
-            </View>
-          );
+
+          switch (iconName) {
+            case "plus":
+              return (
+                <View
+                  style={{
+                    backgroundColor: colors.primary,
+                    width: 36,
+                    borderRadius: 50,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Feather name={iconName} size={32} color={"white"} />
+                </View>
+              );
+            case "bell":
+              return (
+                <View style={{ position: "relative" }}>
+                  <Feather
+                    name={iconName}
+                    size={24}
+                    color={focused ? colors.secondary : "grey"}
+                  />
+                  {notificationBadge ? (
+                    <View
+                      style={{
+                        position: "absolute",
+                        width: 5,
+                        height: 5,
+                        right: -10,
+                        backgroundColor: colors.red,
+                        borderRadius: 50,
+                      }}
+                    ></View>
+                  ) : null}
+                </View>
+              );
+            case "send":
+              return (
+                <View style={{ position: "relative" }}>
+                  <Feather
+                    name={iconName}
+                    size={24}
+                    color={focused ? colors.secondary : "grey"}
+                  />
+                  {chatBadge ? (
+                    <View
+                      style={{
+                        position: "absolute",
+                        width: 5,
+                        height: 5,
+                        right: -10,
+                        backgroundColor: colors.red,
+                        borderRadius: 50,
+                      }}
+                    ></View>
+                  ) : null}
+                </View>
+              );
+            default:
+              return (
+                <Feather
+                  name={iconName}
+                  size={24}
+                  color={focused ? colors.secondary : "grey"}
+                />
+              );
+          }
         },
       })}
       tabBarOptions={{
@@ -126,7 +203,7 @@ const Tabs = ({ navigation, route }) => {
           tabPress: (e) => {
             e.preventDefault();
             if (data !== undefined) {
-              navigation.navigate("Notification", { id: data.viewMyself.id });
+              navigation.navigate("Notification", { id: data?.viewMyself?.id });
             }
           },
         })}
@@ -134,6 +211,7 @@ const Tabs = ({ navigation, route }) => {
       <TabsNavigator.Screen
         name="Message"
         component={Chatrooms}
+        options={{ tabBarBadge: chatBadge ? 1 : 0 }}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();
@@ -201,6 +279,13 @@ export default () => {
         }}
       />
       <MainNavigator.Screen
+        name="SetLost"
+        component={SetLost}
+        options={{
+          title: "迷子設定",
+        }}
+      />
+      <MainNavigator.Screen
         name="Post"
         component={Post}
         options={{ title: "ポスト" }}
@@ -223,7 +308,7 @@ export default () => {
       <MainNavigator.Screen
         name="Maps"
         component={Maps}
-        options={{ title: "お散歩の出会い" }}
+        options={{ headerShown: false, gestureEnabled: false }}
       />
     </MainNavigator.Navigator>
   );

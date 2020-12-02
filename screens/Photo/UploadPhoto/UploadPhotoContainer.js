@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Alert } from "react-native";
 import axios from "axios";
 import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
 import { gql, useApolloClient, useMutation } from "@apollo/client";
 import { UPLOAD_POST, VIEW_FEED } from "../../../queries/Main/MainQueries";
 import UploadPhotoPresenter from "./UploadPhotoPresenter";
 import ENV from "../../../components/env";
+import { getPermission } from "../../../userPermissions";
 
 const query = gql`
   query viewFeed {
@@ -55,36 +55,28 @@ export default ({ navigation, route }) => {
     },
   });
 
-  const askPermission = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== "granted") {
-      return false;
-    }
-    return true;
-  };
-
   const handleGetLocation = async () => {
-    const hasPermission = await askPermission();
-    if (!hasPermission) {
+    const status = await getPermission("location");
+    if (status === "granted") {
+      try {
+        //   setIsFetching(true);
+        const location = await Location.getCurrentPositionAsync({
+          timeout: 5000,
+        });
+        const res = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${ENV.googleApiKey}&language=ja`
+        );
+        const resData = await res.json();
+        const address = resData.results[0].formatted_address.split(" ")[1];
+        setLocation(address);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+      }
+      // setIsFetching(false);
+    } else {
       return;
     }
-
-    try {
-      //   setIsFetching(true);
-      const location = await Location.getCurrentPositionAsync({
-        timeout: 5000,
-      });
-      const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${ENV.googleApiKey}&language=ja`
-      );
-      const resData = await res.json();
-      const address = resData.results[0].formatted_address.split(" ")[1];
-      setLocation(address);
-    } catch (e) {
-      console.warn(e);
-    } finally {
-    }
-    // setIsFetching(false);
   };
 
   const handleSubmit = async () => {
@@ -127,12 +119,12 @@ export default ({ navigation, route }) => {
               return client.cache.writeQuery({
                 query,
                 data: {
-                  viewFeed: [...existingPostRefs, uploadPost]
-                }
+                  viewFeed: [...existingPostRefs, uploadPost],
+                },
               });
             },
           },
-        })
+        });
         navigation.navigate("Feed", { posted: uploadPost.id });
       }
     } catch (error) {

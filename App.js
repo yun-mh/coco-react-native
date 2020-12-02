@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AsyncStorage, Image } from "react-native";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
@@ -23,14 +23,15 @@ import Gate from "./components/Gate";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PersistProvider } from "./contexts/PersistContext";
 
+import * as Notifications from "expo-notifications";
+import * as WebBrowser from "expo-web-browser";
+
 // const httpLink = new HttpLink({
 //   uri:
 //     process.env.NODE_ENV === "development"
 //       ? "http://localhost:4000/"
 //       : "https://api-coco.herokuapp.com/",
 // });
-
-
 
 const httpLink = new HttpLink({
   uri:
@@ -81,6 +82,25 @@ export default function App() {
   const [persistor, setPersistor] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
+  const notificationReceivedListener = useRef();
+
+  useEffect(() => {
+    notificationReceivedListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        const url = response.notification.request.content.data.url;
+        if (url !== "" && url !== undefined) {
+          WebBrowser.openBrowserAsync(url);
+        }
+      }
+    );
+    // return () => subscription.remove();
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationReceivedListener
+      );
+    };
+  }, []);
+
   const handleFinish = async () => {
     const cache = new InMemoryCache({
       typePolicies: {
@@ -88,7 +108,6 @@ export default function App() {
           fields: {
             viewFeed: offsetLimitPagination(),
             viewUser: {
-              // Short for options.mergeObjects(existing, incoming).
               merge: true,
             },
           },
@@ -136,6 +155,7 @@ export default function App() {
         require("./assets/intro3.jpg"),
         require("./assets/walking.jpg"),
         require("./assets/logo_title.png"),
+        require("./assets/logo_qr.png"),
         "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous.jpg",
         "https://coco-for-dogs.s3-ap-northeast-1.amazonaws.com/anonymous-dog.jpg",
       ];
