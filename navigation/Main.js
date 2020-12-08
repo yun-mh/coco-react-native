@@ -63,21 +63,21 @@ const Tabs = ({ navigation, route }) => {
   const [chatBadge, setChatBadge] = useState(false);
   const [notificationBadge, setNotificationBadge] = useState(false);
 
-  useLayoutEffect(() => {
-    if (!chatLoading) {
-      for (const chat of chatData?.viewChatRooms) {
-        const messages = chat.messages;
-        for (const message of messages) {
-          if (
-            message.read === false &&
-            message.from.id !== data?.viewMyself?.id
-          ) {
-            setChatBadge(true);
-          }
-        }
-      }
-    }
-  }, [chatLoading, chatData]);
+  // useLayoutEffect(() => {
+  //   if (!chatLoading) {
+  //     for (const chat of chatData?.viewChatRooms) {
+  //       const messages = chat.messages;
+  //       for (const message of messages) {
+  //         if (
+  //           message.read === false &&
+  //           message.from.id !== data?.viewMyself?.id
+  //         ) {
+  //           setChatBadge(true);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }, [chatLoading, chatData]);
 
   useLayoutEffect(() => {
     setCurrent(getFocusedRouteNameFromRoute(route) || "Feed");
@@ -185,7 +185,16 @@ const Tabs = ({ navigation, route }) => {
       }}
     >
       <TabsNavigator.Screen name="Feed" component={Feed} />
-      <TabsNavigator.Screen name="Walking" component={Walking} />
+      <TabsNavigator.Screen
+        name="Walking"
+        component={Walking}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("Walking", { id: data?.viewMyself?.id });
+          },
+        })}
+      />
       <TabsNavigator.Screen
         name="Add"
         component={SafeAreaView}
@@ -216,7 +225,7 @@ const Tabs = ({ navigation, route }) => {
           tabPress: (e) => {
             e.preventDefault();
             if (data !== undefined) {
-              navigation.navigate("Message", { id: data.viewMyself.id });
+              navigation.navigate("Message", { id: data?.viewMyself?.id });
             }
           },
         })}

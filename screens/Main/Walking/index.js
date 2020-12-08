@@ -40,7 +40,7 @@ const ButtonContainer = styled.View`
   align-items: center;
 `;
 
-export default ({ navigation }) => {
+export default ({ navigation, route }) => {
   return (
     <Container>
       <Background
@@ -56,7 +56,9 @@ export default ({ navigation }) => {
         <Button
           text={"お散歩の出会いを始める"}
           accent={true}
-          onPress={() => navigation.navigate("Maps")}
+          onPress={() =>
+            navigation.navigate("Maps", { userId: route.params.id })
+          }
         />
       </ButtonContainer>
     </Container>

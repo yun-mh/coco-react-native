@@ -1,26 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { Alert } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Alert, Dimensions } from "react-native";
 import * as Location from "expo-location";
-import PubNubReact from "pubnub-react";
 import { getPermission } from "../../../userPermissions";
 import MapsPresenter from "./MapsPresenter";
-import envs from "../../../components/env";
+import ENV from "../../../components/env";
+import utils from "../../../utils";
+import { CREATE_WALKER, GET_WALKER } from "../../../queries/Main/MainQueries";
+import { useMutation, useQuery } from "@apollo/client";
 
-const Maps = ({ navigation }) => {
-  const pubnub = new PubNubReact({
-    publishKey: envs.pubnubPublishKey,
-    subscribeKey: envs.pubnubSubscribeKey,
-  });
+// import { LogBox } from "react-native";
+// import _ from "lodash";
 
+// LogBox.ignoreLogs(["Setting a timer"]);
+// const _console = _.clone(console);
+// console.warn = (message) => {
+//   if (message.indexOf("Setting a timer") <= -1) {
+//     _console.warn(message);
+//   }
+// };
+
+const { width, height } = Dimensions.get("window");
+
+const ASPECT_RATIO = width / height;
+const LATITUDE = 35.6679191;
+const LONGITUDE = 139.4606805;
+const LATITUDE_DELTA = 10;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const Maps = ({ navigation, route }) => {
+  let watchId;
   const [isPermitted, setIsPermitted] = useState(false);
-  const [channel, setChannel] = useState();
-  const [region, setRegion] = useState({
-    latitude: 32.9998961,
-    longitude: 138.4293071,
-    latitudeDelta: 0.002,
-    longitudeDelta: 0.002,
+  const [controlOpen, setControlOpen] = useState(false); // fix
+
+  const [walker, setWalker] = useState();
+
+  const { loading, data } = useQuery(GET_WALKER, {
+    variables: {
+      userId: route.params.userId,
+    },
   });
-  const [controlOpen, setControlOpen] = useState(true);
+
+  const [createWalkerMutation] = useMutation(CREATE_WALKER);
 
   const askPermission = async () => {
     try {
@@ -31,29 +51,32 @@ const Maps = ({ navigation }) => {
         } = await Location.getCurrentPositionAsync({
           enabledHighAccuracy: true,
         });
-        setRegion({
-          latitude,
-          longitude,
-          latitudeDelta: 0.002,
-          longitudeDelta: 0.002,
-        });
         setIsPermitted(true);
+        return true;
       }
     } catch (error) {
       console.log(error);
+      return false;
+    } finally {
+      console.log("check done");
     }
   };
 
-  useEffect(() => {
-    askPermission();
-    pubnub.init();
-  }, []);
-
-  const toggleControl = () => {
-    setControlOpen(!controlOpen);
+  const startTracking = async () => {
+    if (isPermitted) {
+      try {
+        // const res = await fetch(
+        //   `https://maps.googleapis.com/maps/api/geocode/json?latlng=${region.latitude},${region.longitude}&key=${ENV.googleApiKey}&language=en`
+        // );
+        // const resData = await res.json();
+        // const address = resData.plus_code.compound_code.split(", ")[1];
+        // // setChannels(address);
+        watchPosition();
+      } catch (e) {
+        console.warn(e);
+      }
+    }
   };
-
-  const startTracking = async () => {};
 
   const exitScreen = () => {
     Alert.alert("終了", "お散歩の出会いを終了しますか？", [
@@ -64,6 +87,9 @@ const Maps = ({ navigation }) => {
       {
         text: "終了",
         onPress: () => {
+          console.log(watchId);
+          // clear watchposition
+          navigator.geolocation.clearWatch(watchId);
           navigation.goBack();
         },
         style: "destructive",
@@ -71,10 +97,57 @@ const Maps = ({ navigation }) => {
     ]);
   };
 
+  const toggleControl = () => {
+    setControlOpen(!controlOpen);
+  };
+
+  const watchPosition = async () => {
+    const { data } = await createWalkerMutation({
+      // variables: {
+      //   userId: route.params.userId,
+      // },
+    });
+    console.log(data);
+    if (data) {
+      watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          // update my location locally
+          // setCurrentLoc({
+          //   latitude: position.coords.latitude,
+          //   longitude: position.coords.longitude,
+          //   latitudeDelta: LATITUDE_DELTA,
+          //   longitudeDelta: LONGITUDE_DELTA,
+          // });
+          console.log(position);
+
+          // send location info to server
+        },
+        (error) => console.log("Maps Error: ", error),
+        {
+          enableHighAccuracy: true,
+          distanceFilter: 1000, //grab the location whenever the user's location changes by 100 meters
+        }
+      );
+    }
+  };
+
+  // didMount && WillUnmount
+  useEffect(() => {
+    // check permission
+    askPermission();
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      setWalker(data);
+      console.log(walker);
+    }
+  }, [loading, data]);
+
   return (
     <MapsPresenter
-      region={region}
       controlOpen={controlOpen}
+      startTracking={startTracking}
       toggleControl={toggleControl}
       exitScreen={exitScreen}
     />

@@ -6,7 +6,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { Feather } from "@expo/vector-icons";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import colors from "../../../colors";
 import Walker from "../../../components/Walking/Walker";
 import Button from "../../../components/Button";
@@ -59,7 +59,12 @@ const OpenControl = styled.TouchableOpacity`
   box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
 `;
 
-const MapsPresenter = ({ region, controlOpen, toggleControl, exitScreen }) => {
+const MapsPresenter = ({
+  controlOpen,
+  startTracking,
+  toggleControl,
+  exitScreen,
+}) => {
   return (
     <View>
       <ExitButtonContainer onPress={exitScreen}>
@@ -67,9 +72,8 @@ const MapsPresenter = ({ region, controlOpen, toggleControl, exitScreen }) => {
       </ExitButtonContainer>
       <MapView
         style={{ width: wp(100), height: hp(100) }}
-        region={region}
-        followsUserLocation={true}
-        showsUserLocation={true}
+        // followsUserLocation={true}
+        // showsUserLocation={true}
         rotateEnabled={false}
         // scrollEnabled={false}
         // zoomEnabled={false}
@@ -77,19 +81,14 @@ const MapsPresenter = ({ region, controlOpen, toggleControl, exitScreen }) => {
         toolbarEnabled={false}
         pitchEnabled={false}
       >
-        <Walker
-          data={{
-            uid: "test",
-            location: { latitude: 37.785835, longitude: -122.40642 },
-          }}
-        />
+        {/* <Marker.Animated ref={marker} coordinate={coordinate} />  */}
       </MapView>
       {controlOpen ? (
         <ControlContainer>
           <CloseControl onPress={toggleControl}>
             <Feather name={"chevron-down"} size={32} color={colors.darkGray} />
           </CloseControl>
-          <Button text={"開始"} />
+          <Button text={"開始"} onPress={startTracking} />
         </ControlContainer>
       ) : (
         <OpenControl onPress={toggleControl}>

@@ -192,14 +192,8 @@ export const MODIFY_DOG = gql`
 `;
 
 export const TOGGLE_STATUS = gql`
-  mutation toggleMissingStatus(
-    $id: String!
-    $isMissed: Boolean!
-  ) {
-    toggleMissingStatus(
-      id: $id
-      isMissed: $isMissed
-    )
+  mutation toggleMissingStatus($id: String!, $isMissed: Boolean!) {
+    toggleMissingStatus(id: $id, isMissed: $isMissed)
   }
 `;
 
@@ -522,8 +516,18 @@ export const VIEW_CHATROOM = gql`
 `;
 
 export const SEND_MESSAGE = gql`
-  mutation sendMessage($roomId: String, $message: String!, $toId: String, $token: String) {
-    sendMessage(roomId: $roomId, message: $message, toId: $toId, token: $token) {
+  mutation sendMessage(
+    $roomId: String
+    $message: String!
+    $toId: String
+    $token: String
+  ) {
+    sendMessage(
+      roomId: $roomId
+      message: $message
+      toId: $toId
+      token: $token
+    ) {
       id
       text
       from {
@@ -563,6 +567,22 @@ export const GET_MESSAGE = gql`
         id
       }
       createdAt
+    }
+  }
+`;
+
+export const GET_WALKER = gql`
+  query getWalker($userId: String!) {
+    getWalker(userId: $userId) {
+      id
+    }
+  }
+`;
+
+export const CREATE_WALKER = gql`
+  mutation createWalker {
+    createWalker {
+      id
     }
   }
 `;
