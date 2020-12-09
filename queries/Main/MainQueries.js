@@ -572,17 +572,38 @@ export const GET_MESSAGE = gql`
 `;
 
 export const GET_WALKER = gql`
-  query getWalker($userId: String!) {
-    getWalker(userId: $userId) {
+  query getWalker {
+    getWalker {
       id
     }
   }
 `;
 
 export const CREATE_WALKER = gql`
-  mutation createWalker {
-    createWalker {
+  mutation createWalker($userId: String!) {
+    createWalker(userId: $userId) {
       id
+    }
+  }
+`;
+
+export const INSERT_LOCATION = gql`
+  mutation insertLocation(
+    $walkerId: String!
+    $latitude: Float!
+    $longitude: Float!
+  ) {
+    insertLocation(
+      walkerId: $walkerId
+      latitude: $latitude
+      longitude: $longitude
+    ) {
+      id
+      walker {
+        id
+      }
+      longitude
+      latitude
     }
   }
 `;

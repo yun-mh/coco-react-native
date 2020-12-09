@@ -60,8 +60,10 @@ const OpenControl = styled.TouchableOpacity`
 `;
 
 const MapsPresenter = ({
+  isStarted,
   controlOpen,
   startTracking,
+  stopTracking,
   toggleControl,
   exitScreen,
 }) => {
@@ -88,7 +90,16 @@ const MapsPresenter = ({
           <CloseControl onPress={toggleControl}>
             <Feather name={"chevron-down"} size={32} color={colors.darkGray} />
           </CloseControl>
-          <Button text={"開始"} onPress={startTracking} />
+          {!isStarted ? (
+            <Button text={"開始"} accent={true} onPress={startTracking} />
+          ) : (
+            <Button
+              text={"中止"}
+              accent={true}
+              danger={true}
+              onPress={stopTracking}
+            />
+          )}
         </ControlContainer>
       ) : (
         <OpenControl onPress={toggleControl}>

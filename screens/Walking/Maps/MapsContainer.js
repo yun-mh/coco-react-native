@@ -5,7 +5,11 @@ import { getPermission } from "../../../userPermissions";
 import MapsPresenter from "./MapsPresenter";
 import ENV from "../../../components/env";
 import utils from "../../../utils";
-import { CREATE_WALKER, GET_WALKER } from "../../../queries/Main/MainQueries";
+import {
+  CREATE_WALKER,
+  GET_WALKER,
+  INSERT_LOCATION,
+} from "../../../queries/Main/MainQueries";
 import { useMutation, useQuery } from "@apollo/client";
 
 // import { LogBox } from "react-native";
@@ -28,19 +32,21 @@ const LATITUDE_DELTA = 10;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Maps = ({ navigation, route }) => {
-  let watchId;
+  const [watchId, setWatchId] = useState(null);
   const [isPermitted, setIsPermitted] = useState(false);
   const [controlOpen, setControlOpen] = useState(false); // fix
+  const [isStarted, setIsStarted] = useState(false);
+  const [walker, setWalker] = useState(undefined);
+  const [lat, setLat] = useState();
+  const [lng, setLng] = useState();
 
-  const [walker, setWalker] = useState();
+  const { loading, data } = useQuery(GET_WALKER);
 
-  const { loading, data } = useQuery(GET_WALKER, {
-    variables: {
-      userId: route.params.userId,
-    },
+  const [createWalkerMutation] = useMutation(CREATE_WALKER, {
+    variables: { userId: route.params.userId },
   });
 
-  const [createWalkerMutation] = useMutation(CREATE_WALKER);
+  const [insertLocationMutation] = useMutation(INSERT_LOCATION);
 
   const askPermission = async () => {
     try {
@@ -57,25 +63,31 @@ const Maps = ({ navigation, route }) => {
     } catch (error) {
       console.log(error);
       return false;
-    } finally {
-      console.log("check done");
     }
   };
 
   const startTracking = async () => {
     if (isPermitted) {
       try {
-        // const res = await fetch(
-        //   `https://maps.googleapis.com/maps/api/geocode/json?latlng=${region.latitude},${region.longitude}&key=${ENV.googleApiKey}&language=en`
-        // );
-        // const resData = await res.json();
-        // const address = resData.plus_code.compound_code.split(", ")[1];
-        // // setChannels(address);
-        watchPosition();
+        if (walker === undefined) {
+          const {
+            data: { createWalker },
+          } = await createWalkerMutation();
+          if (createWalker) {
+            setWalker(createWalker.id);
+          }
+        }
       } catch (e) {
         console.warn(e);
+      } finally {
+        setIsStarted(true);
       }
     }
+  };
+
+  const stopTracking = () => {
+    navigator.geolocation.clearWatch(watchId);
+    setIsStarted(false);
   };
 
   const exitScreen = () => {
@@ -87,7 +99,6 @@ const Maps = ({ navigation, route }) => {
       {
         text: "終了",
         onPress: () => {
-          console.log(watchId);
           // clear watchposition
           navigator.geolocation.clearWatch(watchId);
           navigation.goBack();
@@ -102,32 +113,36 @@ const Maps = ({ navigation, route }) => {
   };
 
   const watchPosition = async () => {
-    const { data } = await createWalkerMutation({
-      // variables: {
-      //   userId: route.params.userId,
-      // },
-    });
-    console.log(data);
-    if (data) {
-      watchId = navigator.geolocation.watchPosition(
-        (position) => {
+    if (walker) {
+      const watch = navigator.geolocation.watchPosition(
+        async (position) => {
           // update my location locally
-          // setCurrentLoc({
-          //   latitude: position.coords.latitude,
-          //   longitude: position.coords.longitude,
-          //   latitudeDelta: LATITUDE_DELTA,
-          //   longitudeDelta: LONGITUDE_DELTA,
-          // });
-          console.log(position);
+          setLat(position.coords.latitude);
+          setLng(position.coords.longitude);
 
           // send location info to server
+          try {
+            const {
+              data: { insertLocation },
+            } = await insertLocationMutation({
+              variables: {
+                walkerId: walker,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              },
+            });
+            console.log(insertLocation);
+          } catch (e) {
+            console.warn(e);
+          }
         },
-        (error) => console.log("Maps Error: ", error),
+        (error) => console.log("マップエラー", error),
         {
           enableHighAccuracy: true,
           distanceFilter: 1000, //grab the location whenever the user's location changes by 100 meters
         }
       );
+      setWatchId(watch);
     }
   };
 
@@ -135,19 +150,27 @@ const Maps = ({ navigation, route }) => {
   useEffect(() => {
     // check permission
     askPermission();
+    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
   useEffect(() => {
     if (!loading) {
-      setWalker(data);
-      console.log(walker);
+      data?.getWalker?.length === 0
+        ? setWalker(undefined)
+        : setWalker(data?.getWalker[0]?.id);
     }
-  }, [loading, data]);
+  }, [data]);
+
+  useEffect(() => {
+    if (walker !== undefined && isStarted === true) watchPosition();
+  }, [isStarted, walker]);
 
   return (
     <MapsPresenter
+      isStarted={isStarted}
       controlOpen={controlOpen}
       startTracking={startTracking}
+      stopTracking={stopTracking}
       toggleControl={toggleControl}
       exitScreen={exitScreen}
     />

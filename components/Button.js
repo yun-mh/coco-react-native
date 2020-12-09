@@ -15,9 +15,17 @@ const Btn = styled.View`
   padding: 12px 0px;
   align-items: center;
   background-color: ${(props) =>
-    props.accent ? colors.primary : "transparent"};
+    props.accent && props.danger
+      ? colors.red
+      : props.accent && !props.danger
+      ? colors.primary
+      : "transparent"};
   box-shadow: ${(props) =>
-    props.accent ? `0px 3px 6px ${colors.primaryShadow}` : "none"};
+    props.accent && props.danger
+      ? `0px 3px 6px ${colors.redShadow}`
+      : props.accent && !props.danger
+      ? `0px 3px 6px ${colors.primaryShadow}`
+      : "none"};
 `;
 
 const Text = styled.Text`
@@ -31,13 +39,14 @@ const Button = ({
   onPress,
   text,
   accent = false,
+  danger = false,
   marginBottom = true,
 }) => (
   <TouchableOpacity
     onPress={loading ? null : onPress}
     style={{ marginBottom: marginBottom ? hp("3%") : 0 }}
   >
-    <Btn accent={accent}>
+    <Btn accent={accent} danger={danger}>
       {loading ? (
         <ActivityIndicator color={accent ? "white" : "black"} />
       ) : (

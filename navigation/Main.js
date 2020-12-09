@@ -191,7 +191,9 @@ const Tabs = ({ navigation, route }) => {
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();
-            navigation.navigate("Walking", { id: data?.viewMyself?.id });
+            if (data !== undefined) {
+              navigation.navigate("Walking", { id: data?.viewMyself?.id });
+            }
           },
         })}
       />

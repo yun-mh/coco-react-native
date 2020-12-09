@@ -14,6 +14,7 @@ import {
   ApolloLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { onError } from "apollo-link-error";
 import {
   getMainDefinition,
   offsetLimitPagination,
@@ -38,6 +39,10 @@ const httpLink = new HttpLink({
     process.env.NODE_ENV === "development"
       ? "https://api-coco.herokuapp.com/"
       : "https://api-coco.herokuapp.com/",
+});
+
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -122,6 +127,7 @@ export default function App() {
     const client = new ApolloClient({
       cache,
       link: ApolloLink.from([
+        errorLink,
         split(
           ({ query }) => {
             const definition = getMainDefinition(query);
