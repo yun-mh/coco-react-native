@@ -28,7 +28,7 @@ const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 const LATITUDE = 35.6679191;
 const LONGITUDE = 139.4606805;
-const LATITUDE_DELTA = 10;
+const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Maps = ({ navigation, route }) => {
@@ -37,8 +37,14 @@ const Maps = ({ navigation, route }) => {
   const [controlOpen, setControlOpen] = useState(false); // fix
   const [isStarted, setIsStarted] = useState(false);
   const [walker, setWalker] = useState(undefined);
-  const [lat, setLat] = useState();
-  const [lng, setLng] = useState();
+  const [initialRegion] = useState({
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA,
+  });
+  const [lat, setLat] = useState(LATITUDE);
+  const [lng, setLng] = useState(LONGITUDE);
 
   const { loading, data } = useQuery(GET_WALKER);
 
@@ -57,12 +63,16 @@ const Maps = ({ navigation, route }) => {
         } = await Location.getCurrentPositionAsync({
           enabledHighAccuracy: true,
         });
+
+        // 最初座標の取得
+        setLat(latitude);
+        setLng(longitude);
+
+        // 権限獲得のステートをtrueにする
         setIsPermitted(true);
-        return true;
       }
     } catch (error) {
       console.log(error);
-      return false;
     }
   };
 
@@ -167,6 +177,11 @@ const Maps = ({ navigation, route }) => {
 
   return (
     <MapsPresenter
+      initialRegion={initialRegion}
+      latitude={lat}
+      longitude={lng}
+      latitudeDelta={LATITUDE_DELTA}
+      longitudeDelta={LONGITUDE_DELTA}
       isStarted={isStarted}
       controlOpen={controlOpen}
       startTracking={startTracking}

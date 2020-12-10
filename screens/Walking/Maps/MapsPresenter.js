@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import styled from "styled-components/native";
 import {
   widthPercentageToDP as wp,
@@ -60,6 +60,11 @@ const OpenControl = styled.TouchableOpacity`
 `;
 
 const MapsPresenter = ({
+  latitude,
+  longitude,
+  latitudeDelta,
+  longitudeDelta,
+  initialRegion,
   isStarted,
   controlOpen,
   startTracking,
@@ -74,6 +79,13 @@ const MapsPresenter = ({
       </ExitButtonContainer>
       <MapView
         style={{ width: wp(100), height: hp(100) }}
+        initialRegion={initialRegion}
+        region={{
+          latitude,
+          longitude,
+          latitudeDelta,
+          longitudeDelta,
+        }}
         // followsUserLocation={true}
         // showsUserLocation={true}
         rotateEnabled={false}
@@ -83,7 +95,19 @@ const MapsPresenter = ({
         toolbarEnabled={false}
         pitchEnabled={false}
       >
-        {/* <Marker.Animated ref={marker} coordinate={coordinate} />  */}
+        <Marker
+          coordinate={{
+            latitude,
+            longitude,
+            latitudeDelta,
+            longitudeDelta,
+          }}
+        >
+          <Image
+            source={require("../../../assets/marker.png")}
+            style={{ width: wp(12), height: wp(12) }}
+          />
+        </Marker>
       </MapView>
       {controlOpen ? (
         <ControlContainer>
