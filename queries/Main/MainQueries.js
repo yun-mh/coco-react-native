@@ -587,6 +587,15 @@ export const CREATE_WALKER = gql`
   }
 `;
 
+export const MODIFY_WALKER = gql`
+  mutation modifyWalker($walkerId: String!, $isWalking: Boolean!) {
+    modifyWalker(walkerId: $walkerId, isWalking: $isWalking) {
+      id
+      isWalking
+    }
+  }
+`;
+
 export const INSERT_LOCATION = gql`
   mutation insertLocation(
     $walkerId: String!

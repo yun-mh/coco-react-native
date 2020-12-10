@@ -3,10 +3,9 @@ import { Alert, Dimensions } from "react-native";
 import * as Location from "expo-location";
 import { getPermission } from "../../../userPermissions";
 import MapsPresenter from "./MapsPresenter";
-import ENV from "../../../components/env";
-import utils from "../../../utils";
 import {
   CREATE_WALKER,
+  MODIFY_WALKER,
   GET_WALKER,
   INSERT_LOCATION,
 } from "../../../queries/Main/MainQueries";
@@ -37,12 +36,6 @@ const Maps = ({ navigation, route }) => {
   const [controlOpen, setControlOpen] = useState(false); // fix
   const [isStarted, setIsStarted] = useState(false);
   const [walker, setWalker] = useState(undefined);
-  const [initialRegion] = useState({
-    latitude: LATITUDE,
-    longitude: LONGITUDE,
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA,
-  });
   const [lat, setLat] = useState(LATITUDE);
   const [lng, setLng] = useState(LONGITUDE);
 
@@ -51,6 +44,8 @@ const Maps = ({ navigation, route }) => {
   const [createWalkerMutation] = useMutation(CREATE_WALKER, {
     variables: { userId: route.params.userId },
   });
+
+  const [modifyWalkerMutation] = useMutation(MODIFY_WALKER);
 
   const [insertLocationMutation] = useMutation(INSERT_LOCATION);
 
@@ -86,6 +81,16 @@ const Maps = ({ navigation, route }) => {
           if (createWalker) {
             setWalker(createWalker.id);
           }
+        } else {
+          const {
+            data: { modifyWalker },
+          } = await modifyWalkerMutation({
+            variables: {
+              walkerId: walker,
+              isWalking: true,
+            },
+          });
+          console.log(modifyWalker);
         }
       } catch (e) {
         console.warn(e);
@@ -95,9 +100,27 @@ const Maps = ({ navigation, route }) => {
     }
   };
 
-  const stopTracking = () => {
+  const stopTracking = async () => {
+    // clear the watch
     navigator.geolocation.clearWatch(watchId);
+
+    // set isStarted false
     setIsStarted(false);
+
+    // set isWalking false to the server
+    try {
+      const {
+        data: { modifyWalker },
+      } = await modifyWalkerMutation({
+        variables: {
+          walkerId: walker,
+          isWalking: false,
+        },
+      });
+      console.log(modifyWalker);
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   const exitScreen = () => {
@@ -109,8 +132,9 @@ const Maps = ({ navigation, route }) => {
       {
         text: "終了",
         onPress: () => {
-          // clear watchposition
-          navigator.geolocation.clearWatch(watchId);
+          if (watchId !== undefined || walker !== undefined) {
+            stopTracking();
+          }
           navigation.goBack();
         },
         style: "destructive",
@@ -177,7 +201,6 @@ const Maps = ({ navigation, route }) => {
 
   return (
     <MapsPresenter
-      initialRegion={initialRegion}
       latitude={lat}
       longitude={lng}
       latitudeDelta={LATITUDE_DELTA}

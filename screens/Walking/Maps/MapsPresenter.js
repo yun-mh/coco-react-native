@@ -79,7 +79,12 @@ const MapsPresenter = ({
       </ExitButtonContainer>
       <MapView
         style={{ width: wp(100), height: hp(100) }}
-        initialRegion={initialRegion}
+        initialRegion={{
+          latitude,
+          longitude,
+          latitudeDelta,
+          longitudeDelta,
+        }}
         region={{
           latitude,
           longitude,
