@@ -7,9 +7,11 @@ import {
   CREATE_WALKER,
   MODIFY_WALKER,
   GET_WALKER,
+  GET_WALKERS,
   INSERT_LOCATION,
+  GET_NEW_WALKER,
 } from "../../../queries/Main/MainQueries";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 
 // import { LogBox } from "react-native";
 // import _ from "lodash";
@@ -27,7 +29,7 @@ const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 const LATITUDE = 35.6679191;
 const LONGITUDE = 139.4606805;
-const LATITUDE_DELTA = 0.003;
+const LATITUDE_DELTA = 100;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Maps = ({ navigation, route }) => {
@@ -38,8 +40,11 @@ const Maps = ({ navigation, route }) => {
   const [walker, setWalker] = useState(undefined);
   const [lat, setLat] = useState(LATITUDE);
   const [lng, setLng] = useState(LONGITUDE);
+  const [users, setUsers] = useState([]);
 
   const { loading, data } = useQuery(GET_WALKER);
+
+  const { loading: walkersLoading, data: walkersData } = useQuery(GET_WALKERS);
 
   const [createWalkerMutation] = useMutation(CREATE_WALKER, {
     variables: { userId: route.params.userId },
@@ -48,6 +53,8 @@ const Maps = ({ navigation, route }) => {
   const [modifyWalkerMutation] = useMutation(MODIFY_WALKER);
 
   const [insertLocationMutation] = useMutation(INSERT_LOCATION);
+
+  const { data: newWalkerData } = useSubscription(GET_NEW_WALKER);
 
   const askPermission = async () => {
     try {
@@ -90,7 +97,6 @@ const Maps = ({ navigation, route }) => {
               isWalking: true,
             },
           });
-          console.log(modifyWalker);
         }
       } catch (e) {
         console.warn(e);
@@ -117,7 +123,6 @@ const Maps = ({ navigation, route }) => {
           isWalking: false,
         },
       });
-      console.log(modifyWalker);
     } catch (e) {
       console.warn(e);
     }
@@ -165,7 +170,7 @@ const Maps = ({ navigation, route }) => {
                 longitude: position.coords.longitude,
               },
             });
-            console.log(insertLocation);
+            // console.log(insertLocation);
           } catch (e) {
             console.warn(e);
           }
@@ -199,12 +204,54 @@ const Maps = ({ navigation, route }) => {
     if (walker !== undefined && isStarted === true) watchPosition();
   }, [isStarted, walker]);
 
+  const getWalkers = () => {
+    if (walkersData !== undefined) {
+      const { getWalkers } = walkersData;
+      console.log(getWalkers);
+      if (getWalkers) {
+        setUsers([...getWalkers]);
+      }
+    }
+  };
+
+  const handleNewUser = () => {
+    if (newWalkerData !== undefined) {
+      const { getNewWalker } = newWalkerData;
+
+      // ユーザ本人の情報は配列管理しない
+      if (getNewWalker.id !== walker) {
+        // 散歩者の配列の中に新しく取得した散歩者の情報が存在するかチェック
+        const result = users.find((user) => user.id === getNewWalker.id);
+        if (result === undefined) {
+          // なかった場合
+          setUsers((prev) => [...prev, getNewWalker]);
+        } else {
+          // あった場合
+          const exceptTarget = users.filter((user) => user !== result);
+          setUsers([...exceptTarget, getNewWalker]);
+        }
+      }
+    }
+  };
+
+  console.log(users);
+
+  useEffect(() => {
+    getWalkers();
+  }, [walkersData]);
+
+  useEffect(() => {
+    handleNewUser();
+    console.log(users);
+  }, [newWalkerData]);
+
   return (
     <MapsPresenter
       latitude={lat}
       longitude={lng}
       latitudeDelta={LATITUDE_DELTA}
       longitudeDelta={LONGITUDE_DELTA}
+      users={users}
       isStarted={isStarted}
       controlOpen={controlOpen}
       startTracking={startTracking}

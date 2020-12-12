@@ -579,6 +579,22 @@ export const GET_WALKER = gql`
   }
 `;
 
+export const GET_WALKERS = gql`
+  query getWalkers {
+    getWalkers {
+      id
+      user {
+        id
+      }
+      latitude
+      longitude
+      isWalking
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const CREATE_WALKER = gql`
   mutation createWalker($userId: String!) {
     createWalker(userId: $userId) {
@@ -608,11 +624,30 @@ export const INSERT_LOCATION = gql`
       longitude: $longitude
     ) {
       id
-      walker {
+      user {
         id
       }
-      longitude
       latitude
+      longitude
+      isWalking
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_NEW_WALKER = gql`
+  subscription getNewWalker {
+    getNewWalker {
+      id
+      user {
+        id
+      }
+      latitude
+      longitude
+      isWalking
+      createdAt
+      updatedAt
     }
   }
 `;

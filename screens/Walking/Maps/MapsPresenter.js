@@ -64,7 +64,7 @@ const MapsPresenter = ({
   longitude,
   latitudeDelta,
   longitudeDelta,
-  initialRegion,
+  users,
   isStarted,
   controlOpen,
   startTracking,
@@ -72,6 +72,7 @@ const MapsPresenter = ({
   toggleControl,
   exitScreen,
 }) => {
+  console.log(users);
   return (
     <View>
       <ExitButtonContainer onPress={exitScreen}>
@@ -113,6 +114,27 @@ const MapsPresenter = ({
             style={{ width: wp(12), height: wp(12) }}
           />
         </Marker>
+        {users &&
+          users.length > 0 &&
+          users.map(
+            (user) =>
+              user.isWalking && (
+                <Marker
+                  key={user.id}
+                  coordinate={{
+                    latitude: user.latitude,
+                    longitude: user.longitude,
+                    latitudeDelta,
+                    longitudeDelta,
+                  }}
+                >
+                  <Image
+                    source={require("../../../assets/marker.png")}
+                    style={{ width: wp(12), height: wp(12) }}
+                  />
+                </Marker>
+              )
+          )}
       </MapView>
       {controlOpen ? (
         <ControlContainer>
