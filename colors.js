@@ -10,5 +10,6 @@ export default {
   grayShadow: "rgba(198,198,198, .5)",
   red: "#EB7E55",
   redShadow: "rgba(235, 126, 85, .4)",
+  pink: "rgba(232, 67, 147, .7)",
   white: "#FFFFFF",
 };

@@ -6,7 +6,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { Feather } from "@expo/vector-icons";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import colors from "../../../colors";
 import Walker from "../../../components/Walking/Walker";
 import Button from "../../../components/Button";
@@ -64,6 +64,8 @@ const MapsPresenter = ({
   longitude,
   latitudeDelta,
   longitudeDelta,
+  routes,
+  distance,
   users,
   isStarted,
   controlOpen,
@@ -72,7 +74,6 @@ const MapsPresenter = ({
   toggleControl,
   exitScreen,
 }) => {
-  console.log(users);
   return (
     <View>
       <ExitButtonContainer onPress={exitScreen}>
@@ -101,6 +102,11 @@ const MapsPresenter = ({
         toolbarEnabled={false}
         pitchEnabled={false}
       >
+        <Polyline
+          coordinates={routes}
+          strokeColor={colors.pink}
+          strokeWidth={10}
+        />
         <Marker
           coordinate={{
             latitude,
@@ -109,12 +115,10 @@ const MapsPresenter = ({
             longitudeDelta,
           }}
         >
-          <Image
-            source={require("../../../assets/marker.png")}
-            style={{ width: wp(12), height: wp(12) }}
-          />
+          <Walker myself={true} />
         </Marker>
-        {users &&
+        {isStarted &&
+          users &&
           users.length > 0 &&
           users.map(
             (user) =>
@@ -128,10 +132,7 @@ const MapsPresenter = ({
                     longitudeDelta,
                   }}
                 >
-                  <Image
-                    source={require("../../../assets/marker.png")}
-                    style={{ width: wp(12), height: wp(12) }}
-                  />
+                  <Walker myself={false} />
                 </Marker>
               )
           )}
@@ -151,6 +152,9 @@ const MapsPresenter = ({
               onPress={stopTracking}
             />
           )}
+          <View>
+            <Text>{distance} km</Text>
+          </View>
         </ControlContainer>
       ) : (
         <OpenControl onPress={toggleControl}>

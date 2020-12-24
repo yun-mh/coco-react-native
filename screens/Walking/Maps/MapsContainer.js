@@ -12,6 +12,7 @@ import {
   GET_NEW_WALKER,
 } from "../../../queries/Main/MainQueries";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import haversine from "haversine";
 
 // import { LogBox } from "react-native";
 // import _ from "lodash";
@@ -29,7 +30,7 @@ const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 const LATITUDE = 35.6679191;
 const LONGITUDE = 139.4606805;
-const LATITUDE_DELTA = 100;
+const LATITUDE_DELTA = 100; // test: 0.002
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Maps = ({ navigation, route }) => {
@@ -40,6 +41,12 @@ const Maps = ({ navigation, route }) => {
   const [walker, setWalker] = useState(undefined);
   const [lat, setLat] = useState(LATITUDE);
   const [lng, setLng] = useState(LONGITUDE);
+  const [routes, setRoutes] = useState([]);
+  const [distance, setDistance] = useState(0);
+  const [prevLatLng, setPrevLatLng] = useState({
+    latitude: undefined,
+    longitude: undefined,
+  });
   const [users, setUsers] = useState([]);
 
   const { loading, data } = useQuery(GET_WALKER);
@@ -69,6 +76,11 @@ const Maps = ({ navigation, route }) => {
         // 最初座標の取得
         setLat(latitude);
         setLng(longitude);
+
+        setPrevLatLng({
+          latitude,
+          longitude,
+        });
 
         // 権限獲得のステートをtrueにする
         setIsPermitted(true);
@@ -126,6 +138,10 @@ const Maps = ({ navigation, route }) => {
     } catch (e) {
       console.warn(e);
     }
+
+    setRoutes([]);
+
+    // setDistance(0); //delete later
   };
 
   const exitScreen = () => {
@@ -159,6 +175,30 @@ const Maps = ({ navigation, route }) => {
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
 
+          // update the routes
+          setRoutes((prev) => [
+            ...prev,
+            {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            },
+          ]);
+
+          // update the distance
+          // setDistance(
+          //   (prev) =>
+          //     prev +
+          //     calcDistance({
+          //       latitude: position.coords.latitude,
+          //       longitude: position.coords.longitude,
+          //     })
+          // );
+
+          setPrevLatLng({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+
           // send location info to server
           try {
             const {
@@ -170,7 +210,6 @@ const Maps = ({ navigation, route }) => {
                 longitude: position.coords.longitude,
               },
             });
-            // console.log(insertLocation);
           } catch (e) {
             console.warn(e);
           }
@@ -193,6 +232,17 @@ const Maps = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
+    setDistance(
+      (prev) =>
+        prev +
+        calcDistance({
+          latitude: lat,
+          longitude: lng,
+        })
+    );
+  }, [routes]);
+
+  useEffect(() => {
     if (!loading) {
       data?.getWalker?.length === 0
         ? setWalker(undefined)
@@ -207,7 +257,6 @@ const Maps = ({ navigation, route }) => {
   const getWalkers = () => {
     if (walkersData !== undefined) {
       const { getWalkers } = walkersData;
-      console.log(getWalkers);
       if (getWalkers) {
         setUsers([...getWalkers]);
       }
@@ -234,7 +283,13 @@ const Maps = ({ navigation, route }) => {
     }
   };
 
-  console.log(users);
+  const calcDistance = (newLatLng) => {
+    console.log("prev: ", prevLatLng);
+    console.log("current: ", newLatLng);
+    const res = haversine(prevLatLng, newLatLng);
+    console.log("dist: ", res);
+    return haversine(prevLatLng, newLatLng) || 0;
+  };
 
   useEffect(() => {
     getWalkers();
@@ -242,7 +297,6 @@ const Maps = ({ navigation, route }) => {
 
   useEffect(() => {
     handleNewUser();
-    console.log(users);
   }, [newWalkerData]);
 
   return (
@@ -251,6 +305,8 @@ const Maps = ({ navigation, route }) => {
       longitude={lng}
       latitudeDelta={LATITUDE_DELTA}
       longitudeDelta={LONGITUDE_DELTA}
+      routes={routes}
+      distance={distance}
       users={users}
       isStarted={isStarted}
       controlOpen={controlOpen}
