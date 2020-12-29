@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import styled from "styled-components/native";
 import {
   widthPercentageToDP as wp,
@@ -79,6 +79,7 @@ const MapsPresenter = ({
   routes,
   distance,
   users,
+  dummyUsers,
   isStarted,
   controlOpen,
   startTracking,
@@ -132,6 +133,26 @@ const MapsPresenter = ({
           users &&
           users.length > 0 &&
           users.map(
+            (user) =>
+              user.isWalking && (
+                <Marker
+                  key={user.id}
+                  coordinate={{
+                    latitude: user.latitude,
+                    longitude: user.longitude,
+                    latitudeDelta,
+                    longitudeDelta,
+                  }}
+                >
+                  <Walker myself={false} />
+                </Marker>
+              )
+          )}
+        {/* ダミー用 */}
+        {isStarted &&
+          dummyUsers &&
+          dummyUsers.length > 0 &&
+          dummyUsers.map(
             (user) =>
               user.isWalking && (
                 <Marker

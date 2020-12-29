@@ -14,17 +14,6 @@ import {
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import haversine from "haversine";
 
-// import { LogBox } from "react-native";
-// import _ from "lodash";
-
-// LogBox.ignoreLogs(["Setting a timer"]);
-// const _console = _.clone(console);
-// console.warn = (message) => {
-//   if (message.indexOf("Setting a timer") <= -1) {
-//     _console.warn(message);
-//   }
-// };
-
 const { width, height } = Dimensions.get("window");
 
 const ASPECT_RATIO = width / height;
@@ -36,7 +25,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const Maps = ({ navigation, route }) => {
   const [watchId, setWatchId] = useState(null);
   const [isPermitted, setIsPermitted] = useState(false);
-  const [controlOpen, setControlOpen] = useState(true); // fix
+  const [controlOpen, setControlOpen] = useState(true);
   const [isStarted, setIsStarted] = useState(false);
   const [walker, setWalker] = useState(undefined);
   const [lat, setLat] = useState(LATITUDE);
@@ -48,6 +37,7 @@ const Maps = ({ navigation, route }) => {
     longitude: undefined,
   });
   const [users, setUsers] = useState([]);
+  const [dummyUsers, setDummyUsers] = useState([]);
 
   const { loading, data } = useQuery(GET_WALKER);
 
@@ -63,6 +53,7 @@ const Maps = ({ navigation, route }) => {
 
   const { data: newWalkerData } = useSubscription(GET_NEW_WALKER);
 
+  // 位置情報取得の権限確認
   const askPermission = async () => {
     try {
       const status = await getPermission("location");
@@ -82,6 +73,39 @@ const Maps = ({ navigation, route }) => {
           longitude,
         });
 
+        setDummyUsers([
+          {
+            id: 1,
+            latitude: latitude + 0.0001,
+            longitude: longitude + 0.0003,
+            isWalking: true,
+          },
+          {
+            id: 2,
+            latitude: latitude + 0.0004,
+            longitude: longitude - 0.0003,
+            isWalking: true,
+          },
+          {
+            id: 3,
+            latitude: latitude - 0.0004,
+            longitude: longitude - 0.0003,
+            isWalking: true,
+          },
+          {
+            id: 4,
+            latitude: latitude - 0.0002,
+            longitude: longitude - 0.0002,
+            isWalking: true,
+          },
+          {
+            id: 5,
+            latitude: latitude - 0.0003,
+            longitude: longitude + 0.0003,
+            isWalking: true,
+          },
+        ]);
+
         // 権限獲得のステートをtrueにする
         setIsPermitted(true);
       }
@@ -90,6 +114,12 @@ const Maps = ({ navigation, route }) => {
     }
   };
 
+  useEffect(() => {
+    askPermission();
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
+
+  // トラッキング開始処理
   const startTracking = async () => {
     if (isPermitted) {
       try {
@@ -101,9 +131,7 @@ const Maps = ({ navigation, route }) => {
             setWalker(createWalker.id);
           }
         } else {
-          const {
-            data: { modifyWalker },
-          } = await modifyWalkerMutation({
+          await modifyWalkerMutation({
             variables: {
               walkerId: walker,
               isWalking: true,
@@ -118,18 +146,14 @@ const Maps = ({ navigation, route }) => {
     }
   };
 
+  // トラッキング終了処理
   const stopTracking = async () => {
-    // clear the watch
     navigator.geolocation.clearWatch(watchId);
 
-    // set isStarted false
     setIsStarted(false);
 
-    // set isWalking false to the server
     try {
-      const {
-        data: { modifyWalker },
-      } = await modifyWalkerMutation({
+      await modifyWalkerMutation({
         variables: {
           walkerId: walker,
           isWalking: false,
@@ -140,10 +164,9 @@ const Maps = ({ navigation, route }) => {
     }
 
     setRoutes([]);
-
-    // setDistance(0); //delete later
   };
 
+  // 画面を閉めるための処理
   const exitScreen = () => {
     Alert.alert("終了", "お散歩の出会いを終了しますか？", [
       {
@@ -163,19 +186,19 @@ const Maps = ({ navigation, route }) => {
     ]);
   };
 
+  // コントロールパンネルの制御
   const toggleControl = () => {
     setControlOpen(!controlOpen);
   };
 
+  // 現在の位置を監視し位置情報データをアップデートする処理
   const watchPosition = async () => {
     if (walker) {
       const watch = navigator.geolocation.watchPosition(
         async (position) => {
-          // update my location locally
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
 
-          // update the routes
           setRoutes((prev) => [
             ...prev,
             {
@@ -184,26 +207,13 @@ const Maps = ({ navigation, route }) => {
             },
           ]);
 
-          // update the distance
-          // setDistance(
-          //   (prev) =>
-          //     prev +
-          //     calcDistance({
-          //       latitude: position.coords.latitude,
-          //       longitude: position.coords.longitude,
-          //     })
-          // );
-
           setPrevLatLng({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
 
-          // send location info to server
           try {
-            const {
-              data: { insertLocation },
-            } = await insertLocationMutation({
+            await insertLocationMutation({
               variables: {
                 walkerId: walker,
                 latitude: position.coords.latitude,
@@ -217,19 +227,21 @@ const Maps = ({ navigation, route }) => {
         (error) => console.log("マップエラー", error),
         {
           enableHighAccuracy: true,
-          distanceFilter: 1000, //grab the location whenever the user's location changes by 100 meters
+          distanceFilter: 5,
         }
       );
       setWatchId(watch);
     }
   };
 
-  // didMount && WillUnmount
   useEffect(() => {
-    // check permission
-    askPermission();
-    return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+    if (walker !== undefined && isStarted === true) watchPosition();
+  }, [isStarted, walker]);
+
+  // 距離の計算処理
+  const calcDistance = (newLatLng) => {
+    return haversine(prevLatLng, newLatLng) || 0;
+  };
 
   useEffect(() => {
     setDistance(
@@ -250,10 +262,7 @@ const Maps = ({ navigation, route }) => {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (walker !== undefined && isStarted === true) watchPosition();
-  }, [isStarted, walker]);
-
+  // 既登録の散歩者情報の取得
   const getWalkers = () => {
     if (walkersData !== undefined) {
       const { getWalkers } = walkersData;
@@ -263,6 +272,11 @@ const Maps = ({ navigation, route }) => {
     }
   };
 
+  useEffect(() => {
+    getWalkers();
+  }, [walkersData]);
+
+  // 新しい散歩者が追加される際の処理
   const handleNewUser = () => {
     if (newWalkerData !== undefined) {
       const { getNewWalker } = newWalkerData;
@@ -283,17 +297,30 @@ const Maps = ({ navigation, route }) => {
     }
   };
 
-  const calcDistance = (newLatLng) => {
-    return haversine(prevLatLng, newLatLng) || 0;
-  };
-
-  useEffect(() => {
-    getWalkers();
-  }, [walkersData]);
-
   useEffect(() => {
     handleNewUser();
   }, [newWalkerData]);
+
+  // ダミーユーザの処理（プレゼン用の臨時処理）
+  function randomPosition() {
+    return Math.random() * (0.00005 - -0.000025) + -0.000025;
+  }
+
+  useEffect(() => {
+    let timer;
+    if (isStarted) {
+      timer = setInterval(() => {
+        const targetData = dummyUsers.concat();
+        for (const target of targetData) {
+          target.latitude += randomPosition();
+          target.longitude += randomPosition();
+        }
+
+        setDummyUsers(targetData);
+      }, 1500);
+    }
+    return () => clearInterval(timer);
+  }, [isStarted]);
 
   return (
     <MapsPresenter
@@ -304,6 +331,7 @@ const Maps = ({ navigation, route }) => {
       routes={routes}
       distance={distance}
       users={users}
+      dummyUsers={dummyUsers}
       isStarted={isStarted}
       controlOpen={controlOpen}
       startTracking={startTracking}
