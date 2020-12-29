@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { AsyncStorage, Image } from "react-native";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
@@ -23,9 +23,6 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import Gate from "./components/Gate";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PersistProvider } from "./contexts/PersistContext";
-
-import * as Notifications from "expo-notifications";
-import * as WebBrowser from "expo-web-browser";
 
 // const httpLink = new HttpLink({
 //   uri:
@@ -86,25 +83,6 @@ export default function App() {
   const [client, setClient] = useState(null);
   const [persistor, setPersistor] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
-
-  const notificationReceivedListener = useRef();
-
-  useEffect(() => {
-    notificationReceivedListener.current = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        const url = response.notification.request.content.data.url;
-        if (url !== "" && url !== undefined) {
-          WebBrowser.openBrowserAsync(url);
-        }
-      }
-    );
-    // return () => subscription.remove();
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationReceivedListener
-      );
-    };
-  }, []);
 
   const handleFinish = async () => {
     const cache = new InMemoryCache({

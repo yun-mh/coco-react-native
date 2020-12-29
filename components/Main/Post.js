@@ -92,6 +92,7 @@ const Post = ({
   const [toggleLikeMutation] = useMutation(TOGGLE_LIKE, {
     variables: {
       postId: id,
+      token: user.token,
     },
   });
 
@@ -105,12 +106,12 @@ const Post = ({
         fields: {
           viewFeed(existingPostRefs, { readField }) {
             return existingPostRefs.filter(
-              postRef => id !== readField('id', postRef)
+              (postRef) => id !== readField("id", postRef)
             );
           },
         },
-      })
-    }
+      });
+    },
   });
 
   const togglePostModal = () => {
@@ -216,7 +217,9 @@ const Post = ({
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Comment", { id })}
+            onPress={() =>
+              navigation.navigate("Comment", { id, token: user.token })
+            }
             style={{ flexDirection: "row", alignItems: "center" }}
           >
             <IconContainer style={{ marginRight: 3 }}>

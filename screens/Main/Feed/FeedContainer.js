@@ -94,8 +94,6 @@ export default ({ route }) => {
       });
     }
 
-    console.log(token);
-
     if (Platform.OS === "android") {
       Notifications.setNotificationChannelAsync("default", {
         name: "default",

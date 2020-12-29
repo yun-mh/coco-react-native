@@ -220,6 +220,7 @@ export const VIEW_FEED = gql`
         id
         avatar
         username
+        token
       }
       files {
         id
@@ -243,8 +244,8 @@ export const VIEW_FEED = gql`
 `;
 
 export const TOGGLE_LIKE = gql`
-  mutation toggleLike($postId: String!) {
-    toggleLike(postId: $postId)
+  mutation toggleLike($postId: String!, $token: String) {
+    toggleLike(postId: $postId, token: $token)
   }
 `;
 
@@ -281,8 +282,8 @@ export const VIEW_POST = gql`
 `;
 
 export const ADD_COMMENT = gql`
-  mutation addComment($postId: String!, $text: String!) {
-    addComment(postId: $postId, text: $text)
+  mutation addComment($postId: String!, $text: String!, $token: String) {
+    addComment(postId: $postId, text: $text, token: $token)
   }
 `;
 

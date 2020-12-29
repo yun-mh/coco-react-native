@@ -1,9 +1,11 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
 import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import * as Notifications from "expo-notifications";
+import * as WebBrowser from "expo-web-browser";
 import { useQuery } from "@apollo/client";
 import { Feather } from "@expo/vector-icons";
 import BackBtn from "../components/BackBtn";
@@ -62,6 +64,48 @@ const Tabs = ({ navigation, route }) => {
 
   const [chatBadge, setChatBadge] = useState(false);
   const [notificationBadge, setNotificationBadge] = useState(false);
+
+  const notificationReceivedListener = useRef();
+
+  useEffect(() => {
+    notificationReceivedListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        switch (response.notification.request.content.data.type) {
+          case "lostDog":
+            const url = response.notification.request.content.data.url;
+            if (url !== "" && url !== undefined) {
+              WebBrowser.openBrowserAsync(url);
+            }
+            break;
+          case "message":
+            const toId = response.notification.request.content.data.id;
+            if (id !== "" && id !== undefined) {
+              navigation.navigate("Message", { id: toId });
+            }
+            break;
+          case "comment":
+            const postDetailId = response.notification.request.content.data.id;
+            if (postDetailId !== "" && postDetailId !== undefined) {
+              navigation.navigate("Comment", { id: postDetailId });
+            }
+            break;
+          case "like":
+            const postId = response.notification.request.content.data.id;
+            if (postId !== "" && postId !== undefined) {
+              navigation.navigate("Post", { id: postId });
+            }
+            break;
+          default:
+            return;
+        }
+      }
+    );
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationReceivedListener
+      );
+    };
+  }, []);
 
   // useLayoutEffect(() => {
   //   if (!chatLoading) {

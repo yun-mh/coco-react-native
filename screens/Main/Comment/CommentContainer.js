@@ -4,12 +4,11 @@ import { useQuery, useMutation } from "@apollo/client";
 import {
   VIEW_POST,
   ADD_COMMENT,
-  DELETE_COMMENT,
   CHECK_MYSELF,
 } from "../../../queries/Main/MainQueries";
 import CommentPresenter from "./CommentPresenter";
 
-export default ({ navigation, route }) => {
+export default ({ route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [comment, setComment] = useState("");
   const [height, setHeight] = useState(40);
@@ -26,6 +25,7 @@ export default ({ navigation, route }) => {
     variables: {
       postId: route.params.id,
       text: comment,
+      token: route.params.token,
     },
     refetchQueries: () => [
       { query: VIEW_POST, variables: { id: route.params.id } },
@@ -53,9 +53,7 @@ export default ({ navigation, route }) => {
       return;
     }
     try {
-      const {
-        data: { addComment },
-      } = await addCommentMutation();
+      await addCommentMutation();
     } catch (error) {
       console.warn(error);
     } finally {
