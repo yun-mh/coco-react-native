@@ -139,6 +139,18 @@ export default ({ navigation }) => {
                 selected.length > 0 &&
                 selected[0] !== undefined ? (
                   <GallerySwiper selected={selected} />
+                ) : allPhotos.length !== 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 20, color: colors.darkGray }}>
+                      イメージを選択してください。
+                    </Text>
+                  </View>
                 ) : (
                   <View
                     style={{

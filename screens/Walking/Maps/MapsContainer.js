@@ -30,19 +30,19 @@ const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 const LATITUDE = 35.6679191;
 const LONGITUDE = 139.4606805;
-const LATITUDE_DELTA = 100; // test: 0.002
+const LATITUDE_DELTA = 0.002; // test: 0.002
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Maps = ({ navigation, route }) => {
   const [watchId, setWatchId] = useState(null);
   const [isPermitted, setIsPermitted] = useState(false);
-  const [controlOpen, setControlOpen] = useState(false); // fix
+  const [controlOpen, setControlOpen] = useState(true); // fix
   const [isStarted, setIsStarted] = useState(false);
   const [walker, setWalker] = useState(undefined);
   const [lat, setLat] = useState(LATITUDE);
   const [lng, setLng] = useState(LONGITUDE);
   const [routes, setRoutes] = useState([]);
-  const [distance, setDistance] = useState(0);
+  const [distance, setDistance] = useState(0.0);
   const [prevLatLng, setPrevLatLng] = useState({
     latitude: undefined,
     longitude: undefined,
@@ -284,10 +284,6 @@ const Maps = ({ navigation, route }) => {
   };
 
   const calcDistance = (newLatLng) => {
-    console.log("prev: ", prevLatLng);
-    console.log("current: ", newLatLng);
-    const res = haversine(prevLatLng, newLatLng);
-    console.log("dist: ", res);
     return haversine(prevLatLng, newLatLng) || 0;
   };
 

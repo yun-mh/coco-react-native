@@ -10,6 +10,7 @@ import MapView, { Marker, Polyline } from "react-native-maps";
 import colors from "../../../colors";
 import Walker from "../../../components/Walking/Walker";
 import Button from "../../../components/Button";
+import DistanceIcon from "../../../components/Walking/DistanceIcon";
 
 const ExitButtonContainer = styled.TouchableOpacity`
   position: absolute;
@@ -32,7 +33,7 @@ const ControlContainer = styled.View`
   position: absolute;
   z-index: 50;
   width: ${wp(90)}px;
-  height: ${hp(20)}px;
+  height: ${hp(25)}px;
   margin: ${wp(5)}px;
   bottom: 0px;
   border-radius: 14px;
@@ -59,6 +60,17 @@ const OpenControl = styled.TouchableOpacity`
   box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
 `;
 
+const ControlBox = styled.View`
+  height: 30%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonContainer = styled.View`
+  position: absolute;
+  bottom: 0px;
+`;
+
 const MapsPresenter = ({
   latitude,
   longitude,
@@ -75,12 +87,12 @@ const MapsPresenter = ({
   exitScreen,
 }) => {
   return (
-    <View>
+    <View style={{ width: wp(100), height: hp(100), flex: 1 }}>
       <ExitButtonContainer onPress={exitScreen}>
         <Feather name={"x"} size={24} color={colors.white} />
       </ExitButtonContainer>
       <MapView
-        style={{ width: wp(100), height: hp(100) }}
+        style={{ width: wp(100), height: hp(100), flex: 1 }}
         initialRegion={{
           latitude,
           longitude,
@@ -93,11 +105,10 @@ const MapsPresenter = ({
           latitudeDelta,
           longitudeDelta,
         }}
-        // followsUserLocation={true}
-        // showsUserLocation={true}
+        followsUserLocation={true}
         rotateEnabled={false}
-        // scrollEnabled={false}
-        // zoomEnabled={false}
+        scrollEnabled={false}
+        zoomEnabled={false}
         zoomControlEnabled={false}
         toolbarEnabled={false}
         pitchEnabled={false}
@@ -142,19 +153,35 @@ const MapsPresenter = ({
           <CloseControl onPress={toggleControl}>
             <Feather name={"chevron-down"} size={32} color={colors.darkGray} />
           </CloseControl>
-          {!isStarted ? (
-            <Button text={"開始"} accent={true} onPress={startTracking} />
-          ) : (
-            <Button
-              text={"中止"}
-              accent={true}
-              danger={true}
-              onPress={stopTracking}
-            />
-          )}
-          <View>
-            <Text>{distance} km</Text>
-          </View>
+          <ControlBox>
+            {!isStarted ? (
+              <View>
+                <Text>開始ボタンを押すとトラッキングが始まります。</Text>
+              </View>
+            ) : (
+              <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
+                <DistanceIcon />
+                <Text
+                  style={{ marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
+                >
+                  {distance.toFixed(2)}
+                </Text>
+                <Text style={{ color: colors.darkGray }}> km</Text>
+              </View>
+            )}
+          </ControlBox>
+          <ButtonContainer>
+            {!isStarted ? (
+              <Button text={"開始"} accent={true} onPress={startTracking} />
+            ) : (
+              <Button
+                text={"中止"}
+                accent={true}
+                danger={true}
+                onPress={stopTracking}
+              />
+            )}
+          </ButtonContainer>
         </ControlContainer>
       ) : (
         <OpenControl onPress={toggleControl}>
