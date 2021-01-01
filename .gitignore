@@ -18,6 +18,7 @@ ios/
 .expo/
 .expo-shared/
 gen/
+app.json
 
 # macOS
 .DS_Store
