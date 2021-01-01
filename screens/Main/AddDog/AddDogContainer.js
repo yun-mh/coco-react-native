@@ -3,7 +3,7 @@ import { Alert, Keyboard } from "react-native";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import AddDogPresenter from "./AddDogPresenter";
-import { getCameraPermission } from "../../../userPermissions";
+import { getPermission } from "../../../userPermissions";
 import { ADD_DOG, VIEW_USER } from "../../../queries/Main/MainQueries";
 
 export default ({ navigation, route }) => {
@@ -37,13 +37,13 @@ export default ({ navigation, route }) => {
   });
 
   const handlePickImage = async () => {
-    const status = await getCameraPermission();
+    const status = await getPermission("cameraRoll");
     if (status != "granted") {
       Alert.alert("カメラロールの権限が必要です。");
     }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [4, 3],
     });
     if (!result.cancelled) {

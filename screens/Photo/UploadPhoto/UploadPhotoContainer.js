@@ -67,6 +67,7 @@ export default ({ navigation, route }) => {
           `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${ENV.googleApiKey}&language=ja`
         );
         const resData = await res.json();
+        console.log(resData);
         const address = resData.results[0].formatted_address.split(" ")[1];
         setLocation(address);
       } catch (e) {

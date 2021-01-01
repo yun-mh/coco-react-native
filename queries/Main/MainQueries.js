@@ -51,6 +51,8 @@ export const VIEW_USER = gql`
         dogs {
           name
         }
+        token
+        isMyself
         isFollowing
       }
       following {
@@ -60,6 +62,8 @@ export const VIEW_USER = gql`
         dogs {
           name
         }
+        token
+        isMyself
         isFollowing
       }
       followingCount
@@ -126,8 +130,8 @@ export const SET_TOKEN = gql`
 `;
 
 export const FOLLOW = gql`
-  mutation follow($id: String!) {
-    follow(id: $id)
+  mutation follow($id: String!, $token: String) {
+    follow(id: $id, token: $token)
   }
 `;
 

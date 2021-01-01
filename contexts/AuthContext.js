@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { usePersistor } from "./PersistContext";
 import { useApolloClient } from "@apollo/client";
 

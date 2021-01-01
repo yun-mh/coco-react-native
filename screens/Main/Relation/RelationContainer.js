@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import RelationPresenter from "./RelationPresenter";
 
-export default ({ route: { params: { viewUser }} }) => {
+export default ({
+  route: {
+    params: { viewUser },
+  },
+}) => {
   const [isFollowersTab, setIsFollowersTab] = useState(true);
 
   const handleFollowersTab = () => {

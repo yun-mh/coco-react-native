@@ -44,7 +44,7 @@ export default ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(false);
   const [selected, setSelected] = useState([]);
   const [endCursor, setEndCursor] = useState();
-  const [allPhotos, setAllPhotos] = useState();
+  const [allPhotos, setAllPhotos] = useState([]);
 
   const changeSelected = (photo) => {
     if (selected.includes(photo)) {
@@ -64,6 +64,7 @@ export default ({ navigation }) => {
         first: 9,
         sortBy: ["creationTime"],
       });
+      console.log(assets);
       const [firstPhoto] = assets;
       setSelected([firstPhoto]);
       if (hasNextPage) {

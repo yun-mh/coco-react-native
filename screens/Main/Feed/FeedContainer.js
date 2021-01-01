@@ -64,7 +64,7 @@ export default ({ route }) => {
     handleNotification: async () => ({
       shouldShowAlert: false,
       shouldPlaySound: false,
-      shouldSetBadge: true,
+      shouldSetBadge: false,
     }),
   });
 
@@ -85,7 +85,11 @@ export default ({ route }) => {
         alert("プッシュ通知のためのトークンを取得できませんでした。");
         return;
       }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
+      token = (
+        await Notifications.getExpoPushTokenAsync({
+          experienceId: "@yun-mh/coco",
+        })
+      ).data;
 
       await setTokenMutation({
         variables: {
@@ -106,9 +110,10 @@ export default ({ route }) => {
   }
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
+    registerForPushNotificationsAsync().then((token) => {
+      console.log(token);
+      setExpoPushToken(token);
+    });
     notificationListener.current = Notifications.addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);

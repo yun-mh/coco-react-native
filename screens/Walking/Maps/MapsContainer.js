@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Dimensions } from "react-native";
 import * as Location from "expo-location";
+import Geolocation from "@react-native-community/geolocation";
 import { getPermission } from "../../../userPermissions";
 import MapsPresenter from "./MapsPresenter";
 import {
@@ -116,7 +117,7 @@ const Maps = ({ navigation, route }) => {
 
   useEffect(() => {
     askPermission();
-    return () => navigator.geolocation.clearWatch(watchId);
+    return () => Geolocation.clearWatch(watchId);
   }, []);
 
   // トラッキング開始処理
@@ -148,7 +149,7 @@ const Maps = ({ navigation, route }) => {
 
   // トラッキング終了処理
   const stopTracking = async () => {
-    navigator.geolocation.clearWatch(watchId);
+    Geolocation.clearWatch(watchId);
 
     setIsStarted(false);
 
@@ -194,7 +195,7 @@ const Maps = ({ navigation, route }) => {
   // 現在の位置を監視し位置情報データをアップデートする処理
   const watchPosition = async () => {
     if (walker) {
-      const watch = navigator.geolocation.watchPosition(
+      const watch = Geolocation.watchPosition(
         async (position) => {
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);

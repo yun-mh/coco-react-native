@@ -5,7 +5,6 @@ import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import DismissKeyboard from "../../../components/DismissKeyboard";
 import TextButton from "../../../components/TextButton";
-import colors from "../../../colors";
 
 const Container = styled.View`
   flex: 1;

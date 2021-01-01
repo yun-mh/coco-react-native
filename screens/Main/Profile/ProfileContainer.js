@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import ProfilePresenter from "./ProfilePresenter";
 import { useQuery, useMutation } from "@apollo/client";
-import { VIEW_USER, FOLLOW, UNFOLLOW, CREATE_CHATROOM, VIEW_CHATROOMS } from "../../../queries/Main/MainQueries";
+import {
+  VIEW_USER,
+  FOLLOW,
+  UNFOLLOW,
+  CREATE_CHATROOM,
+  VIEW_CHATROOMS,
+} from "../../../queries/Main/MainQueries";
 import { useLogOut } from "../../../contexts/AuthContext";
 
 const ProfileContainer = ({ navigation, route }) => {
-  const logout = useLogOut();
-
-  const { loading, error, data } = useQuery(VIEW_USER, {
-    variables: { id: route.params.id },
-  });
-
   const [dogId, setDogId] = useState("");
   const [image, setImage] = useState("");
   const [dogName, setDogName] = useState("");
@@ -22,6 +22,12 @@ const ProfileContainer = ({ navigation, route }) => {
   const [isUserInfoModalVisible, setUserInfoModalVisible] = useState(false);
   const [isDogInfoModalVisible, setDogInfoModalVisible] = useState(false);
 
+  const logout = useLogOut();
+
+  const { loading, error, data } = useQuery(VIEW_USER, {
+    variables: { id: route.params.id },
+  });
+
   useEffect(() => {
     if (data?.viewUser?.isFollowing === true) {
       setIsFollowing(true);
@@ -30,9 +36,12 @@ const ProfileContainer = ({ navigation, route }) => {
     }
   }, [data?.viewUser?.isFollowing]);
 
+  console.log(data?.viewUser?.token);
+
   const [followMutation] = useMutation(FOLLOW, {
     variables: {
       id: route.params.id,
+      token: data?.viewUser?.token,
     },
   });
 
@@ -46,9 +55,7 @@ const ProfileContainer = ({ navigation, route }) => {
     variables: {
       toId: route.params.id,
     },
-    refetchQueries: () => [
-      { query: VIEW_CHATROOMS },
-    ],
+    refetchQueries: () => [{ query: VIEW_CHATROOMS }],
   });
 
   const toChatroom = async () => {
@@ -59,7 +66,9 @@ const ProfileContainer = ({ navigation, route }) => {
         },
       } = await createChatRoomMutation();
 
-      const currentUser = participants.filter((p) => p.id !== route.params.id)[0];
+      const currentUser = participants.filter(
+        (p) => p.id !== route.params.id
+      )[0];
 
       navigation.navigate("Chatroom", {
         id: roomId,

@@ -58,6 +58,7 @@ export default ({
   myself,
   text,
   setText,
+  sendingLoading,
   handleSendMessage,
 }) => {
   const headerHeight = useHeaderHeight();
@@ -116,11 +117,14 @@ export default ({
             }
           />
           <MessageAddContainer>
-            {text !== "" ? (
-              <TouchableOpacity onPress={handleSendMessage}>
-                <Feather name="send" size={24} color={colors.darkGray} />
-              </TouchableOpacity>
-            ) : null}
+            {text !== "" &&
+              (!sendingLoading ? (
+                <TouchableOpacity onPress={handleSendMessage}>
+                  <Feather name="send" size={24} color={colors.darkGray} />
+                </TouchableOpacity>
+              ) : (
+                <Loader />
+              ))}
           </MessageAddContainer>
         </MessageInputContainer>
       </KeyboardAvoidingView>

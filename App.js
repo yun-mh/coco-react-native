@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { AsyncStorage, Image } from "react-native";
+import { Image } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { Ionicons, Feather } from "@expo/vector-icons";
+import * as Sentry from "sentry-expo";
 import { CachePersistor } from "apollo-cache-persist";
 import {
   ApolloProvider,
@@ -23,13 +25,13 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import Gate from "./components/Gate";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PersistProvider } from "./contexts/PersistContext";
+import envs from "./components/env";
 
-// const httpLink = new HttpLink({
-//   uri:
-//     process.env.NODE_ENV === "development"
-//       ? "http://localhost:4000/"
-//       : "https://api-coco.herokuapp.com/",
-// });
+Sentry.init({
+  dsn: envs.sentrySDN,
+  enableInExpoDevelopment: true,
+  debug: true,
+});
 
 const httpLink = new HttpLink({
   uri:

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import styled from "styled-components/native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Image, View } from "react-native";
-import colors from "../../colors";
+import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import Button from "./Button";
-import { FOLLOW, UNFOLLOW, VIEW_USER } from "../../queries/Main/MainQueries";
 import { useMutation } from "@apollo/client";
+import { FOLLOW, UNFOLLOW, VIEW_USER } from "../../queries/Main/MainQueries";
+import Button from "./Button";
+import colors from "../../colors";
 
 const ItemContainer = styled.View`
   flex-direction: row;
@@ -37,27 +36,37 @@ const BreedingInfo = styled.Text`
   color: ${colors.gray};
 `;
 
-export default ({ currentUser, id, avatar, username, dogs, isFollowing }) => {
-  const navigation = useNavigation();
-
+export default ({
+  currentUser,
+  id,
+  avatar,
+  token,
+  username,
+  dogs,
+  isMyself,
+  isFollowing,
+}) => {
   const [isFollowingS, setIsFollowingS] = useState(isFollowing);
 
-  const [followMutation] = useMutation(FOLLOW, { 
-      variables: { 
-          id 
-      },
-      refetchQueries: () => [
-        { query: VIEW_USER, variables: { id: currentUser } },
-      ],
+  const navigation = useNavigation();
+
+  const [followMutation] = useMutation(FOLLOW, {
+    variables: {
+      id,
+      token,
+    },
+    refetchQueries: () => [
+      { query: VIEW_USER, variables: { id: currentUser } },
+    ],
   });
 
-  const [unfollowMutation] = useMutation(UNFOLLOW, { 
-      variables: { 
-          id 
-      },
-      refetchQueries: () => [
-        { query: VIEW_USER, variables: { id: currentUser } },
-      ], 
+  const [unfollowMutation] = useMutation(UNFOLLOW, {
+    variables: {
+      id,
+    },
+    refetchQueries: () => [
+      { query: VIEW_USER, variables: { id: currentUser } },
+    ],
   });
 
   const handleFollow = async () => {
@@ -79,7 +88,7 @@ export default ({ currentUser, id, avatar, username, dogs, isFollowing }) => {
   };
 
   return (
-    <View style={{ marginVertical: 5 }} >
+    <View style={{ marginVertical: 5 }}>
       <ItemContainer>
         <UserContainer onPress={() => navigation.navigate("Profile", { id })}>
           <Image
@@ -88,15 +97,22 @@ export default ({ currentUser, id, avatar, username, dogs, isFollowing }) => {
           />
           <DataContainer>
             <Username>{username}</Username>
-            <BreedingInfo>{ dogs.length > 0 ? `${dogs[0].name + ( dogs.length > 1 ? "の他" + (dogs.length - 1) + "匹" : "" )}を飼っています` : ""}</BreedingInfo>
+            <BreedingInfo>
+              {dogs.length > 0
+                ? `${
+                    dogs[0].name +
+                    (dogs.length > 1 ? "の他" + (dogs.length - 1) + "匹" : "")
+                  }を飼っています`
+                : ""}
+            </BreedingInfo>
           </DataContainer>
         </UserContainer>
-        { isFollowingS ? ( 
-                <Button text={"アンフォロー"} onPress={handleFollow} />
-            ) : (
-                <Button text={"フォロー"} accent={true} onPress={handleFollow} />
-            )
-        }
+        {!isMyself &&
+          (isFollowingS ? (
+            <Button text={"アンフォロー"} onPress={handleFollow} />
+          ) : (
+            <Button text={"フォロー"} accent={true} onPress={handleFollow} />
+          ))}
       </ItemContainer>
     </View>
   );

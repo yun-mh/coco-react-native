@@ -4,7 +4,7 @@ import axios from "axios";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
 import SignUpPresenter from "./SignUpPresenter";
-import { getCameraPermission } from "../../../userPermissions";
+import { getPermission } from "../../../userPermissions";
 import { CREATE_ACCOUNT } from "../../../queries/Auth/AuthQueries";
 import utils from "../../../utils";
 
@@ -28,7 +28,7 @@ export default ({ navigation }) => {
   });
 
   const handlePickAvatar = async () => {
-    const status = await getCameraPermission();
+    const status = await getPermission("cameraRoll");
     if (status != "granted") {
       Alert.alert("カメラロールの権限が必要です。");
     }

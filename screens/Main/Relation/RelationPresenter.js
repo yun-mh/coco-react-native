@@ -1,7 +1,6 @@
 import React, { useLayoutEffect } from "react";
-import styled from "styled-components/native";
 import { Text, View, FlatList } from "react-native";
-import Loader from "../../../components/Main/Loader";
+import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../../colors";
 import RelationUser from "../../../components/Main/RelationUser";
@@ -22,13 +21,6 @@ const Tab = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const PostScrollView = styled.ScrollView``;
-
-const PostContentContainer = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-`;
-
 export default ({
   id,
   username,
@@ -42,7 +34,7 @@ export default ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: username
+      headerTitle: username,
     });
   });
 
@@ -53,10 +45,24 @@ export default ({
           onPress={handleFollowersTab}
           style={{ borderRightWidth: 1, borderColor: colors.lightGray }}
         >
-          <Text style={{ color: isFollowersTab? colors.black : colors.darkGray, fontWeight: isFollowersTab ? "bold" : "normal" }}>フォロワー ({followers.length})</Text>
+          <Text
+            style={{
+              color: isFollowersTab ? colors.black : colors.darkGray,
+              fontWeight: isFollowersTab ? "bold" : "normal",
+            }}
+          >
+            フォロワー ({followers.length})
+          </Text>
         </Tab>
         <Tab onPress={handleFollowingsTab}>
-          <Text style={{ color: isFollowersTab? colors.darkGray : colors.black, fontWeight: isFollowersTab ? "normal" : "bold"}}>フォロー中 ({followings.length})</Text>
+          <Text
+            style={{
+              color: isFollowersTab ? colors.darkGray : colors.black,
+              fontWeight: isFollowersTab ? "normal" : "bold",
+            }}
+          >
+            フォロー中 ({followings.length})
+          </Text>
         </Tab>
       </TabContainer>
       <View style={{ flex: 1, justifyContent: "center" }}>
@@ -70,7 +76,9 @@ export default ({
                 id={item.id}
                 avatar={item.avatar}
                 username={item.username}
+                token={item.token}
                 dogs={item.dogs}
+                isMyself={item.isMyself}
                 isFollowing={item.isFollowing}
               />
             )}
@@ -87,7 +95,9 @@ export default ({
                 id={item.id}
                 avatar={item.avatar}
                 username={item.username}
+                token={item.token}
                 dogs={item.dogs}
+                isMyself={item.isMyself}
                 isFollowing={item.isFollowing}
               />
             )}

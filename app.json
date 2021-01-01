@@ -25,10 +25,33 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cocofordogs",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app"
+      }
     },
     "android": {
-      "useNextNotificationsApi": true
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBRihvg9_1H9ZI5Cm2uXGAQTHu8LNbAFOE"
+        }
+      },
+      "useNextNotificationsApi": true,
+      "package": "com.cocofordogs"
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "coco-pf",
+            "project": "react-native",
+            "authToken": "aa46e02dbca64d5b998433c398d4683e500f952fcbf14b438656fe284582f646"
+          }
+        }
+      ]
     }
   }
 }

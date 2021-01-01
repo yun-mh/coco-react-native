@@ -95,6 +95,12 @@ const Tabs = ({ navigation, route }) => {
               navigation.navigate("Post", { id: postId });
             }
             break;
+          case "follow":
+            const userId = response.notification.request.content.data.id;
+            if (userId !== "" && userId !== undefined) {
+              navigation.navigate("Profile", { id: userId });
+            }
+            break;
           default:
             return;
         }

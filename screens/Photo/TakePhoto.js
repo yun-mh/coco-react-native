@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { TouchableOpacity } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import styled from "styled-components";
 import * as MediaLibrary from "expo-media-library";
 import { Camera } from "expo-camera";
@@ -51,11 +52,14 @@ const Button = styled.View`
 `;
 
 export default ({ navigation }) => {
-  const cameraRef = useRef();
   const [canTakePhoto, setCanTakePhoto] = useState(true);
   const [loading, setLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+
+  const cameraRef = useRef(null);
+
+  const isFocused = useIsFocused();
 
   const takePhoto = async () => {
     if (!canTakePhoto) {
@@ -63,9 +67,7 @@ export default ({ navigation }) => {
     }
     try {
       setCanTakePhoto(false);
-      const { uri } = await cameraRef.current.takePictureAsync({
-        skipProcessing: true,
-      });
+      const { uri } = await cameraRef.current.takePictureAsync();
       const asset = await MediaLibrary.createAssetAsync(uri);
       navigation.navigate("UploadPhoto", { photo: [asset] });
     } catch (error) {
@@ -100,17 +102,20 @@ export default ({ navigation }) => {
 
   useEffect(() => {
     askPermission();
+    return () => setCanTakePhoto(true);
   }, []);
 
   return (
     <View>
       {loading ? (
         <Loader />
-      ) : hasPermission ? (
+      ) : hasPermission && isFocused ? (
         <>
           <Camera
             ref={cameraRef}
             type={cameraType}
+            ratio={"4:3"}
+            useCamera2Api={true}
             style={{
               flex: 4,
               width: wp("100%"),

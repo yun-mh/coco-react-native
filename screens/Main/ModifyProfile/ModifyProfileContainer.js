@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import * as ImagePicker from "expo-image-picker";
-import { getCameraPermission } from "../../../userPermissions";
+import { getPermission } from "../../../userPermissions";
 import ModifyProfilePresenter from "./ModifyProfilePresenter";
 import { VIEW_USER, EDIT_USER } from "../../../queries/Main/MainQueries";
 import { Alert } from "react-native";
@@ -28,13 +28,16 @@ export default ({ navigation, route }) => {
   });
 
   const handlePickAvatar = async () => {
-    const status = await getCameraPermission();
-    if (status != "granted") {
+    const status = await getPermission("cameraRoll");
+
+    if (status !== "granted") {
       Alert.alert("カメラロールの権限が必要です。");
+      return;
     }
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [4, 3],
     });
     if (!result.cancelled) {

@@ -9,13 +9,15 @@ import {
 
 export default ({ navigation, route }) => {
   const myself = route.params.myself;
+
   const [text, setText] = useState("");
   const [height, setHeight] = useState(40);
   const [messages, setMessages] = useState([]);
+  const [sendingLoading, setSendingLoading] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({ title: route.params.counterpartUsername });
-  })
+  });
 
   const { data: newData } = useSubscription(GET_MESSAGE, {
     variables: { roomId: route.params.id },
@@ -59,10 +61,13 @@ export default ({ navigation, route }) => {
 
   const handleSendMessage = async () => {
     try {
+      setSendingLoading(true);
       await sendMessageMutation();
     } catch (error) {
+      console.warn(error);
     } finally {
       setText("");
+      setSendingLoading(false);
     }
   };
 
@@ -77,6 +82,7 @@ export default ({ navigation, route }) => {
       myself={myself}
       text={text}
       setText={setText}
+      sendingLoading={sendingLoading}
       handleSendMessage={handleSendMessage}
       height={height}
       updateInputSize={updateInputSize}
