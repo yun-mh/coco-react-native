@@ -83,6 +83,7 @@ export const VIEW_USER = gql`
         files {
           url
         }
+        createdAt
       }
       isFollowing
       isMyself

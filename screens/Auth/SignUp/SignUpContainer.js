@@ -48,6 +48,10 @@ export default ({ navigation }) => {
       Alert.alert("エラー", "すべての項目を入力してください。");
       return false;
     }
+    if (username.length > 10) {
+      Alert.alert("エラー", "ユーザ名は10文字以内に設定してください。");
+      return false;
+    }
     if (!utils.isEmail(email)) {
       Alert.alert("エラー", "メールアドレスを正しく入力してください。");
       return false;

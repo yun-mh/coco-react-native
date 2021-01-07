@@ -37,7 +37,7 @@ export default ({ navigation, route }) => {
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
+      allowsEditing: true,
       aspect: [4, 3],
     });
     if (!result.cancelled) {
@@ -48,7 +48,11 @@ export default ({ navigation, route }) => {
 
   const isFormValid = () => {
     if (username === "") {
-      Alert.alert("エラー", "すべての項目を入力してください。");
+      Alert.alert("エラー", "ユーザ名を入力してください。");
+      return false;
+    }
+    if (username.length > 10) {
+      Alert.alert("エラー", "ユーザ名は10文字以内に設定してください。");
       return false;
     }
     return true;

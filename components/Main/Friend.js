@@ -30,9 +30,7 @@ const Friend = ({ id, avatar, username, currentUser }) => {
     variables: {
       toId: id,
     },
-    refetchQueries: () => [
-      { query: VIEW_CHATROOMS },
-    ],
+    refetchQueries: () => [{ query: VIEW_CHATROOMS }],
   });
 
   const toChatroom = async () => {
@@ -65,7 +63,9 @@ const Friend = ({ id, avatar, username, currentUser }) => {
             borderRadius: widthPercentageToDP("10%") / 2,
           }}
         />
-        <Username>{username}</Username>
+        <Username>
+          {username.length > 8 ? username.substring(0, 8) + "..." : username}
+        </Username>
       </TouchableContainer>
     </Container>
   );

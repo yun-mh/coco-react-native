@@ -55,7 +55,7 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://api-coco.herokuapp.com/`,
+  uri: `wss://api-coco.herokuapp.com/`,
   options: {
     reconnect: true,
     connectionParams: async () => {

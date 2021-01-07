@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, FlatList, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
@@ -83,7 +83,7 @@ const InfoItem = styled.View`
 const TouchableInfoItem = styled.TouchableOpacity`
   flex: 1;
   align-items: center;
-`
+`;
 
 const InfoTitle = styled.Text`
   flex: 1;
@@ -163,6 +163,19 @@ const ProfilePresenter = ({
   logout,
 }) => {
   const navigation = useNavigation();
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      let postsTarget = data.viewUser.posts.concat();
+      if (postsTarget) {
+        postsTarget.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPosts([...postsTarget]);
+      }
+    }
+  }, [data]);
 
   return loading ? (
     <Loader />
@@ -184,7 +197,10 @@ const ProfilePresenter = ({
                 </UsernameContainer>
                 <UserContainer>
                   {data.viewUser.isMyself ? (
-                    <TouchableOpacity onPress={toggleUserInfoModal} style={{ marginHorizontal: 10 }}>
+                    <TouchableOpacity
+                      onPress={toggleUserInfoModal}
+                      style={{ marginHorizontal: 10 }}
+                    >
                       <Feather name="settings" size={18} color={colors.black} />
                     </TouchableOpacity>
                   ) : isFollowing ? (
@@ -197,7 +213,15 @@ const ProfilePresenter = ({
                     />
                   )}
                   {data.viewUser.isMyself ? null : (
-                    <TouchableOpacity onPress={toChatroom} style={{ marginHorizontal: 10, backgroundColor: colors.primary, padding: 5, borderRadius: 5 }}>
+                    <TouchableOpacity
+                      onPress={toChatroom}
+                      style={{
+                        marginHorizontal: 10,
+                        backgroundColor: colors.primary,
+                        padding: 5,
+                        borderRadius: 5,
+                      }}
+                    >
                       <Feather name="send" size={18} color={colors.white} />
                     </TouchableOpacity>
                   )}
@@ -208,13 +232,25 @@ const ProfilePresenter = ({
                     <InfoData>{data?.viewUser?.postsCount}</InfoData>
                   </InfoItem>
                   <InfoItem>
-                    <TouchableInfoItem onPress={() => navigation.navigate("Relation", { viewUser: data?.viewUser })}>
+                    <TouchableInfoItem
+                      onPress={() =>
+                        navigation.navigate("Relation", {
+                          viewUser: data?.viewUser,
+                        })
+                      }
+                    >
                       <InfoTitle>フォロワー</InfoTitle>
                       <InfoData>{data?.viewUser?.followersCount}</InfoData>
                     </TouchableInfoItem>
                   </InfoItem>
                   <InfoItem>
-                    <TouchableInfoItem onPress={() => navigation.navigate("Relation", { viewUser: data?.viewUser })}>
+                    <TouchableInfoItem
+                      onPress={() =>
+                        navigation.navigate("Relation", {
+                          viewUser: data?.viewUser,
+                        })
+                      }
+                    >
                       <InfoTitle>フォロー中</InfoTitle>
                       <InfoData>{data?.viewUser?.followingCount}</InfoData>
                     </TouchableInfoItem>
@@ -261,14 +297,15 @@ const ProfilePresenter = ({
             </PostHeaderContainer>
             <PostContentContainer>
               <FlatList
+                removeClippedSubviews={false}
                 style={{ width: "100%", height: "100%" }}
-                data={data.viewUser.posts}
+                data={posts}
                 renderItem={({ item }) => (
                   <PostGrid id={item.id} files={item.files} />
                 )}
                 numColumns={3}
                 keyExtractor={(item) => item.id.toString()}
-                showsVerticalScrollIndicator={false}
+                showsVerticalScrollIndicator={true}
               />
             </PostContentContainer>
           </PostContainer>

@@ -7,19 +7,26 @@ import {
   CHECK_MYSELF,
 } from "../../../queries/Main/MainQueries";
 import CommentPresenter from "./CommentPresenter";
+import { useEffect } from "react";
 
 export default ({ route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [comment, setComment] = useState("");
   const [height, setHeight] = useState(40);
+  const [currentUser, setCurrentUser] = useState();
+  const [addLoading, setAddLoading] = useState(false);
+
   const { loading, error, data, refetch } = useQuery(VIEW_POST, {
     variables: { id: route.params.id },
   });
-  const {
-    data: {
-      viewMyself: { id: currentUser },
-    },
-  } = useQuery(CHECK_MYSELF);
+
+  // const {
+  //   data: {
+  //     viewMyself: { id: currentUser },
+  //   },
+  // } = useQuery(CHECK_MYSELF);
+
+  const { loading: myselfLoading, data: myselfData } = useQuery(CHECK_MYSELF);
 
   const [addCommentMutation] = useMutation(ADD_COMMENT, {
     variables: {
@@ -31,6 +38,12 @@ export default ({ route }) => {
       { query: VIEW_POST, variables: { id: route.params.id } },
     ],
   });
+
+  useEffect(() => {
+    if (!myselfLoading && !myselfData) {
+      setCurrentUser(myselfData.viewMyself.id);
+    }
+  }, [myselfData]);
 
   const onRefresh = async () => {
     try {
@@ -53,11 +66,13 @@ export default ({ route }) => {
       return;
     }
     try {
+      setAddLoading(true);
       await addCommentMutation();
     } catch (error) {
       console.warn(error);
     } finally {
       setComment("");
+      setAddLoading(false);
     }
   };
 
@@ -67,6 +82,7 @@ export default ({ route }) => {
       data={data}
       refreshing={refreshing}
       onRefresh={onRefresh}
+      addLoading={addLoading}
       comment={comment}
       height={height}
       setComment={setComment}

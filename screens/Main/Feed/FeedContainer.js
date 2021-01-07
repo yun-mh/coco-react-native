@@ -127,7 +127,7 @@ export default ({ route }) => {
   const onRefresh = async () => {
     try {
       setRefreshing(true);
-      await refetch();
+      refetch();
     } catch (e) {
       console.log(e);
     } finally {

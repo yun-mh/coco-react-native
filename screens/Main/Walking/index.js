@@ -1,10 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import colors from "../../../colors";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Button from "../../../components/Button";
 
 const Container = styled.View`
@@ -49,12 +46,12 @@ export default ({ navigation, route }) => {
         source={require("../../../assets/walking.jpg")}
       />
       <CaptionContainer>
-        <Caption>他のお散歩中の犬と</Caption>
-        <Caption>友だちになりませんか？</Caption>
+        <Caption>他のお散歩中のワンちゃんと</Caption>
+        <Caption>友だちになりましょう！</Caption>
       </CaptionContainer>
       <ButtonContainer>
         <Button
-          text={"お散歩の出会いを始める"}
+          text={"お散歩トラッキングを始める"}
           accent={true}
           onPress={() =>
             navigation.navigate("Maps", { userId: route.params.id })

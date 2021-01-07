@@ -50,7 +50,7 @@ export default ({ navigation, route }) => {
     }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
+      allowsEditing: true,
       aspect: [4, 3],
     });
     if (!result.cancelled) {
@@ -67,6 +67,10 @@ export default ({ navigation, route }) => {
   const isFormValid = () => {
     if (name === "" || birthdate == "" || breed == "") {
       Alert.alert("エラー", "すべての情報を入力してください。");
+      return false;
+    }
+    if (name.length > 10) {
+      Alert.alert("エラー", "犬名は10文字以内に設定してください。");
       return false;
     }
     return true;

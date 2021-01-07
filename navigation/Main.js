@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
@@ -43,7 +43,7 @@ function getHeaderTitle(route) {
     case "Feed":
       return () => <LogoTitle />;
     case "Walking":
-      return "お散歩の出会い";
+      return "お散歩トラッキング";
     case "Notification":
       return "通知";
     case "Message":
@@ -79,7 +79,7 @@ const Tabs = ({ navigation, route }) => {
             break;
           case "message":
             const toId = response.notification.request.content.data.id;
-            if (id !== "" && id !== undefined) {
+            if (toId !== "" && toId !== undefined) {
               navigation.navigate("Message", { id: toId });
             }
             break;

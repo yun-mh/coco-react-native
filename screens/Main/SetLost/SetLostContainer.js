@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Alert, Linking } from "react-native";
 import { useMutation } from "@apollo/client";
-import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 import { VIEW_USER, TOGGLE_STATUS } from "../../../queries/Main/MainQueries";
 import SetLostPresenter from "./SetLostPresenter";
 
@@ -22,46 +22,40 @@ export default ({ navigation, route }) => {
       id: dogId,
       isMissed,
     },
-    refetchQueries: () => [
-      { query: VIEW_USER, variables: { id: currentUser } },
-    ],
+    refetchQueries: () => [{ query: VIEW_USER, variables: { id } }],
   });
 
   const toggleMissingStatus = () => {
-    Alert.alert(
-      "警告",
-      "本当に迷子状態を変更しますか？",
-      [
-        {
-          text: "キャンセル",
-          onPress: () => {
-            return;
-          },
-          style: "cancel"
+    Alert.alert("警告", "本当に迷子状態を変更しますか？", [
+      {
+        text: "キャンセル",
+        onPress: () => {
+          return;
         },
-        { 
-          text: "設定", 
-          onPress: async () => {
-            try {
-              await modifyDogMutation();
-
-            } catch(e) {
-              console.log(e);
+        style: "cancel",
+      },
+      {
+        text: "設定",
+        onPress: async () => {
+          try {
+            setIsMissed(!isMissed);
+            const {
+              data: { toggleMissingStatus },
+            } = await modifyDogMutation({
+              variables: {
+                id: dogId,
+                isMissed: !isMissed,
+              },
+            });
+            if (toggleMissingStatus) {
+              setIsMissed(!isMissed);
             }
+          } catch (e) {
+            console.log(e);
           }
-        }
-      ]
-    );
-    // setIsMissed(!isMissed);
-    // const { data: { toggleMissingStatus } } = await modifyDogMutation({ 
-    //   variables: {
-    //     id: dogId,
-    //     isMissed: !isMissed,
-    //   } 
-    // });
-    // if (toggleMissingStatus) {
-    //   setIsMissed(!isMissed);
-    // }
+        },
+      },
+    ]);
   };
 
   const openPage = () => {
@@ -71,15 +65,17 @@ export default ({ navigation, route }) => {
   const saveCode = () => {
     try {
       svg.toDataURL(async (data) => {
-          const filename = FileSystem.documentDirectory + `coco_${new Date().getTime().toString()}.png`;
-          await FileSystem.writeAsStringAsync(filename, data, {
-              encoding: FileSystem.EncodingType.Base64,
-          });
-          await MediaLibrary.saveToLibraryAsync(filename);
-          Alert.alert("完了", "QRコードを保存しました。");
+        const filename =
+          FileSystem.documentDirectory +
+          `coco_${new Date().getTime().toString()}.png`;
+        await FileSystem.writeAsStringAsync(filename, data, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        await MediaLibrary.saveToLibraryAsync(filename);
+        Alert.alert("完了", "QRコードを保存しました。");
       });
     } catch (e) {
-      Alert.alert("エラー", "QRコード保存に失敗しました。")
+      Alert.alert("エラー", "QRコード保存に失敗しました。");
     }
   };
 
