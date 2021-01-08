@@ -64,6 +64,10 @@ export default ({ navigation, route: { params } }) => {
       Alert.alert("エラー", "すべての情報を入力してください。");
       return false;
     }
+    if (name.length > 10) {
+      Alert.alert("エラー", "犬名は10文字以内に設定してください。");
+      return false;
+    }
     return true;
   };
 

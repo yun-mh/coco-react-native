@@ -74,21 +74,21 @@ export default ({ navigation }) => {
           <SlideItemContainer>
             <SlideImage source={require("../../assets/intro1.jpg")} />
             <CaptionContainer>
-              <Caption>犬との思い出をみんなに共有しませんか?</Caption>
-              <CaptionTitle>犬のためのSNS</CaptionTitle>
+              <Caption>ワンちゃんとの思い出をみんなに共有しませんか?</Caption>
+              <CaptionTitle>ワンちゃんのためのSNS</CaptionTitle>
             </CaptionContainer>
           </SlideItemContainer>
           <SlideItemContainer>
             <SlideImage source={require("../../assets/intro2.jpg")} />
             <CaptionContainer>
-              <Caption>犬に友達を作ってください</Caption>
-              <CaptionTitle>お散歩出会い</CaptionTitle>
+              <Caption>お散歩中に他のワンちゃんと会いましょう！</Caption>
+              <CaptionTitle>お散歩トラッキング</CaptionTitle>
             </CaptionContainer>
           </SlideItemContainer>
           <SlideItemContainer>
             <SlideImage source={require("../../assets/intro3.jpg")} />
             <CaptionContainer>
-              <Caption>犬が迷子になって困っていますか？</Caption>
+              <Caption>ワンちゃんが迷子になって困っていますか？</Caption>
               <CaptionTitle>迷子犬サポート</CaptionTitle>
             </CaptionContainer>
           </SlideItemContainer>

@@ -12,6 +12,7 @@ export default ({
   setComment,
   updateInputSize,
   handleAddComment,
+  addLoading,
   currentUser,
 }) => {
   return loading ? (
@@ -20,6 +21,7 @@ export default ({
     data && data.viewPost && (
       <PostDetail
         {...data.viewPost}
+        addLoading={addLoading}
         refreshing={refreshing}
         onRefresh={onRefresh}
         comment={comment}

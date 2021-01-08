@@ -6,6 +6,7 @@ import { useHeaderHeight } from "@react-navigation/stack";
 import { Feather } from "@expo/vector-icons";
 import Comment from "./Comment";
 import colors from "../../colors";
+import Loader from "./Loader";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -85,6 +86,7 @@ const PostDetail = ({
   updateInputSize,
   handleAddComment,
   currentUser,
+  addLoading,
 }) => {
   const navigation = useNavigation();
   const headerHeight = useHeaderHeight();
@@ -156,7 +158,11 @@ const PostDetail = ({
             }
           />
           <CommentAddContainer onPress={handleAddComment}>
-            <Feather name="edit-3" size={24} color="black" />
+            {!addLoading ? (
+              <Feather name="edit-3" size={24} color="black" />
+            ) : (
+              <Loader />
+            )}
           </CommentAddContainer>
         </CommentInputContainer>
       </Container>
