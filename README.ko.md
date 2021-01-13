@@ -30,5 +30,5 @@ Read this in other languages: [日本語](./README.md), [English](./README.en.md
 아직 작업중이므로 사용에 있어 불안정할 수 있습니다. \
 작성이 끝나는 대로 업데이트할 예정입니다.
 
-Android: <a href="https://www.dropbox.com/s/xq35z768ve5x2k7/app-release.apk?dl=0">다운로드(베타판)</a>
+Android: <a href="https://www.dropbox.com/s/51dl13zt7h7pqyb/app-release.apk?dl=0">다운로드(베타판)</a>
 iOS: 작업중

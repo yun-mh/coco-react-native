@@ -30,5 +30,5 @@ This project is created with:
 Could be unstable because not finished yet. \
 Will update as soon as the work is finished.
 
-Android: <a href="https://www.dropbox.com/s/xq35z768ve5x2k7/app-release.apk?dl=0">Download(Beta)</a>
+Android: <a href="https://www.dropbox.com/s/51dl13zt7h7pqyb/app-release.apk?dl=0">Download(Beta)</a>
 iOS: Working
