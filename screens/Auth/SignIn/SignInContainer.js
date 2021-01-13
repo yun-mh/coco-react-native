@@ -7,8 +7,8 @@ import { LOGIN } from "../../../queries/Auth/AuthQueries";
 import { useLogIn } from "../../../contexts/AuthContext";
 
 export default ({ navigation, route: { params } }) => {
-  const [email, setEmail] = useState(params?.email || "canivas@naver.com");
-  const [password, setPassword] = useState(params?.password || "1188025");
+  const [email, setEmail] = useState(params?.email);
+  const [password, setPassword] = useState(params?.password);
   const [loading, setLoading] = useState(false);
   const login = useLogIn();
   const [loginMutation] = useMutation(LOGIN, {

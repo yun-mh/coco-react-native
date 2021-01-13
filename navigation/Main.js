@@ -2,7 +2,10 @@ import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import {
+  getFocusedRouteNameFromRoute,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Notifications from "expo-notifications";
 import * as WebBrowser from "expo-web-browser";
@@ -65,53 +68,53 @@ const Tabs = ({ navigation, route }) => {
   const [chatBadge, setChatBadge] = useState(false);
   const [notificationBadge, setNotificationBadge] = useState(false);
 
-  const notificationReceivedListener = useRef();
+  // const notificationReceivedListener = useRef();
 
-  useEffect(() => {
-    notificationReceivedListener.current = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        switch (response.notification.request.content.data.type) {
-          case "lostDog":
-            const url = response.notification.request.content.data.url;
-            if (url !== "" && url !== undefined) {
-              WebBrowser.openBrowserAsync(url);
-            }
-            break;
-          case "message":
-            const toId = response.notification.request.content.data.id;
-            if (toId !== "" && toId !== undefined) {
-              navigation.navigate("Message", { id: toId });
-            }
-            break;
-          case "comment":
-            const postDetailId = response.notification.request.content.data.id;
-            if (postDetailId !== "" && postDetailId !== undefined) {
-              navigation.navigate("Comment", { id: postDetailId });
-            }
-            break;
-          case "like":
-            const postId = response.notification.request.content.data.id;
-            if (postId !== "" && postId !== undefined) {
-              navigation.navigate("Post", { id: postId });
-            }
-            break;
-          case "follow":
-            const userId = response.notification.request.content.data.id;
-            if (userId !== "" && userId !== undefined) {
-              navigation.navigate("Profile", { id: userId });
-            }
-            break;
-          default:
-            return;
-        }
-      }
-    );
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationReceivedListener
-      );
-    };
-  }, []);
+  // useEffect(() => {
+  //   notificationReceivedListener.current = Notifications.addNotificationResponseReceivedListener(
+  //     (response) => {
+  //       switch (response.notification.request.content.data.type) {
+  //         case "lostDog":
+  //           const url = response.notification.request.content.data.url;
+  //           if (url !== "" && url !== undefined) {
+  //             WebBrowser.openBrowserAsync(url);
+  //           }
+  //           break;
+  //         case "message":
+  //           const toId = response.notification.request.content.data.id;
+  //           if (toId !== "" && toId !== undefined) {
+  //             navigation.navigate("Message", { id: toId });
+  //           }
+  //           break;
+  //         case "comment":
+  //           const postDetailId = response.notification.request.content.data.id;
+  //           if (postDetailId !== "" && postDetailId !== undefined) {
+  //             navigation.navigate("Comment", { id: postDetailId });
+  //           }
+  //           break;
+  //         case "like":
+  //           const postId = response.notification.request.content.data.id;
+  //           if (postId !== "" && postId !== undefined) {
+  //             navigation.navigate("Post", { id: postId });
+  //           }
+  //           break;
+  //         case "follow":
+  //           const userId = response.notification.request.content.data.id;
+  //           if (userId !== "" && userId !== undefined) {
+  //             navigation.navigate("Profile", { id: userId });
+  //           }
+  //           break;
+  //         default:
+  //           return;
+  //       }
+  //     }
+  //   );
+  //   return () => {
+  //     Notifications.removeNotificationSubscription(
+  //       notificationReceivedListener
+  //     );
+  //   };
+  // }, []);
 
   // useLayoutEffect(() => {
   //   if (!chatLoading) {
@@ -264,7 +267,9 @@ const Tabs = ({ navigation, route }) => {
           tabPress: (e) => {
             e.preventDefault();
             if (data !== undefined) {
-              navigation.navigate("Notification", { id: data?.viewMyself?.id });
+              navigation.navigate("Notification", {
+                id: data?.viewMyself?.id,
+              });
             }
           },
         })}
