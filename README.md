@@ -24,11 +24,3 @@ Read this in other languages: [日本語](./README.md), [English](./README.en.md
 
 | <img src="./mobile.jpg" alt="drawing" width="600"/> |
 | :-------------------------------------------------: |
-
-## デモ
-
-まだ作業中で、利用にあたって不安定の可能性があります。\
-作成の終わり次第アップデートの予定です。
-
-Android: <a href="https://www.dropbox.com/s/51dl13zt7h7pqyb/app-release.apk?dl=0">ダウンロード(ベータ版)</a>
-iOS: 作業中
